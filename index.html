@@ -3,26 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bílamagn vs Borgarlínan</title>
+<title>Borgarlína.app — Bílamagn vs Borgarlínan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: #0f172a; color: #e2e8f0; padding: 20px;
-    font-size: 14px; max-width: 980px; margin: 0 auto;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0c1120; color: #e2e8f0;
+    font-size: 14px;
+    padding-top: 92px; /* sticky header height */
   }
-  h1 { font-size: 18px; font-weight: 800; color: #f8fafc; margin-bottom: 2px; }
-  .subtitle { color: #64748b; font-size: 12px; margin-bottom: 18px; }
+  .page-wrap { max-width: 980px; margin: 0 auto; padding: 28px 32px; }
 
-  .tabs { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
-  .tab {
-    padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;
-    cursor: pointer; border: 1px solid #334155; background: transparent;
-    color: #64748b; transition: all 0.15s;
+  /* ── Sticky header ── */
+  .app-header {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 50;
+    background: #0c1120;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
   }
-  .tab.active { background: #6366f1; border-color: #6366f1; color: #fff; }
+  .header-top {
+    display: flex; align-items: center;
+    padding: 0 32px; gap: 16px;
+    height: 52px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .bl-brand { display: flex; align-items: center; gap: 9px; flex-shrink: 0; }
+  .bl-mark {
+    width: 22px; height: 22px; border-radius: 5px; background: #6366f1;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .bl-wordmark {
+    font-size: 13px; font-weight: 600; color: #e2e8f0; letter-spacing: -0.01em;
+  }
+  .bl-wordmark span { color: #6366f1; }
+  .header-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.08); flex-shrink: 0; }
+  .header-title {
+    flex: 1; min-width: 0;
+    font-size: 14px; font-weight: 600; color: #e2e8f0; letter-spacing: -0.01em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .header-title .sep { color: #475569; font-weight: 400; margin: 0 7px; }
+  .header-title .sub { color: #94a3b8; font-weight: 400; }
+  .header-deila {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 6px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    color: #94a3b8; font-size: 12px; font-weight: 500;
+    cursor: pointer; flex-shrink: 0; font-family: inherit;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .header-deila:hover { border-color: rgba(255,255,255,0.2); color: #e2e8f0; }
+  .header-deila.copied { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); color: #34d399; }
+
+  /* ── Tab nav ── */
+  .header-nav {
+    display: flex; align-items: stretch;
+    padding: 0 32px;
+    height: 40px;
+    overflow-x: auto; scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .header-nav::-webkit-scrollbar { display: none; }
+  .tab {
+    background: none; border: none; cursor: pointer; font-family: inherit;
+    padding: 0 14px;
+    font-size: 12px; font-weight: 400;
+    color: #475569;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap; flex-shrink: 0;
+    transition: color 0.12s, border-color 0.12s;
+    margin-bottom: -1px;
+  }
+  .tab:hover { color: #94a3b8; }
+  .tab.active { font-weight: 600; color: #e2e8f0; border-bottom-color: #6366f1; }
   .panel { display: none; }
   .panel.active { display: block; }
 
@@ -75,7 +130,7 @@
   .muni-row { display: flex; justify-content: space-between; font-size: 11px; color: #64748b; margin-bottom: 2px; }
   .muni-row span:last-child { color: #94a3b8; font-weight: 600; }
 
-  .info-box { background: #1e1b4b; border: 1px solid #3730a3; border-radius: 10px; padding: 12px 14px; font-size: 12px; line-height: 1.7; margin-bottom: 18px; color: #a5b4fc; }
+  .info-box { background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2); border-radius: 10px; padding: 12px 14px; font-size: 12px; line-height: 1.7; margin-bottom: 18px; color: #a5b4fc; }
   .note { background: #1e293b55; border-left: 3px solid #6366f1; padding: 12px 14px; border-radius: 0 8px 8px 0; font-size: 11px; color: #64748b; line-height: 1.7; margin-bottom: 18px; }
   .note strong { color: #94a3b8; }
 
@@ -89,6 +144,72 @@
     .grid2 { grid-template-columns: 1fr; }
     .slider-label { width: 140px; font-size: 11px; }
   }
+
+  /* ── Mobile responsive ── */
+  @media (max-width: 768px) {
+    body { padding-top: 96px; }
+    .page-wrap { padding: 16px; }
+    .header-top { padding: 0 16px; gap: 8px; }
+    .bl-wordmark { display: none; }
+    .header-title { font-size: 13px; }
+    .header-title .sub { display: none; }
+    .header-deila { padding: 5px 10px; font-size: 11px; }
+    .header-nav { padding: 0 16px; }
+    .tab { padding: 0 10px; font-size: 11.5px; }
+    /* stack split layout */
+    .split-layout { grid-template-columns: 1fr !important; }
+    .split-left { position: static !important; display: none; }
+    .split-left.drawer-open { display: block; }
+    /* table scroll with sticky first column */
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .table-wrap td:first-child,
+    .table-wrap th:first-child { position: sticky; left: 0; background: #0c1120; z-index: 2; }
+    .table-wrap thead th:first-child { background: #1e293b; }
+    /* scenario cards stack */
+    .sc-grid { grid-template-columns: 1fr 1fr; }
+    .grid3 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ── FAB (Forsendur button, mobile only) ── */
+  .fab-forsendur {
+    display: none;
+    position: fixed; bottom: 20px; right: 16px;
+    align-items: center; gap: 7px;
+    background: #6366f1; border: none; border-radius: 20px;
+    padding: 10px 16px; color: white; font-size: 12px; font-weight: 600;
+    cursor: pointer; box-shadow: 0 4px 20px rgba(99,102,241,0.5);
+    font-family: inherit; z-index: 30;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .fab-forsendur:active { transform: scale(0.97); }
+  @media (max-width: 768px) { .fab-forsendur { display: flex; } }
+
+  /* ── Bottom drawer ── */
+  .drawer-backdrop {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+    z-index: 40;
+  }
+  .drawer-backdrop.open { display: block; }
+  .mob-drawer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #111827; border-radius: 16px 16px 0 0;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    z-index: 50; max-height: 78%;
+    display: flex; flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
+  }
+  .mob-drawer.open { transform: translateY(0); }
+  .drawer-handle-wrap { padding: 12px 0 4px; display: flex; justify-content: center; flex-shrink: 0; }
+  .drawer-handle { width: 36px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.15); }
+  .drawer-title-row { display: flex; align-items: center; justify-content: space-between; padding: 4px 16px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); flex-shrink: 0; }
+  .drawer-title { font-size: 14px; font-weight: 600; color: #e2e8f0; }
+  .drawer-close { background: none; border: none; color: #475569; cursor: pointer; font-size: 20px; padding: 4px; font-family: inherit; line-height: 1; }
+  .drawer-body { overflow-y: auto; padding: 16px 16px 40px; flex: 1; }
+  /* Inside drawer: slot for the active panel's d3-panel */
+  #mob-drawer-sliders .d3-panel { background: none; border: none; padding: 0; }
 
   /* ── Instrument Panel Slider Design ── */
   .d3-panel { display:flex; flex-direction:column; gap:8px; background:#0b1120; border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:20px 16px; }
@@ -128,63 +249,91 @@
     .split-left .slider-label { width: 140px; font-size: 11px; }
   }
 
-  .share-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; }
-  #shareBtn {
-    padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;
-    cursor: pointer; border: 1px solid #334155; background: transparent;
-    color: #94a3b8; transition: all 0.15s; white-space: nowrap;
-  }
-  #shareBtn:hover { background: #1e293b; color: #e2e8f0; border-color: #6366f1; }
-  #shareBtn.copied { background: #14532d; border-color: #22c55e; color: #22c55e; }
+  /* share toast */
   #shareToast {
-    font-size: 11px; color: #22c55e; opacity: 0;
-    transition: opacity 0.3s; pointer-events: none;
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: #111827; border: 1px solid rgba(16,185,129,0.3);
+    color: #34d399; font-size: 12px; font-weight: 500;
+    padding: 8px 16px; border-radius: 8px;
+    opacity: 0; transition: opacity 0.25s; pointer-events: none;
+    z-index: 100;
   }
   #shareToast.show { opacity: 1; }
 </style>
 </head>
 <body>
 
-<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:2px;">
-  <div>
-    <h1>Bílamagn vs Borgarlínan &mdash; H&ouml;fu&eth;borgarsv&aelig;&eth;i&eth;</h1>
-    <p class="subtitle">&Ouml;ll 7 sveitarf&eacute;l&ouml;g &middot; Annatímagreining 07:30&ndash;09:30 og 16:00&ndash;17:30 &middot; BPR-tafamódel</p>
+<!-- ═══ STICKY HEADER ═══ -->
+<header class="app-header">
+  <div class="header-top">
+    <div class="bl-brand">
+      <div class="bl-mark">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M3.5 10.5V3.5h4a2 2 0 010 4h-4" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M3.5 7.5h4.5a2 2 0 010 4h-4.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="bl-wordmark">borgarlína<span>.app</span></span>
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-title">
+      Bílamagn vs Borgarlínan<span class="sep">—</span><span class="sub">Höfuðborgarsvæðið</span>
+    </div>
+    <button class="header-deila" id="shareBtn" onclick="shareLink()">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="2.5" r="1.5"/><circle cx="10.5" cy="10.5" r="1.5"/><circle cx="2.5" cy="6.5" r="1.5"/><path d="M4 6.5h4.5M4 6.5L9 3M9 10L4 6.5"/></svg>
+      Deila
+    </button>
   </div>
-  <div class="share-bar">
-    <button id="shareBtn" onclick="shareLink()">&#128279; Deila</button>
-    <span id="shareToast">Hlekkur afritaður!</span>
+  <nav class="header-nav">
+    <button class="tab active" onclick="showTab('home')">Yfirlit</button>
+    <button class="tab" onclick="showTab('peak')">Annatímar &amp; tafar</button>
+    <button class="tab" onclick="showTab('calc')">Reiknivél</button>
+    <button class="tab" onclick="showTab('straeto')">Strætó grunnlína</button>
+    <button class="tab" onclick="showTab('roads')">Vegbreiðkun vs BL</button>
+    <button class="tab" onclick="showTab('munis')">Sveitarfélögin 7</button>
+  </nav>
+</header>
+
+<!-- Share toast -->
+<span id="shareToast">✓ Hlekkur afritaður!</span>
+
+<!-- Mobile: FAB + drawer (slider contents cloned here by JS) -->
+<button class="fab-forsendur" id="fabForsendur" onclick="openDrawer()">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M1 3h12M1 7h12M1 11h12"/><circle cx="4" cy="3" r="1.5" fill="white" stroke="none"/><circle cx="9" cy="7" r="1.5" fill="white" stroke="none"/><circle cx="5" cy="11" r="1.5" fill="white" stroke="none"/></svg>
+  Forsendur
+</button>
+<div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
+<div class="mob-drawer" id="mobDrawer">
+  <div class="drawer-handle-wrap"><div class="drawer-handle"></div></div>
+  <div class="drawer-title-row">
+    <span class="drawer-title">Forsendur</span>
+    <button class="drawer-close" onclick="closeDrawer()">&#215;</button>
   </div>
+  <div class="drawer-body" id="mob-drawer-sliders"></div>
 </div>
 
-<div class="tabs">
-  <button class="tab active" onclick="showTab('home')">&#127968; Yfirlit</button>
-  <button class="tab" onclick="showTab('peak')">&#128680; Annatímar &amp; tafar</button>
-  <button class="tab" onclick="showTab('calc')">&#128202; Reikniv&eacute;l (heill dagur)</button>
-  <button class="tab" onclick="showTab('straeto')">&#128652; Str&aelig;t&oacute; grunnl&iacute;na</button>
-  <button class="tab" onclick="showTab('roads')">&#128739; Vegbreiðkun vs BL</button>
-  <button class="tab" onclick="showTab('munis')">&#127968; Sveitarf&eacute;l&ouml;gin 7</button>
-</div>
+<div class="page-wrap">
 
 <!-- ═══ HOME ═══ -->
 <div class="panel active" id="panel-home">
 
   <!-- HERO -->
-  <div style="background:linear-gradient(135deg,#1e1b4b 0%,#0f2d1a 100%);border:1px solid #3730a3;border-radius:16px;padding:32px 28px 24px;margin-bottom:20px;">
+  <div style="background:linear-gradient(135deg,#111827 0%,#0f2027 60%,#0d1f2d 100%);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:28px 32px 32px;margin-bottom:20px;">
     <div style="font-size:11px;font-weight:700;color:#6366f1;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px;">Gagnalíkan &mdash; Höfuðborgarsvæðið 2025&ndash;2040</div>
     <div style="font-size:30px;font-weight:900;color:#f8fafc;margin-bottom:8px;line-height:1.2;">Mun Borgarlínan<br>draga úr bílum?</div>
     <div style="font-size:13px;color:#94a3b8;margin-bottom:24px;line-height:1.7;max-width:560px;">
       Líkan byggt á íbúafjöldaspá Hagstofunnar, umferðargögnum Vegagerðarinnar og rauntalningum Strætó.
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
-      <div style="background:#0f172a66;border:1px solid #334155;border-radius:10px;padding:14px;text-align:center;">
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:20px 22px;text-align:center;">
         <div style="font-size:24px;font-weight:900;color:#f87171;" id="home-cars-today">194.000</div>
         <div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.4;">Bílar á svæðinu í dag</div>
       </div>
-      <div style="background:#0f172a66;border:1px solid #334155;border-radius:10px;padding:14px;text-align:center;">
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:20px 22px;text-align:center;">
         <div style="font-size:24px;font-weight:900;color:#fbbf24;" id="home-cars-2031">+35.000</div>
         <div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.4;">Aukabílar 2031 án BL</div>
       </div>
-      <div style="background:#0f172a66;border:1px solid #334155;border-radius:10px;padding:14px;text-align:center;">
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:20px 22px;text-align:center;">
         <div style="font-size:24px;font-weight:900;color:#34d399;" id="home-cars-bl">−15.000</div>
         <div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.4;">Bílar sem BL kemur í stað</div>
       </div>
@@ -192,11 +341,11 @@
   </div>
 
   <!-- KEY FINDING -->
-  <div style="background:#2d1515;border:1px solid #7f1d1d;border-radius:12px;padding:16px 18px;margin-bottom:20px;display:flex;gap:14px;align-items:flex-start;">
+  <div style="background:rgba(217,119,6,0.1);border:1px solid rgba(217,119,6,0.3);border-radius:10px;padding:16px 20px;margin-bottom:20px;display:flex;gap:14px;align-items:flex-start;">
     <div style="font-size:22px;flex-shrink:0;">&#9888;&#65039;</div>
     <div>
-      <div style="font-size:13px;font-weight:700;color:#fca5a5;margin-bottom:4px;">Lykilniðurstaða</div>
-      <div style="font-size:12px;color:#fecaca;line-height:1.7;">
+      <div style="font-size:13px;font-weight:600;color:#fbbf24;margin-bottom:6px;">Lykilniðurstaða</div>
+      <div style="font-size:13px;color:#cbd5e1;line-height:1.55;">
         Bílamagn á höfuðborgarsvæðinu <strong>mun hækka</strong> fram til 2031 &mdash; jafnvel með Borgarlínunni.
         Ástæðan: íbúafjöldinn eykst um ~20.000 á þessum tíma, og BL (við 8% modal shift) kemur aðeins í stað ~15.000 bíla.
         <strong>BL dregur úr vextinum en snýr honum ekki við ein og sér.</strong>
@@ -209,7 +358,7 @@
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
 
-    <div onclick="showTab('peak')" style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='#6366f1';this.style.background='#1e293bdd'" onmouseout="this.style.borderColor='#334155';this.style.background='#1e293b'">
+    <div onclick="showTab('peak')" style="background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:18px 20px;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='rgba(99,102,241,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)'">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
         <span style="font-size:20px;">&#128680;</span>
         <span style="font-size:13px;font-weight:700;color:#f8fafc;">Annatímar &amp; tafar</span>
@@ -221,7 +370,7 @@
       <div style="margin-top:10px;font-size:11px;color:#6366f1;font-weight:600;">Opna &#8594;</div>
     </div>
 
-    <div onclick="showTab('calc')" style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='#6366f1';this.style.background='#1e293bdd'" onmouseout="this.style.borderColor='#334155';this.style.background='#1e293b'">
+    <div onclick="showTab('calc')" style="background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:18px 20px;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='rgba(99,102,241,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)'">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
         <span style="font-size:20px;">&#128202;</span>
         <span style="font-size:13px;font-weight:700;color:#f8fafc;">Reiknivél &mdash; heill dagur</span>
@@ -232,7 +381,7 @@
       <div style="margin-top:10px;font-size:11px;color:#6366f1;font-weight:600;">Opna &#8594;</div>
     </div>
 
-    <div onclick="showTab('straeto')" style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='#6366f1';this.style.background='#1e293bdd'" onmouseout="this.style.borderColor='#334155';this.style.background='#1e293b'">
+    <div onclick="showTab('straeto')" style="background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:18px 20px;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='rgba(99,102,241,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)'">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
         <span style="font-size:20px;">&#128652;</span>
         <span style="font-size:13px;font-weight:700;color:#f8fafc;">Strætó grunnlína</span>
@@ -243,7 +392,7 @@
       <div style="margin-top:10px;font-size:11px;color:#6366f1;font-weight:600;">Opna &#8594;</div>
     </div>
 
-    <div onclick="showTab('munis')" style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='#6366f1';this.style.background='#1e293bdd'" onmouseout="this.style.borderColor='#334155';this.style.background='#1e293b'">
+    <div onclick="showTab('munis')" style="background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:18px 20px;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='rgba(99,102,241,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)'">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
         <span style="font-size:20px;">&#127968;</span>
         <span style="font-size:13px;font-weight:700;color:#f8fafc;">Sveitarfélögin 7</span>
@@ -825,7 +974,7 @@ function calcPeak() {
     ['V/C hlutfall (annatími)', vc25.toFixed(2), vcYr.toFixed(2), vcBL.toFixed(2),
       '<span class="green">&minus;' + (vcYr - vcBL).toFixed(2) + '</span>'],
     ['Þjónststig (LOS)', los25.los, losYr.los, losBL.los, '&mdash;'],
-    ['Ferðatími (frjálsakstur: ' + FREE_FLOW_MIN + ' mín)', fmtT(delay25), fmtT(delayYr), fmtT(delayBL),
+    ['Ferðatími (frjálsakstur: ' + FREE_FLOW_DYN + ' mín)', fmtT(delay25), fmtT(delayYr), fmtT(delayBL),
       '<span class="green">&minus;' + Math.round(delayYr - delayBL) + ' mín</span>'],
     ['Ferðatími á skóladegi', fmtT(delaySchool25), fmtT(delaySchoolYr), fmtT(delaySchoolBL),
       '<span class="green">&minus;' + Math.round(delaySchoolYr - delaySchoolBL) + ' mín</span>'],
@@ -1175,5 +1324,6 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
+</div><!-- /page-wrap -->
 </body>
 </html>
