@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bílamagn vs Borgarlínan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -87,6 +89,27 @@
     .grid2 { grid-template-columns: 1fr; }
     .slider-label { width: 140px; font-size: 11px; }
   }
+
+  /* ── Instrument Panel Slider Design ── */
+  .d3-panel { display:flex; flex-direction:column; gap:8px; background:#0b1120; border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:20px 16px; }
+  .d3-group { background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.055); border-radius:8px; padding:12px 14px; display:flex; flex-direction:column; gap:14px; }
+  .d3-group-title { font-size:9px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#334155; }
+  .d3-row { display:flex; flex-direction:column; gap:7px; }
+  .d3-header { display:flex; align-items:center; justify-content:space-between; }
+  .d3-label-wrap { display:flex; align-items:center; gap:7px; }
+  .d3-icon { width:20px; height:20px; border-radius:5px; background:rgba(99,102,241,0.12); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .d3-icon svg { width:10px; height:10px; }
+  .d3-label { font-size:11px; font-weight:500; color:#94a3b8; }
+  .d3-badge { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:500; padding:2px 7px; border-radius:4px; background:rgba(99,102,241,0.15); color:#a5b4fc; letter-spacing:-0.02em; min-width:42px; text-align:center; border:1px solid rgba(99,102,241,0.2); transition:background 0.1s; white-space:nowrap; }
+  .d3-badge.low { background:rgba(100,116,139,0.15); color:#64748b; border-color:rgba(100,116,139,0.2); }
+  .d3-badge.high { background:rgba(99,102,241,0.25); color:#c7d2fe; border-color:rgba(99,102,241,0.4); }
+  .d3-range-wrap { position:relative; height:14px; display:flex; align-items:center; }
+  .d3-range { -webkit-appearance:none; appearance:none; width:100%; height:2px; border-radius:1px; outline:none; cursor:pointer; }
+  .d3-range::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:#0b1120; border:2px solid #6366f1; cursor:pointer; box-shadow:0 0 6px rgba(99,102,241,0.4); transition:border-color 0.1s, box-shadow 0.1s; }
+  .d3-range:hover::-webkit-slider-thumb { border-color:#a5b4fc; box-shadow:0 0 10px rgba(99,102,241,0.6); }
+  .d3-range::-moz-range-thumb { width:14px; height:14px; border-radius:50%; background:#0b1120; border:2px solid #6366f1; cursor:pointer; }
+  .d3-scale { display:flex; justify-content:space-between; padding:0 1px; }
+  .d3-scale span { font-size:9px; color:#1e293b; font-family:'JetBrains Mono',monospace; }
 
   /* Split layout: sliders left, content right */
   .split-layout { display: grid; grid-template-columns: 260px 1fr; gap: 18px; align-items: start; }
@@ -254,49 +277,97 @@
 
   <div class="split-layout">
   <div class="split-left">
-  <div class="box">
-    <h3>Stillingar annatíma</h3>
-    <div class="slider-row">
-      <span class="slider-label">&#128197; &Aacute;r til greiningar</span>
-      <input type="range" id="peakYear" min="2025" max="2040" value="2031" step="1" oninput="calcPeak()">
-      <span class="slider-val" id="peakYearVal">2031</span>
+  <div class="d3-panel">
+
+    <div class="d3-group">
+      <div class="d3-group-title">Tímasetning</div>
+      <div class="d3-row">
+        <div class="d3-header">
+          <div class="d3-label-wrap">
+            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><circle cx="5" cy="5" r="3.5"/><path d="M5 3v2l1.5 1.5"/></svg></div>
+            <span class="d3-label">Ár til greiningar</span>
+          </div>
+          <div class="d3-badge" id="peakYearBadge"><span id="peakYearVal">2031</span></div>
+        </div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="peakYear" min="2025" max="2040" value="2031" step="1" oninput="calcPeak()"></div>
+        <div class="d3-scale"><span>2025</span><span>2040</span></div>
+      </div>
+      <div class="d3-row">
+        <div class="d3-header">
+          <div class="d3-label-wrap">
+            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><path d="M1.5 8V6l3.5-4 3.5 4v2"/><path d="M3.5 8V6.5h3V8"/></svg></div>
+            <span class="d3-label">Skólaáhrif (%)</span>
+          </div>
+          <div class="d3-badge" id="schoolFactorBadge"><span id="schoolFactorVal">+10%</span></div>
+        </div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="schoolFactor" min="0" max="20" value="10" step="1" oninput="calcPeak()"></div>
+        <div class="d3-scale"><span>0</span><span>20</span></div>
+      </div>
     </div>
-    <div class="slider-row">
-      <span class="slider-label">&#128663; B&iacute;lar/1000 &iacute;b&uacute;ar (2025)</span>
-      <input type="range" id="pkCarsNow" min="650" max="850" value="779" step="1" oninput="calcPeak()">
-      <span class="slider-val" id="pkCarsNowVal">779</span>
+
+    <div class="d3-group">
+      <div class="d3-group-title">Umferð</div>
+      <div class="d3-row">
+        <div class="d3-header">
+          <div class="d3-label-wrap">
+            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><rect x="1" y="5" width="2.5" height="4"/><rect x="3.75" y="3" width="2.5" height="6"/><rect x="6.5" y="1" width="2.5" height="8"/></svg></div>
+            <span class="d3-label">Akreinar í hvora átt</span>
+          </div>
+          <div class="d3-badge" id="numLanesBadge"><span id="numLanesVal">2</span></div>
+        </div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="numLanes" min="1" max="3" value="2" step="1" oninput="calcPeak()"></div>
+        <div class="d3-scale"><span>1</span><span>3</span></div>
+      </div>
+      <div class="d3-row">
+        <div class="d3-header">
+          <div class="d3-label-wrap">
+            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><path d="M1 5h1.5l1.5-3 2 6 1.5-3H9"/></svg></div>
+            <span class="d3-label">Dagleg umferð (ÁDU)</span>
+          </div>
+          <div class="d3-badge" id="corridorADTBadge"><span id="corridorADTVal">28.000</span></div>
+        </div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="corridorADT" min="10000" max="50000" value="28000" step="1000" oninput="calcPeak()"></div>
+        <div class="d3-scale"><span>10k</span><span>50k</span></div>
+      </div>
+      <div class="d3-row">
+        <div class="d3-header">
+          <div class="d3-label-wrap">
+            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><circle cx="5" cy="5" r="3.5"/><path d="M5 3v2l1.5 1.5"/></svg></div>
+            <span class="d3-label">Grunnferðatími (mín)</span>
+          </div>
+          <div class="d3-badge" id="freeFlowMinBadge"><span id="freeFlowMinVal">20 mín</span></div>
+        </div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="freeFlowMin" min="5" max="40" value="20" step="1" oninput="calcPeak()"></div>
+        <div class="d3-scale"><span>5</span><span>40</span></div>
+      </div>
     </div>
-    <div class="slider-row">
-      <span class="slider-label">&#128652; Modal shift vegna BL (%)</span>
-      <input type="range" id="pkModalShift" min="0" max="20" value="8" step="1" oninput="calcPeak()">
-      <span class="slider-val" id="pkModalShiftVal">8%</span>
+
+    <div class="d3-group">
+      <div class="d3-group-title">Borgarlínan</div>
+      <div class="d3-row">
+        <div class="d3-header">
+          <div class="d3-label-wrap">
+            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><circle cx="4" cy="3" r="1.5"/><path d="M1.5 8.5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5"/><circle cx="7.5" cy="3.5" r="1.2"/><path d="M6.5 8.5c0-1.1.67-2 1.5-2.3"/></svg></div>
+            <span class="d3-label">Bílar/1000 íbúar</span>
+          </div>
+          <div class="d3-badge" id="pkCarsNowBadge"><span id="pkCarsNowVal">779</span></div>
+        </div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="pkCarsNow" min="650" max="850" value="779" step="1" oninput="calcPeak()"></div>
+        <div class="d3-scale"><span>650</span><span>850</span></div>
+      </div>
+      <div class="d3-row">
+        <div class="d3-header">
+          <div class="d3-label-wrap">
+            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><path d="M1 8l8-6"/><circle cx="3" cy="3.5" r="1.2"/><circle cx="7" cy="6.5" r="1.2"/></svg></div>
+            <span class="d3-label">Modal shift BL (%)</span>
+          </div>
+          <div class="d3-badge" id="pkModalShiftBadge"><span id="pkModalShiftVal">8%</span></div>
+        </div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="pkModalShift" min="0" max="20" value="8" step="1" oninput="calcPeak()"></div>
+        <div class="d3-scale"><span>0</span><span>20</span></div>
+      </div>
     </div>
-    <div class="slider-row">
-      <span class="slider-label">&#127979; Skólaáhrif (% aukning á skóladögum)</span>
-      <input type="range" id="schoolFactor" min="0" max="20" value="10" step="1" oninput="calcPeak()">
-      <span class="slider-val" id="schoolFactorVal">+10%</span>
-    </div>
-    <div class="slider-row">
-      <span class="slider-label">&#128739; Akreinar í hvora &aacute;tt</span>
-      <input type="range" id="numLanes" min="1" max="3" value="2" step="1" oninput="calcPeak()">
-      <span class="slider-val" id="numLanesVal">2</span>
-    </div>
-    <div class="slider-row">
-      <span class="slider-label">&#128202; Dagleg umfer&eth; á lei&eth;inni (&Aacute;DU, b&aacute;&eth;ar &aacute;ttir)</span>
-      <input type="range" id="corridorADT" min="10000" max="50000" value="28000" step="1000" oninput="calcPeak()">
-      <span class="slider-val" id="corridorADTVal">28.000</span>
-    </div>
-    <p style="font-size:11px;color:#475569;margin-top:-4px;margin-bottom:10px;">
-      Su&eth;urlandsbraut ~25-35&thorn;. &middot; Miklabraut ~30-40&thorn;. &middot; Hærri=meiri umfer&eth; á lykillei&eth;
-    </p>
-    <div class="slider-row">
-      <span class="slider-label">&#9201; Grunnfer&eth;at&iacute;mi (frj&aacute;lsakstur, m&iacute;n&uacute;tur)</span>
-      <input type="range" id="freeFlowMin" min="5" max="40" value="20" step="1" oninput="calcPeak()">
-      <span class="slider-val" id="freeFlowMinVal">20 m&iacute;n</span>
-    </div>
-    <p style="font-size:11px;color:#475569;margin-top:-4px;margin-bottom:8px;">
-      T.d. 20 m&iacute;n = pendlun á lægstu lykillei&eth; (~10 km vi&eth; 50 km/klst). 30 m&iacute;n = löng leiðin (t.d. Mosfellsbær&rarr;mi&eth;borg).
-    </p>
+
   </div>
   </div><!-- /split-left -->
   <div class="split-right">
@@ -329,28 +400,60 @@
 <div class="panel" id="panel-calc">
   <div class="split-layout">
   <div class="split-left">
-  <div class="box">
-    <h3>Forsendur &mdash; stillanlegar</h3>
-    <div class="slider-row">
-      <span class="slider-label">&#128663; B&iacute;lar/1000 &iacute;b&uacute;ar (2025)</span>
-      <input type="range" id="carsNow" min="650" max="850" value="779" step="1" oninput="calc()">
-      <span class="slider-val" id="carsNowVal">779</span>
+  <div class="d3-panel">
+
+    <div class="d3-group">
+      <div class="d3-group-title">Bílaeign</div>
+      <div class="d3-row">
+        <div class="d3-header">
+          <div class="d3-label-wrap">
+            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><path d="M1.5 6.5h7M2 6.5L3 4h4l1 2.5"/><circle cx="3.2" cy="7.5" r="0.9"/><circle cx="6.8" cy="7.5" r="0.9"/></svg></div>
+            <span class="d3-label">Bílar/1000 íbúar</span>
+          </div>
+          <div class="d3-badge" id="carsNowBadge"><span id="carsNowVal">779</span></div>
+        </div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="carsNow" min="650" max="850" value="779" step="1" oninput="calc()"></div>
+        <div class="d3-scale"><span>650</span><span>850</span></div>
+      </div>
+      <div class="d3-row">
+        <div class="d3-header">
+          <div class="d3-label-wrap">
+            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><path d="M1 7.5l3-3 2 2 3-4"/></svg></div>
+            <span class="d3-label">Breyting bíla/ári</span>
+          </div>
+          <div class="d3-badge" id="carGrowthBadge"><span id="carGrowthVal">+3/ári</span></div>
+        </div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="carGrowth" min="-15" max="15" value="3" step="1" oninput="calc()"></div>
+        <div class="d3-scale"><span>−15</span><span>+15</span></div>
+      </div>
     </div>
-    <div class="slider-row">
-      <span class="slider-label">&#128200; Breyting b&iacute;la/1000 &aacute; &aacute;ri (&aacute;n BL)</span>
-      <input type="range" id="carGrowth" min="-15" max="15" value="3" step="1" oninput="calc()">
-      <span class="slider-val" id="carGrowthVal">+3/&aacute;ri</span>
+
+    <div class="d3-group">
+      <div class="d3-group-title">Borgarlínan</div>
+      <div class="d3-row">
+        <div class="d3-header">
+          <div class="d3-label-wrap">
+            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><path d="M1 8l8-6"/><circle cx="3" cy="3.5" r="1.2"/><circle cx="7" cy="6.5" r="1.2"/></svg></div>
+            <span class="d3-label">Modal shift (%)</span>
+          </div>
+          <div class="d3-badge" id="modalShiftBadge"><span id="modalShiftVal">8%</span></div>
+        </div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="modalShift" min="0" max="20" value="8" step="1" oninput="calc()"></div>
+        <div class="d3-scale"><span>0</span><span>20</span></div>
+      </div>
+      <div class="d3-row">
+        <div class="d3-header">
+          <div class="d3-label-wrap">
+            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><circle cx="5" cy="5" r="3.5"/><path d="M5 3v2l1.5 1.5"/></svg></div>
+            <span class="d3-label">BL opnar (Phase 1)</span>
+          </div>
+          <div class="d3-badge" id="blYearBadge"><span id="blYearVal">2031</span></div>
+        </div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="blYear" min="2029" max="2035" value="2031" step="1" oninput="calc()"></div>
+        <div class="d3-scale"><span>2029</span><span>2035</span></div>
+      </div>
     </div>
-    <div class="slider-row">
-      <span class="slider-label">&#128652; Modal shift vegna BL (%)</span>
-      <input type="range" id="modalShift" min="0" max="20" value="8" step="1" oninput="calc()">
-      <span class="slider-val" id="modalShiftVal">8%</span>
-    </div>
-    <div class="slider-row">
-      <span class="slider-label">&#128197; BL opnar (Phase 1)</span>
-      <input type="range" id="blYear" min="2029" max="2035" value="2031" step="1" oninput="calc()">
-      <span class="slider-val" id="blYearVal">2031</span>
-    </div>
+
   </div>
   </div><!-- /split-left -->
   <div class="split-right">
@@ -415,33 +518,71 @@
 
   <div class="split-layout">
   <div class="split-left">
-  <div class="box">
-    <h3>Stillingar &mdash; vegbreiðkun</h3>
-    <div class="slider-row">
-      <span class="slider-label">&#128739; Aukaakreinar &aacute; lykilleið (báðar áttir)</span>
-      <input type="range" id="extraLanes" min="1" max="6" value="2" step="1" oninput="calcRoads()">
-      <span class="slider-val" id="extraLanesVal">2</span>
+  <div class="d3-panel">
+
+    <div class="d3-group">
+      <div class="d3-group-title">Vegbreiðkun</div>
+      <div class="d3-row">
+        <div class="d3-header">
+          <div class="d3-label-wrap">
+            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><rect x="1" y="5" width="2.5" height="4"/><rect x="3.75" y="3" width="2.5" height="6"/><rect x="6.5" y="1" width="2.5" height="8"/></svg></div>
+            <span class="d3-label">Aukaakreinar (báðar áttir)</span>
+          </div>
+          <div class="d3-badge" id="extraLanesBadge"><span id="extraLanesVal">2</span></div>
+        </div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="extraLanes" min="1" max="6" value="2" step="1" oninput="calcRoads()"></div>
+        <div class="d3-scale"><span>1</span><span>6</span></div>
+      </div>
+      <div class="d3-row">
+        <div class="d3-header">
+          <div class="d3-label-wrap">
+            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><path d="M1 8l8-6"/><circle cx="3" cy="3.5" r="1.2"/><circle cx="7" cy="6.5" r="1.2"/></svg></div>
+            <span class="d3-label">Induced demand (%/ár)</span>
+          </div>
+          <div class="d3-badge" id="inducedRateBadge"><span id="inducedRateVal">8%</span></div>
+        </div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="inducedRate" min="0" max="15" value="8" step="1" oninput="calcRoads()"></div>
+        <div class="d3-scale"><span>0</span><span>15</span></div>
+      </div>
     </div>
-    <div class="slider-row">
-      <span class="slider-label">&#128200; Induced demand &mdash; umferðaraukning &aacute; &aacute;ri (%)</span>
-      <input type="range" id="inducedRate" min="0" max="15" value="8" step="1" oninput="calcRoads()">
-      <span class="slider-val" id="inducedRateVal">8%</span>
+
+    <div class="d3-group">
+      <div class="d3-group-title">Umferð</div>
+      <div class="d3-row">
+        <div class="d3-header">
+          <div class="d3-label-wrap">
+            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><path d="M1 5h1.5l1.5-3 2 6 1.5-3H9"/></svg></div>
+            <span class="d3-label">Dagleg umferð (ÁDU)</span>
+          </div>
+          <div class="d3-badge" id="roadsADTBadge"><span id="roadsADTVal">28.000</span></div>
+        </div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="roadsADT" min="10000" max="50000" value="28000" step="1000" oninput="calcRoads()"></div>
+        <div class="d3-scale"><span>10k</span><span>50k</span></div>
+      </div>
+      <div class="d3-row">
+        <div class="d3-header">
+          <div class="d3-label-wrap">
+            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><circle cx="5" cy="5" r="3.5"/><path d="M5 3v2l1.5 1.5"/></svg></div>
+            <span class="d3-label">Grunnferðatími (mín)</span>
+          </div>
+          <div class="d3-badge" id="roadsFreeFlowBadge"><span id="roadsFreeFlowVal">20 mín</span></div>
+        </div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="roadsFreeFlow" min="5" max="40" value="20" step="1" oninput="calcRoads()"></div>
+        <div class="d3-scale"><span>5</span><span>40</span></div>
+      </div>
+      <div class="d3-row">
+        <div class="d3-header">
+          <div class="d3-label-wrap">
+            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><circle cx="5" cy="5" r="3.5"/><path d="M5 3v2l1.5 1.5"/></svg></div>
+            <span class="d3-label">Ár til samanburðar</span>
+          </div>
+          <div class="d3-badge" id="roadsYearBadge"><span id="roadsYearVal">2031</span></div>
+        </div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="roadsYear" min="2026" max="2040" value="2031" step="1" oninput="calcRoads()"></div>
+        <div class="d3-scale"><span>2026</span><span>2040</span></div>
+      </div>
     </div>
-    <div class="slider-row">
-      <span class="slider-label">&#128197; Ár til samanburðar</span>
-      <input type="range" id="roadsYear" min="2026" max="2040" value="2031" step="1" oninput="calcRoads()">
-      <span class="slider-val" id="roadsYearVal">2031</span>
-    </div>
-    <div class="slider-row">
-      <span class="slider-label">&#128202; Dagleg umferð &aacute; leið (&Aacute;DU, n&uacute;verandi)</span>
-      <input type="range" id="roadsADT" min="10000" max="50000" value="28000" step="1000" oninput="calcRoads()">
-      <span class="slider-val" id="roadsADTVal">28.000</span>
-    </div>
-    <div class="slider-row">
-      <span class="slider-label">&#9201; Grunnferðatími (frjálsakstur, mín.)</span>
-      <input type="range" id="roadsFreeFlow" min="5" max="40" value="20" step="1" oninput="calcRoads()">
-      <span class="slider-val" id="roadsFreeFlowVal">20 mín</span>
-    </div>
+
   </div>
   </div><!-- /split-left -->
   <div class="split-right">
@@ -705,6 +846,7 @@ function calcPeak() {
     + 'Skólaáhrif: Íslenskar grunnskólur byrja 08:00&ndash;08:30 &mdash; þetta skapar þríhyrning í umferð 07:30&ndash;09:00 þar sem foreldrar aka börnum OG fara sjálfir í vinnu samtímis. '
     + 'Annatímahlutfall 9% (AASHTO Highway Capacity Manual). '
     + '<strong>Takmörk líkansins:</strong> BPR er simplified &mdash; tekur ekki tillit til gatnamóta, umferðarljósa eða dreifingar bíla milli leiða. Notaðu tölurnar sem vísbendingu, ekki nákvæma spá.';
+  d3RefreshAll();
 }
 
 // ── FULL DAY CALCULATOR ──
@@ -759,6 +901,7 @@ function calc() {
     +'Innflytjendur eru inni &iacute; &ouml;llum t&ouml;lum. B&iacute;lar/1000: 779 (Hagstofa 2024). '
     +'Modal shift: mat byggt &aacute; samanb&uacute;r&eth;i vi&eth; BRT-kerfi &iacute; &ouml;&eth;rum borgum.';
   if(document.getElementById('panel-straeto').classList.contains('active')) renderRidershipCalc();
+  d3RefreshAll();
 }
 
 // ── STRAETO RIDERSHIP ──
@@ -913,6 +1056,7 @@ function calcRoads() {
     + '&#128994; BL sérakreinar taka ~3,5 m af miðju Suðurlandsbrautar &mdash; sama land, engin kaup. Induced demand á bílakerfi eykst ekki þegar BL tekur rúm.<br>'
     + '&#128994; BL afkastageta: <strong style="color:#34d399;">' + fmt(BL_PAX_HR) + ' farþegar/klst</strong> &mdash; sama og ~' + fmt(BL_CAR_EQ) + ' bílar/klst á tveimur akreinum.'
     + '</div>';
+  d3RefreshAll();
 }
 
 // ── MUNICIPALITIES ──
@@ -953,6 +1097,39 @@ calcPeak();
 calc();
 updateHome();
 calcRoads();
+d3RefreshAll();
+
+// ── D3 SLIDER STYLES ──
+var D3_CONFIGS = [
+  {id:'peakYear',      min:2025, max:2040},
+  {id:'pkCarsNow',     min:650,  max:850},
+  {id:'pkModalShift',  min:0,    max:20},
+  {id:'schoolFactor',  min:0,    max:20},
+  {id:'numLanes',      min:1,    max:3},
+  {id:'corridorADT',   min:10000,max:50000},
+  {id:'freeFlowMin',   min:5,    max:40},
+  {id:'carsNow',       min:650,  max:850},
+  {id:'carGrowth',     min:-15,  max:15},
+  {id:'modalShift',    min:0,    max:20},
+  {id:'blYear',        min:2029, max:2035},
+  {id:'extraLanes',    min:1,    max:6},
+  {id:'inducedRate',   min:0,    max:15},
+  {id:'roadsYear',     min:2026, max:2040},
+  {id:'roadsADT',      min:10000,max:50000},
+  {id:'roadsFreeFlow', min:5,    max:40}
+];
+
+function d3RefreshAll() {
+  D3_CONFIGS.forEach(function(c) {
+    var el = document.getElementById(c.id);
+    if (!el) return;
+    var val = +el.value;
+    var pct = (val - c.min) / (c.max - c.min);
+    el.style.background = 'linear-gradient(90deg,rgba(99,102,241,0.35) ' + (pct*100).toFixed(1) + '%,rgba(255,255,255,0.07) 0%)';
+    var badge = document.getElementById(c.id + 'Badge');
+    if (badge) badge.className = 'd3-badge' + (pct < 0.25 ? ' low' : pct > 0.75 ? ' high' : '');
+  });
+}
 
 // ── SHARE / URL STATE ──
 var SHARE_SLIDERS = [

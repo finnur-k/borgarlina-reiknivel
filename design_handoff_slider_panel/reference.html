@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 3 — Instrument Panel (Reference)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #080e1a;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+
+  .panel {
+    width: 260px;
+    background: #0b1120;
+    padding: 24px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .d3-group {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.055);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .d3-group-title {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #334155;
+  }
+
+  .d3-row { display: flex; flex-direction: column; gap: 7px; }
+
+  .d3-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .d3-label-wrap { display: flex; align-items: center; gap: 7px; }
+
+  .d3-icon {
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    background: rgba(99,102,241,0.12);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .d3-icon svg { width: 10px; height: 10px; }
+
+  .d3-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #94a3b8;
+  }
+
+  .d3-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: rgba(99,102,241,0.15);
+    color: #a5b4fc;
+    letter-spacing: -0.02em;
+    min-width: 42px;
+    text-align: center;
+    border: 1px solid rgba(99,102,241,0.2);
+    transition: background 0.1s;
+  }
+  .d3-badge.low  { background: rgba(100,116,139,0.15); color: #64748b; border-color: rgba(100,116,139,0.2); }
+  .d3-badge.high { background: rgba(99,102,241,0.25);  color: #c7d2fe; border-color: rgba(99,102,241,0.4); }
+
+  .d3-range-wrap { position: relative; height: 14px; display: flex; align-items: center; }
+
+  .d3-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 2px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 1px;
+    outline: none;
+    cursor: pointer;
+  }
+  .d3-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: #0b1120;
+    border: 2px solid #6366f1;
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(99,102,241,0.4);
+    transition: border-color 0.1s, box-shadow 0.1s;
+  }
+  .d3-range:hover::-webkit-slider-thumb {
+    border-color: #a5b4fc;
+    box-shadow: 0 0 10px rgba(99,102,241,0.6);
+  }
+  .d3-range::-moz-range-thumb {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: #0b1120;
+    border: 2px solid #6366f1;
+    cursor: pointer;
+  }
+
+  .d3-scale {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1px;
+  }
+  .d3-scale span {
+    font-size: 9px;
+    color: #1e293b;
+    font-family: 'JetBrains Mono', monospace;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const SLIDERS = [
+  { id: 'pop',     group: 'Demographics',  label: 'Population served', min: 5000,  max: 500000, step: 1000, default: 120000, unit: 'inh.' },
+  { id: 'dens',    group: 'Demographics',  label: 'Urban density',     min: 500,   max: 20000,  step: 100,  default: 4200,   unit: '/km²' },
+  { id: 'freq',    group: 'Service design',label: 'Peak frequency',    min: 2,     max: 30,     step: 1,    default: 8,      unit: 'min'  },
+  { id: 'span',    group: 'Service design',label: 'Daily span',        min: 12,    max: 24,     step: 1,    default: 18,     unit: 'hrs'  },
+  { id: 'fare',    group: 'Financials',    label: 'Fare level',        min: 200,   max: 1000,   step: 50,   default: 450,    unit: 'ISK'  },
+  { id: 'subsidy', group: 'Financials',    label: 'Public subsidy',    min: 0,     max: 100,    step: 5,    default: 60,     unit: '%'    },
+];
+
+const GROUPS = ['Demographics', 'Service design', 'Financials'];
+
+const ICONS = {
+  pop:     <svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" strokeWidth="1.2" strokeLinecap="round"><circle cx="4" cy="3" r="1.5"/><path d="M1.5 8.5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5"/><circle cx="7.5" cy="3.5" r="1.2"/><path d="M6.5 8.5c0-1.1.67-2 1.5-2.3"/></svg>,
+  dens:    <svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" strokeWidth="1.2" strokeLinecap="round"><rect x="1" y="5" width="2.5" height="4"/><rect x="3.75" y="3" width="2.5" height="6"/><rect x="6.5" y="1" width="2.5" height="8"/></svg>,
+  freq:    <svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" strokeWidth="1.2" strokeLinecap="round"><path d="M1 5h1.5l1.5-3 2 6 1.5-3H9"/></svg>,
+  span:    <svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" strokeWidth="1.2" strokeLinecap="round"><circle cx="5" cy="5" r="3.5"/><path d="M5 3v2l1.5 1.5"/></svg>,
+  fare:    <svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" strokeWidth="1.2" strokeLinecap="round"><rect x="1" y="2.5" width="8" height="5" rx="1"/><path d="M3.5 5.5h3M5 4v3"/></svg>,
+  subsidy: <svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" strokeWidth="1.2" strokeLinecap="round"><path d="M1 8l8-6M3 3.5h2.5M5 3.5V6"/></svg>,
+};
+
+function fmt(id, val) {
+  if (val >= 10000) return (val/1000).toFixed(val%1000===0?0:1)+'k';
+  return val.toLocaleString();
+}
+
+function badgeClass(s, val) {
+  const p = (val - s.min) / (s.max - s.min);
+  if (p < 0.25) return 'low';
+  if (p > 0.75) return 'high';
+  return '';
+}
+
+function SliderPanel() {
+  const [vals, setVals] = React.useState(
+    Object.fromEntries(SLIDERS.map(s => [s.id, s.default]))
+  );
+
+  return (
+    <div className="panel">
+      {GROUPS.map(g => (
+        <div className="d3-group" key={g}>
+          <div className="d3-group-title">{g}</div>
+          {SLIDERS.filter(s => s.group === g).map(s => {
+            const val = vals[s.id];
+            const pct = (val - s.min) / (s.max - s.min);
+            return (
+              <div className="d3-row" key={s.id}>
+                <div className="d3-header">
+                  <div className="d3-label-wrap">
+                    <div className="d3-icon">{ICONS[s.id]}</div>
+                    <span className="d3-label">{s.label}</span>
+                  </div>
+                  <div className={`d3-badge ${badgeClass(s, val)}`}>
+                    {fmt(s.id, val)}
+                    <span style={{fontSize:9, opacity:0.6, marginLeft:2}}>{s.unit}</span>
+                  </div>
+                </div>
+                <div className="d3-range-wrap">
+                  <input
+                    type="range"
+                    className="d3-range"
+                    min={s.min} max={s.max} step={s.step} value={val}
+                    style={{
+                      background: `linear-gradient(90deg, rgba(99,102,241,0.35) ${pct*100}%, rgba(255,255,255,0.07) 0%)`
+                    }}
+                    onChange={e => setVals(prev => ({...prev, [s.id]: +e.target.value}))}
+                  />
+                </div>
+                <div className="d3-scale">
+                  <span>{s.min >= 1000 ? (s.min/1000)+'k' : s.min}</span>
+                  <span>{s.max >= 1000 ? (s.max/1000)+'k' : s.max}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<SliderPanel />);
+</script>
+</body>
+</html>
