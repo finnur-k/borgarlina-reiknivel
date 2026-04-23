@@ -87,12 +87,34 @@
     .grid2 { grid-template-columns: 1fr; }
     .slider-label { width: 140px; font-size: 11px; }
   }
+
+  .share-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; }
+  #shareBtn {
+    padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;
+    cursor: pointer; border: 1px solid #334155; background: transparent;
+    color: #94a3b8; transition: all 0.15s; white-space: nowrap;
+  }
+  #shareBtn:hover { background: #1e293b; color: #e2e8f0; border-color: #6366f1; }
+  #shareBtn.copied { background: #14532d; border-color: #22c55e; color: #22c55e; }
+  #shareToast {
+    font-size: 11px; color: #22c55e; opacity: 0;
+    transition: opacity 0.3s; pointer-events: none;
+  }
+  #shareToast.show { opacity: 1; }
 </style>
 </head>
 <body>
 
-<h1>Bílamagn vs Borgarlínan &mdash; H&ouml;fu&eth;borgarsv&aelig;&eth;i&eth;</h1>
-<p class="subtitle">&Ouml;ll 7 sveitarf&eacute;l&ouml;g &middot; Annatímagreining 07:30&ndash;09:30 og 16:00&ndash;17:30 &middot; BPR-tafamódel</p>
+<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:2px;">
+  <div>
+    <h1>Bílamagn vs Borgarlínan &mdash; H&ouml;fu&eth;borgarsv&aelig;&eth;i&eth;</h1>
+    <p class="subtitle">&Ouml;ll 7 sveitarf&eacute;l&ouml;g &middot; Annatímagreining 07:30&ndash;09:30 og 16:00&ndash;17:30 &middot; BPR-tafamódel</p>
+  </div>
+  <div class="share-bar">
+    <button id="shareBtn" onclick="shareLink()">&#128279; Deila</button>
+    <span id="shareToast">Hlekkur afritaður!</span>
+  </div>
+</div>
 
 <div class="tabs">
   <button class="tab active" onclick="showTab('home')">&#127968; Yfirlit</button>
@@ -896,6 +918,69 @@ calcPeak();
 calc();
 updateHome();
 calcRoads();
+
+// ── SHARE / URL STATE ──
+var SHARE_SLIDERS = [
+  'peakYear','pkCarsNow','pkModalShift','schoolFactor','numLanes','corridorADT','freeFlowMin',
+  'carsNow','carGrowth','modalShift','blYear',
+  'extraLanes','inducedRate','roadsYear','roadsADT','roadsFreeFlow'
+];
+
+function getShareURL() {
+  var params = new URLSearchParams();
+  for (var i = 0; i < SHARE_SLIDERS.length; i++) {
+    var el = document.getElementById(SHARE_SLIDERS[i]);
+    if (el) params.set(SHARE_SLIDERS[i], el.value);
+  }
+  var activeTab = document.querySelector('.tab.active');
+  if (activeTab) {
+    var m = activeTab.getAttribute('onclick').match(/showTab\('(\w+)'\)/);
+    if (m) params.set('tab', m[1]);
+  }
+  return location.origin + location.pathname + '#' + params.toString();
+}
+
+function shareLink() {
+  var url = getShareURL();
+  var btn = document.getElementById('shareBtn');
+  var toast = document.getElementById('shareToast');
+  function showCopied() {
+    btn.innerHTML = '&#10003; Afritað';
+    btn.classList.add('copied');
+    toast.classList.add('show');
+    setTimeout(function() {
+      btn.innerHTML = '&#128279; Deila';
+      btn.classList.remove('copied');
+      toast.classList.remove('show');
+    }, 2500);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(showCopied).catch(function() {
+      prompt('Afritaðu þennan hlekk:', url);
+    });
+  } else {
+    prompt('Afritaðu þennan hlekk:', url);
+  }
+}
+
+function loadFromHash() {
+  var hash = location.hash.slice(1);
+  if (!hash) return;
+  try {
+    var params = new URLSearchParams(hash);
+    var changed = false;
+    for (var i = 0; i < SHARE_SLIDERS.length; i++) {
+      if (params.has(SHARE_SLIDERS[i])) {
+        var el = document.getElementById(SHARE_SLIDERS[i]);
+        if (el) { el.value = params.get(SHARE_SLIDERS[i]); changed = true; }
+      }
+    }
+    if (changed) { calcPeak(); calc(); calcRoads(); updateHome(); }
+    if (params.has('tab')) showTab(params.get('tab'));
+  } catch(e) {}
+}
+
+loadFromHash();
 
 function updateHome() {
   var carsNow = 779;

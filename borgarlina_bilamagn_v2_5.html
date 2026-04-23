@@ -87,12 +87,34 @@
     .grid2 { grid-template-columns: 1fr; }
     .slider-label { width: 140px; font-size: 11px; }
   }
+
+  .share-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; }
+  #shareBtn {
+    padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;
+    cursor: pointer; border: 1px solid #334155; background: transparent;
+    color: #94a3b8; transition: all 0.15s; white-space: nowrap;
+  }
+  #shareBtn:hover { background: #1e293b; color: #e2e8f0; border-color: #6366f1; }
+  #shareBtn.copied { background: #14532d; border-color: #22c55e; color: #22c55e; }
+  #shareToast {
+    font-size: 11px; color: #22c55e; opacity: 0;
+    transition: opacity 0.3s; pointer-events: none;
+  }
+  #shareToast.show { opacity: 1; }
 </style>
 </head>
 <body>
 
-<h1>Bílamagn vs Borgarlínan &mdash; H&ouml;fu&eth;borgarsv&aelig;&eth;i&eth;</h1>
-<p class="subtitle">&Ouml;ll 7 sveitarf&eacute;l&ouml;g &middot; Annatímagreining 07:30&ndash;09:30 og 16:00&ndash;17:30 &middot; BPR-tafamódel</p>
+<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:2px;">
+  <div>
+    <h1>Bílamagn vs Borgarlínan &mdash; H&ouml;fu&eth;borgarsv&aelig;&eth;i&eth;</h1>
+    <p class="subtitle">&Ouml;ll 7 sveitarf&eacute;l&ouml;g &middot; Annatímagreining 07:30&ndash;09:30 og 16:00&ndash;17:30 &middot; BPR-tafamódel</p>
+  </div>
+  <div class="share-bar">
+    <button id="shareBtn" onclick="shareLink()">&#128279; Deila</button>
+    <span id="shareToast">Hlekkur afritaður!</span>
+  </div>
+</div>
 
 <div class="tabs">
   <button class="tab active" onclick="showTab('home')">&#127968; Yfirlit</button>
@@ -887,37 +909,4 @@ function showTab(name) {
   var panels=document.querySelectorAll('.panel');
   for(var i=0;i<panels.length;i++) panels[i].classList.remove('active');
   document.querySelector('[onclick="showTab(\''+name+'\')"]').classList.add('active');
-  document.getElementById('panel-'+name).classList.add('active');
-  if(name==='straeto') renderRidershipCalc();
-}
-
-renderMunis();
-calcPeak();
-calc();
-updateHome();
-calcRoads();
-
-function updateHome() {
-  var carsNow = 779;
-  var pop2025 = 249560;
-  var pop2031 = 270000;
-  var blModalShift = 0.08;
-  var carGrowth = 3;
-
-  var cars2025 = Math.round(pop2025 * carsNow / 1000);
-  var cpk2031 = carsNow + carGrowth * 6;
-  var cars2031 = Math.round(pop2031 * cpk2031 / 1000);
-  var cars2031bl = Math.round(cars2031 * (1 - blModalShift));
-  var extra = cars2031 - cars2025;
-  var saved = cars2031 - cars2031bl;
-
-  var elToday = document.getElementById('home-cars-today');
-  var el2031  = document.getElementById('home-cars-2031');
-  var elBL    = document.getElementById('home-cars-bl');
-  if (elToday) elToday.textContent = fmt(cars2025);
-  if (el2031)  el2031.textContent  = '+' + fmt(extra);
-  if (elBL)    elBL.textContent    = '−' + fmt(saved);
-}
-</script>
-</body>
-</html>
+  document.getElemen
