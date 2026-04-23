@@ -330,7 +330,7 @@
     <button class="tab" onclick="showTab('peak')">Annatímar &amp; tafar</button>
     <button class="tab" onclick="showTab('calc')">Reiknivél</button>
     <button class="tab" onclick="showTab('straeto')">Strætó grunnlína</button>
-    <button class="tab" onclick="showTab('roads')">Vegbreiðkun vs BL</button>
+    <button class="tab" onclick="showTab('roads')">Fleiri akreinar vs BL</button>
     <button class="tab" onclick="showTab('munis')">Sveitarfélögin 7</button>
   </nav>
   <!-- Mobile tab dropdown -->
@@ -345,7 +345,7 @@
       <div class="mob-tab-picker-item" onclick="showTab('peak');closeTabPicker()"><svg id="chk-peak" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Annatímar &amp; tafar</div>
       <div class="mob-tab-picker-item" onclick="showTab('calc');closeTabPicker()"><svg id="chk-calc" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Reiknivél</div>
       <div class="mob-tab-picker-item" onclick="showTab('straeto');closeTabPicker()"><svg id="chk-straeto" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Strætó grunnlína</div>
-      <div class="mob-tab-picker-item" onclick="showTab('roads');closeTabPicker()"><svg id="chk-roads" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Vegbreiðkun vs BL</div>
+      <div class="mob-tab-picker-item" onclick="showTab('roads');closeTabPicker()"><svg id="chk-roads" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Fleiri akreinar vs BL</div>
       <div class="mob-tab-picker-item" onclick="showTab('munis');closeTabPicker()"><svg id="chk-munis" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Sveitarfélögin 7</div>
     </div>
   </div>
@@ -710,7 +710,7 @@
   <div class="d3-panel">
 
     <div class="d3-group">
-      <div class="d3-group-title">Vegbreiðkun</div>
+      <div class="d3-group-title">Fleiri akreinar</div>
       <div class="d3-row">
         <div class="d3-header">
           <div class="d3-label-wrap">
@@ -784,14 +784,18 @@
     <table>
       <thead>
         <tr>
-          <th>Ár</th>
-          <th>ÁDU &mdash; vegbreiðkun</th>
-          <th>V/C &mdash; vegbreiðkun</th>
-          <th>Ferðatími &mdash; vegbreiðkun</th>
-          <th>ÁDU &mdash; BL</th>
-          <th>V/C &mdash; BL</th>
-          <th>Ferðatími &mdash; BL</th>
-          <th>BL betri um</th>
+          <th rowspan="2">Ár</th>
+          <th colspan="3" style="text-align:center;border-bottom:1px solid #334155;">Fleiri akreinar</th>
+          <th colspan="3" style="text-align:center;border-bottom:1px solid #334155;">Borgarlínan</th>
+          <th rowspan="2">Munur</th>
+        </tr>
+        <tr>
+          <th>ÁDU</th>
+          <th>V/C</th>
+          <th>Mín</th>
+          <th>ÁDU</th>
+          <th>V/C</th>
+          <th>Mín</th>
         </tr>
       </thead>
       <tbody id="roadsTable"></tbody>
@@ -1194,17 +1198,17 @@ function calcRoads() {
         + '<h4 style="color:' + col + ';margin-bottom:12px;font-size:13px;">' + title + '</h4>'
         + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">'
         + '<div><div style="font-size:20px;font-weight:700;color:' + col + '">' + fmt(d.adt) + '</div><div style="font-size:10px;color:#64748b;">\u00c1DU</div></div>'
-        + '<div><div style="font-size:20px;font-weight:700;color:' + d.los.col + '">' + d.vc.toFixed(2) + '</div><div style="font-size:10px;color:#64748b;">V/C hlutfall</div></div>'
-        + '<div><div style="font-size:20px;font-weight:700;color:' + d.los.col + '">' + d.delay + ' m\u00edn</div><div style="font-size:10px;color:#64748b;">Fer\u00f0at\u00edmi</div></div>'
-        + '<div><div style="font-size:20px;font-weight:700;color:' + d.los.col + '">' + d.los.los + '</div><div style="font-size:10px;color:#64748b;">\u00dej\u00f3nunststig</div></div>'
+        + '<div><div style="font-size:20px;font-weight:700;color:' + col + '">' + d.vc.toFixed(2) + '</div><div style="font-size:10px;color:#64748b;">V/C hlutfall</div></div>'
+        + '<div><div style="font-size:20px;font-weight:700;color:' + col + '">' + d.delay + ' m\u00edn</div><div style="font-size:10px;color:#64748b;">Fer\u00f0at\u00edmi</div></div>'
+        + '<div><div style="font-size:20px;font-weight:700;color:' + col + '">' + d.los.los + '</div><div style="font-size:10px;color:#64748b;">\u00dej\u00f3nuststig</div></div>'
         + '</div>'
         + '<div style="font-size:10px;color:#64748b;">' + note + '</div>'
         + '</div>';
     }
     document.getElementById('roadsCompare').innerHTML =
-      roadCard('&#128739; Vegbrei\u00f0kun ' + roadsYear, '#f87171', compareR,
+      roadCard('&#128739; Fleiri akreinar ' + roadsYear, '#f87171', compareR,
         'Me\u00f0 ' + extraLanes + ' aukaakreinum &mdash; en induced demand ' + Math.round(inducedRate*100) + '%/\u00e1r fyllir akreinarnar')
-      + roadCard('&#128652; Borgairl\u00edna ' + roadsYear, '#34d399', compareBL,
+      + roadCard('&#128652; Borgarl\u00edna ' + roadsYear, '#34d399', compareBL,
         'Engar aukaakreinar &mdash; BL flytur ~8% b\u00edlfer\u00f0a af lei\u00f0inni fr\u00e1 2031');
   }
 
@@ -1214,11 +1218,11 @@ function calcRoads() {
   var extraHa    = (extraM2 / 10000).toFixed(1);
   var fields     = Math.round(extraM2 / 7140);
   document.getElementById('roadsLandBox').innerHTML =
-    '<strong>&#127758; Landnotkun vegbrei\u00f0kunar:</strong> '
+    '<strong>&#127758; Landnotkun akreinaaukningar:</strong> '
     + extraLanes + ' aukaakreinar \u00e1 ' + corridorKm + ' km lei\u00f0 = '
     + '<strong>' + fmt(Math.round(extraM2)) + ' m\u00b2</strong> (' + extraHa + ' ha) '
     + '&mdash; ~' + fields + ' f\u00f3tbollavellir. '
-    + 'Borgairl\u00ednan n\u00fdtir sama vegrunn og n\u00faverandi str\u00e6tisvagnar &mdash; engin n\u00fd land \u00fef.';
+    + 'Borgarl\u00ednan n\u00fdtir sama vegrunn og n\u00faverandi str\u00e6tisvagnar &mdash; engin n\u00fd land \u00fef.';
 
   d3RefreshAll();
 }
@@ -1227,7 +1231,7 @@ function calcRoads() {
 var TABS_WITH_SLIDERS = { peak: true, calc: true, roads: true };
 var TAB_LABELS = {
   home: 'Yfirlit', peak: 'Annatímar & tafar', calc: 'Reiknivél',
-  straeto: 'Strætó grunnlína', roads: 'Vegbreiðkun vs BL', munis: 'Sveitarfélögin 7'
+  straeto: 'Strætó grunnlína', roads: 'Fleiri akreinar vs BL', munis: 'Sveitarfélögin 7'
 };
 
 // ── TAB SWITCHER ──
