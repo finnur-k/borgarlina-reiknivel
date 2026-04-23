@@ -1285,6 +1285,16 @@ function showTab(name) {
   updateHash();
 }
 
+// ── Mobile drawer (Forsendur) ──
+function openDrawer() {
+  document.getElementById('drawerBackdrop').classList.add('open');
+  document.getElementById('mobDrawer').classList.add('open');
+}
+function closeDrawer() {
+  document.getElementById('drawerBackdrop').classList.remove('open');
+  document.getElementById('mobDrawer').classList.remove('open');
+}
+
 // ── Mobile tab picker ──
 function toggleTabPicker() {
   var open = document.getElementById('tabPicker').classList.contains('open');
