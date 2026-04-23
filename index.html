@@ -131,6 +131,12 @@
   .muni-row span:last-child { color: #94a3b8; font-weight: 600; }
 
   .info-box { background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2); border-radius: 10px; padding: 12px 14px; font-size: 12px; line-height: 1.7; margin-bottom: 18px; color: #a5b4fc; }
+  details.info-box { padding: 0; }
+  details.info-box summary { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; cursor: pointer; list-style: none; font-weight: 600; color: #818cf8; font-size: 12px; }
+  details.info-box summary::-webkit-details-marker { display: none; }
+  details.info-box summary::after { content: '›'; font-size: 18px; line-height: 1; color: #6366f1; transition: transform 0.2s; flex-shrink: 0; }
+  details.info-box[open] summary::after { transform: rotate(90deg); }
+  details.info-box .info-body { padding: 0 14px 12px; border-top: 1px solid rgba(99,102,241,0.15); padding-top: 10px; }
   .note { background: #1e293b55; border-left: 3px solid #6366f1; padding: 12px 14px; border-radius: 0 8px 8px 0; font-size: 11px; color: #64748b; line-height: 1.7; margin-bottom: 18px; }
   .note strong { color: #94a3b8; }
 
@@ -455,9 +461,10 @@
 <!-- ═══ PEAK HOUR ═══ -->
 <div class="panel" id="panel-peak">
 
-  <div class="info-box">
-    <strong>&#128270; Aðferðafræði:</strong> BPR-formúla (Bureau of Public Roads): <code style="background:#0f172a;padding:2px 6px;border-radius:4px;font-size:12px;">t = t&#8320; &times; (1 + 0,15 &times; (V/C)&#8308;)</code> &mdash; þar sem V = umferð á klukkustund, C = þakmark leiðarinnar. Þegar V/C nálgast 1,0 eykst tafinn á veldisvísi. Þakmark Suðurlandsbrautar: <strong>900 bílar/akrein/klst</strong> (T.ark/mbl.is, mars 2026). Annatímahlutfall: ~9% af daglegri umferð (AASHTO Highway Capacity Manual). Grunnferðatími (t&#8320;) er stillanlegt hér að neðan.
-  </div>
+  <details class="info-box">
+    <summary>&#128270; Aðferðafræði &mdash; BPR-formúla</summary>
+    <div class="info-body">BPR-formúla (Bureau of Public Roads): <code style="background:#0f172a;padding:2px 6px;border-radius:4px;font-size:12px;">t = t&#8320; &times; (1 + 0,15 &times; (V/C)&#8308;)</code> &mdash; þar sem V = umferð á klukkustund, C = þakmark leiðarinnar. Þegar V/C nálgast 1,0 eykst tafinn á veldisvísi. Þakmark Suðurlandsbrautar: <strong>900 bílar/akrein/klst</strong> (T.ark/mbl.is, mars 2026). Annatímahlutfall: ~9% af daglegri umferð (AASHTO Highway Capacity Manual). Grunnferðatími (t&#8320;) er stillanlegt hér að neðan.</div>
+  </details>
 
   <div class="split-layout">
   <div class="split-left">
@@ -661,10 +668,10 @@
 
 <!-- ═══ STRAETO ═══ -->
 <div class="panel" id="panel-straeto">
-  <div class="info-box">
-    <strong>Raunverulegar t&ouml;lur &uacute;r sj&aacute;lfb&aelig;rnisky;rslum Str&aelig;t&oacute; bs.</strong><br>
-    Innstig = eitt skipti sem far&thorn;egi st&iacute;gur upp &iacute; vagn.
-  </div>
+  <details class="info-box">
+    <summary>Raunverulegar tölur &mdash; Strætó bs.</summary>
+    <div class="info-body"><strong>Raunverulegar t&ouml;lur &uacute;r sj&aacute;lfb&aelig;rnisky;rslum Str&aelig;t&oacute; bs.</strong><br>Innstig = eitt skipti sem far&thorn;egi st&iacute;gur upp &iacute; vagn.</div>
+  </details>
   <div class="table-wrap">
     <table>
       <thead><tr><th>&Aacute;r</th><th>Innstig (m)</th><th>&Aacute; dag</th><th>&Aacute; &iacute;b&uacute;a</th><th>Athugasemd</th></tr></thead>
@@ -693,12 +700,10 @@
 <!-- ═══ ROADS ═══ -->
 <div class="panel" id="panel-roads">
 
-  <div class="info-box">
-    <strong>&#128270; Fundamental law of road congestion</strong> (Duranton &amp; Turner, 2011):
-    10% aukning á vegaafkastagetu leiðir til ~10% aukningar á umferð innan 5&ndash;10 ára.
-    Fólk sem var að forðast álagstímann, taka aðra leið, eða vinna heiman eykur bílanotkun þegar rúm gefst.
-    Nýjar akreinar fyllast &mdash; BL gerir það ekki.
-  </div>
+  <details class="info-box">
+    <summary>&#128270; Fundamental law of road congestion</summary>
+    <div class="info-body">(Duranton &amp; Turner, 2011): 10% aukning á vegaafkastagetu leiðir til ~10% aukningar á umferð innan 5&ndash;10 ára. Fólk sem var að forðast álagstímann, taka aðra leið, eða vinna heiman eykur bílanotkun þegar rúm gefst. Nýjar akreinar fyllast &mdash; BL gerir það ekki.</div>
+  </details>
 
   <div class="split-layout">
   <div class="split-left">
@@ -1455,6 +1460,10 @@ window.addEventListener('DOMContentLoaded', function() {
     // Default tab is 'home' which has no sliders — hide FAB
     var fab = document.getElementById('fabForsendur');
     if (fab) fab.style.display = 'none';
+    // Auto-open info-boxes on desktop
+    if (window.innerWidth > 768) {
+      document.querySelectorAll('details.info-box').forEach(function(d) { d.open = true; });
+    }
   }
 });
 </script>
