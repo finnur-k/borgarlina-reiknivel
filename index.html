@@ -920,202 +920,154 @@ function renderRidershipCalc() {
     '<div class="stat-card"><div class="snum" style="color:#f87171">'+fmt(repl)+'</div><div class="slbl">B\u00edlar sem BL kemur \u00ed sta\u00f0 ('+blYr+')<br>vi\u00f0 '+pct+'% modal shift</div></div>'
     +'<div class="stat-card"><div class="snum" style="color:#fbbf24">'+fmt(dTrips)+'</div><div class="slbl">B\u00edlafer\u00f0ir/dag sem f\u00e6rast \u00ed BL</div></div>'
     +'<div class="stat-card"><div class="snum" style="color:#34d399">'+fmt(dBoard)+'</div><div class="slbl">N\u00fd innstig \u00e1 dag \u00ed BL</div></div>'
-    +'<div class="stat-card"><div class="snum" style="color:#818cf8">+'+aBoard+'m</div><div class="slbl">Aukning innstig \u00e1 \u00e1ri</div></div>';
+    +'<div class="stat-card"><div class="snum" style="color:#818cf8">'+newTot+'m</div><div class="slbl">Heildarinnstig \u00e1ri\u00f0 (BL opna\u00f0 '+blYr+')</div></div>';
   document.getElementById('ridershipNote').innerHTML=
-    'Str\u00e6t\u00f3 grunnl\u00edna 2024: ~11,9m. Me\u00f0 BL: ~'+newTot+'m. Mark mi\u00f0 2040: 60m. '
-    +'Forsendur: 1,8 b\u00edlafer\u00f0ir/dag, 1,3 innstig/fer\u00f0.';
+    '<strong>R\u00f6kstuddar forsendu:</strong> Hvert b\u00edll sem BL kemur \u00ed sta\u00f0 er talinn gera 1,8 fer\u00f0ir/dag. Af \u00feeim fer\u00f0um lenda 1,3 innstig \u00ed BL (sum \u00feirfara). '
+    +'Innstigsspjall BL er reiknast sem 300 opnunardagar/\u00e1r. '
+    +'Grunnl\u00edna 2024: 11,9m innstig (Str\u00e6t\u00f3 \u00e1rsskyrsla). Innflutt: met 2023 = 12,64m.';
 }
 
-
-// ── ROADS VS BL ──
+// ── ROADS CALCULATOR ──
 function calcRoads() {
   var extraLanes   = parseInt(document.getElementById('extraLanes').value);
   var inducedRate  = parseInt(document.getElementById('inducedRate').value) / 100;
+  var roadsADT     = parseInt(document.getElementById('roadsADT').value);
+  var roadsFreeFlow= parseInt(document.getElementById('roadsFreeFlow').value);
   var roadsYear    = parseInt(document.getElementById('roadsYear').value);
-  var adt          = parseInt(document.getElementById('roadsADT').value);
-  var freeFlow     = parseInt(document.getElementById('roadsFreeFlow').value);
 
   document.getElementById('extraLanesVal').textContent    = extraLanes;
-  document.getElementById('inducedRateVal').textContent   = (inducedRate*100) + '%';
+  document.getElementById('inducedRateVal').textContent   = Math.round(inducedRate*100) + '%';
+  document.getElementById('roadsADTVal').textContent      = fmt(roadsADT);
+  document.getElementById('roadsFreeFlowVal').textContent = roadsFreeFlow + ' m\u00edn';
   document.getElementById('roadsYearVal').textContent     = roadsYear;
-  document.getElementById('roadsADTVal').textContent      = adt.toLocaleString('is-IS');
-  document.getElementById('roadsFreeFlowVal').textContent = freeFlow + ' mín';
 
-  var LANE_CAP   = 900;   // bílar/akrein/klst
-  var PEAK_SH    = 0.09;  // 9% of ADT per hour
-  var BL_PAX_HR  = Math.floor(60/7) * 2 * 125; // 2 routes, 7min headway, 125 pax
-  var BL_CAR_EQ  = Math.round(BL_PAX_HR / 1.2);
+  var BASE_LANES  = 2;   // lanes per direction (baseline)
+  var POP_GROWTH  = 0.016;
+  var BL_MODAL    = 0.08;
+  var BL_YEAR     = 2031;
 
-  var baseLanes  = 2; // existing lanes per direction
-  var newLanes   = baseLanes + extraLanes;
-
-  var years = [];
-  for (var y = 2025; y <= 2040; y++) years.push(y);
-
-  var tableRows = '';
-  var compareData = {};
+  var years = [2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035,2036,2037,2038,2039,2040];
+  var rows = '', compareR = null, compareBL = null;
 
   for (var i = 0; i < years.length; i++) {
     var yr = years[i];
-    var yrsFromNow = yr - 2025;
+    var t  = yr - 2025;
 
-    // --- ROAD WIDENING ---
-    // New capacity after widening
-    var newCap = newLanes * LANE_CAP; // per direction
+    // Base ADT grows with population
+    var adtBase = roadsADT * Math.pow(1 + POP_GROWTH, t);
 
-    // Induced demand: ADT grows by inducedRate% per year after widening
-    var adtRoad = yr >= 2027
-      ? Math.round(adt * Math.pow(1 + inducedRate, Math.min(yrsFromNow, yr - 2027 + 1)))
-      : adt;
-    // Also grows from population (+1.6%/yr)
-    adtRoad = Math.round(adtRoad * Math.pow(1.016, yrsFromNow));
-    var peakRoad = Math.round(adtRoad * PEAK_SH / 2);
-    var vcRoad   = peakRoad / (newLanes * LANE_CAP);
-    var tRoad    = freeFlow * (1 + 0.15 * Math.pow(Math.min(vcRoad, 1.5), 4));
+    // ROAD WIDENING: add extraLanes/2 per direction, induced demand kicks in from roadsYear
+    var lanesR     = BASE_LANES + (yr >= roadsYear ? extraLanes / 2 : 0);
+    var indYrs     = yr >= roadsYear ? yr - roadsYear : 0;
+    var adtR       = adtBase * Math.pow(1 + inducedRate, indYrs);
+    var peakR      = adtR * PEAK_SHARE / 2;
+    var vcR        = peakR / (lanesR * LANE_CAPACITY);
+    var delayR     = bprDelay(peakR / lanesR, LANE_CAPACITY, roadsFreeFlow);
+    var losR       = getLOS(vcR);
 
-    // --- BORGARLÍNAN (modal shift 8%, BL opens 2031) ---
-    var adtBL = Math.round(adt * Math.pow(1.016, yrsFromNow));
-    if (yr >= 2031) adtBL = Math.round(adtBL * (1 - 0.08 * 1.3));
-    var peakBL = Math.round(adtBL * PEAK_SH / 2);
-    var vcBL   = peakBL / (baseLanes * LANE_CAP);
-    var tBL    = freeFlow * (1 + 0.15 * Math.pow(Math.min(vcBL, 1.5), 4));
+    // BL: no extra lanes, modal shift from BL_YEAR
+    var adtBL      = yr >= BL_YEAR ? adtBase * (1 - BL_MODAL) : adtBase;
+    var peakBL     = adtBL * PEAK_SHARE / 2;
+    var vcBL       = peakBL / (BASE_LANES * LANE_CAPACITY);
+    var delayBL    = bprDelay(peakBL / BASE_LANES, LANE_CAPACITY, roadsFreeFlow);
+    var losBL      = getLOS(vcBL);
 
-    var losRoad = getLOS(vcRoad);
-    var losBL   = getLOS(vcBL);
-    var diff    = tRoad - tBL;
+    var diff = Math.round(delayR - delayBL);
+    var diffStr = diff > 0
+      ? '<span class="green">&minus;' + diff + ' m\u00edn</span>'
+      : diff < 0
+        ? '<span class="red">+' + Math.abs(diff) + ' m\u00edn</span>'
+        : '<span class="dim">&mdash;</span>';
 
-    if (yr === roadsYear) compareData = {
-      adtRoad:adtRoad, vcRoad:vcRoad, tRoad:tRoad, losRoad:losRoad,
-      adtBL:adtBL, vcBL:vcBL, tBL:tBL, losBL:losBL,
-      peakRoad:peakRoad, peakBL:peakBL, diff:diff
-    };
-
-    var isNow = yr === 2025;
-    var isBL  = yr === 2031;
-    var diffStr = diff > 0.5
-      ? '<span class="green">BL betri um ' + Math.round(diff) + ' mín</span>'
-      : diff < -0.5
-        ? '<span class="red">Vegur betri um ' + Math.round(-diff) + ' mín</span>'
-        : '<span class="dim">Jafntefli</span>';
-
-    tableRows += '<tr' + (isNow ? ' class="row-now"' : '') + '>'
-      + '<td class="hl">' + yr + (isBL ? ' &#128652;' : '') + '</td>'
-      + '<td>' + fmt(adtRoad) + '</td>'
-      + '<td><span style="color:' + losRoad.col + ';font-weight:700;">' + vcRoad.toFixed(2) + ' (' + losRoad.los + ')</span></td>'
-      + '<td>' + Math.round(tRoad) + ' mín</td>'
-      + '<td>' + fmt(adtBL) + '</td>'
-      + '<td><span style="color:' + losBL.col + ';font-weight:700;">' + vcBL.toFixed(2) + ' (' + losBL.los + ')</span></td>'
-      + '<td>' + Math.round(tBL) + ' mín</td>'
+    rows += '<tr' + (yr === 2025 ? ' class="row-now"' : '') + '>'
+      + '<td class="hl">' + yr + (yr === roadsYear ? ' &#128739;' : '') + (yr === BL_YEAR ? ' &#128652;' : '') + '</td>'
+      + '<td>' + fmt(Math.round(adtR)) + '</td>'
+      + '<td><span style="color:' + losR.col + '">' + vcR.toFixed(2) + '</span></td>'
+      + '<td><span style="color:' + losR.col + '">' + Math.round(delayR) + ' m\u00edn</span></td>'
+      + '<td>' + fmt(Math.round(adtBL)) + '</td>'
+      + '<td><span style="color:' + losBL.col + '">' + vcBL.toFixed(2) + '</span></td>'
+      + '<td><span style="color:' + losBL.col + '">' + Math.round(delayBL) + ' m\u00edn</span></td>'
       + '<td>' + diffStr + '</td>'
       + '</tr>';
+
+    if (yr === roadsYear) {
+      compareR  = { adt: Math.round(adtR),  vc: vcR,  delay: Math.round(delayR),  los: losR  };
+      compareBL = { adt: Math.round(adtBL), vc: vcBL, delay: Math.round(delayBL), los: losBL };
+    }
+  }
+  document.getElementById('roadsTable').innerHTML = rows;
+
+  // Comparison cards
+  if (compareR && compareBL) {
+    function roadCard(title, col, d, note) {
+      return '<div style="background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.055);border-radius:10px;padding:16px;">'
+        + '<h4 style="color:' + col + ';margin-bottom:12px;font-size:13px;">' + title + '</h4>'
+        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">'
+        + '<div><div style="font-size:20px;font-weight:700;color:' + col + '">' + fmt(d.adt) + '</div><div style="font-size:10px;color:#64748b;">\u00c1DU</div></div>'
+        + '<div><div style="font-size:20px;font-weight:700;color:' + d.los.col + '">' + d.vc.toFixed(2) + '</div><div style="font-size:10px;color:#64748b;">V/C hlutfall</div></div>'
+        + '<div><div style="font-size:20px;font-weight:700;color:' + d.los.col + '">' + d.delay + ' m\u00edn</div><div style="font-size:10px;color:#64748b;">Fer\u00f0at\u00edmi</div></div>'
+        + '<div><div style="font-size:20px;font-weight:700;color:' + d.los.col + '">' + d.los.los + '</div><div style="font-size:10px;color:#64748b;">\u00dej\u00f3nunststig</div></div>'
+        + '</div>'
+        + '<div style="font-size:10px;color:#64748b;">' + note + '</div>'
+        + '</div>';
+    }
+    document.getElementById('roadsCompare').innerHTML =
+      roadCard('&#128739; Vegbrei\u00f0kun ' + roadsYear, '#f87171', compareR,
+        'Me\u00f0 ' + extraLanes + ' aukaakreinum &mdash; en induced demand ' + Math.round(inducedRate*100) + '%/\u00e1r fyllir akreinarnar')
+      + roadCard('&#128652; Borgairl\u00edna ' + roadsYear, '#34d399', compareBL,
+        'Engar aukaakreinar &mdash; BL flytur ~8% b\u00edlfer\u00f0a af lei\u00f0inni fr\u00e1 2031');
   }
 
-  document.getElementById('roadsTable').innerHTML = tableRows;
-
-  // COMPARE CARDS
-  var cd = compareData;
-  document.getElementById('roadsCompare').innerHTML =
-    '<div style="background:#1a1a2e;border:1px solid #334155;border-radius:12px;padding:18px;">'
-    + '<div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;">&#128739; Vegbreiðkun (+' + extraLanes + ' akreinar) &mdash; ' + roadsYear + '</div>'
-    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'
-    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:' + cd.losRoad.col + '">' + fmt(cd.adtRoad) + '</div><div style="font-size:10px;color:#64748b;margin-top:2px;">ÁDU (induced demand innifalið)</div></div>'
-    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:' + cd.losRoad.col + '">' + cd.vcRoad.toFixed(2) + '</div><div style="font-size:10px;color:#64748b;margin-top:2px;">V/C &mdash; LOS ' + cd.losRoad.los + '</div></div>'
-    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:' + cd.losRoad.col + '">' + Math.round(cd.tRoad) + ' mín</div><div style="font-size:10px;color:#64748b;margin-top:2px;">Ferðatími á annatíma</div></div>'
-    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:#64748b;">' + (newLanes) + ' akreinar</div><div style="font-size:10px;color:#64748b;margin-top:2px;">Í hvora átt eftir breiðkun</div></div>'
-    + '</div></div>'
-
-    + '<div style="background:#0f2d1a;border:1px solid #14532d;border-radius:12px;padding:18px;">'
-    + '<div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;">&#128652; Borgarlínan (8% modal shift) &mdash; ' + roadsYear + '</div>'
-    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'
-    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:' + cd.losBL.col + '">' + fmt(cd.adtBL) + '</div><div style="font-size:10px;color:#64748b;margin-top:2px;">ÁDU (BL dregur úr umferð)</div></div>'
-    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:' + cd.losBL.col + '">' + cd.vcBL.toFixed(2) + '</div><div style="font-size:10px;color:#64748b;margin-top:2px;">V/C &mdash; LOS ' + cd.losBL.los + '</div></div>'
-    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:' + cd.losBL.col + '">' + Math.round(cd.tBL) + ' mín</div><div style="font-size:10px;color:#64748b;margin-top:2px;">Ferðatími á annatíma</div></div>'
-    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:#34d399;">' + fmt(BL_PAX_HR) + '</div><div style="font-size:10px;color:#64748b;margin-top:2px;">Farþegar/klst á BL leiðum</div></div>'
-    + '</div></div>';
-
-  // LAND USE
-  var laneLen    = 14500; // 14.5 km Phase 1 corridor
-  var laneW      = 3.5;
-  var sqm        = extraLanes * 2 * laneLen * laneW;
-  var ha         = (sqm / 10000).toFixed(1);
-  var footballs  = Math.round(sqm / 7140);
-  var blCost     = 48600; // milljónir kr Phase 1
-  var costPerSqm = Math.round(blCost * 1e6 / (14500 * (3.5 * 2 * 2 + 3.0))); // rough BL cost per m2 corridor
-
+  // Land use
+  var corridorKm = 10;
+  var extraM2    = extraLanes * 3.5 * corridorKm * 1000;
+  var extraHa    = (extraM2 / 10000).toFixed(1);
+  var fields     = Math.round(extraM2 / 7140);
   document.getElementById('roadsLandBox').innerHTML =
-    '<h3>Landnotkun &mdash; vegbreiðkun á 14,5 km (BL-leiðarlengd)</h3>'
-    + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;">'
-    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:#fbbf24;">' + fmt(Math.round(sqm)) + ' m²</div><div style="font-size:10px;color:#64748b;margin-top:2px;">Nýtt malbik (' + extraLanes + '×2 akreinar × 14,5 km × 3,5 m)</div></div>'
-    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:#fbbf24;">' + ha + ' ha</div><div style="font-size:10px;color:#64748b;margin-top:2px;">Hektarar af borgarlandi</div></div>'
-    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:#fbbf24;">~' + footballs + '</div><div style="font-size:10px;color:#64748b;margin-top:2px;">Fótboltavellir (til samanburðar)</div></div>'
-    + '</div>'
-    + '<div style="font-size:12px;color:#94a3b8;line-height:1.8;">'
-    + '&#128308; Vegbreiðkun þarf <strong style="color:#fbbf24;">' + ha + ' hektara</strong> af nýju landi &mdash; sem þarf að kaupa, flytja lagnir, breyta bílastæðum.<br>'
-    + '&#128308; Induced demand þýðir að þetta er ekki varanleg lausn &mdash; umferð fyllir upp á ' + Math.round(1/inducedRate * 10) + ' árum við ' + Math.round(inducedRate*100) + '% induced demand á ári.<br>'
-    + '&#128994; BL sérakreinar taka ~3,5 m af miðju Suðurlandsbrautar &mdash; sama land, engin kaup. Induced demand á bílakerfi eykst ekki þegar BL tekur rúm.<br>'
-    + '&#128994; BL afkastageta: <strong style="color:#34d399;">' + fmt(BL_PAX_HR) + ' farþegar/klst</strong> &mdash; sama og ~' + fmt(BL_CAR_EQ) + ' bílar/klst á tveimur akreinum.'
-    + '</div>';
+    '<strong>&#127758; Landnotkun vegbrei\u00f0kunar:</strong> '
+    + extraLanes + ' aukaakreinar \u00e1 ' + corridorKm + ' km lei\u00f0 = '
+    + '<strong>' + fmt(Math.round(extraM2)) + ' m\u00b2</strong> (' + extraHa + ' ha) '
+    + '&mdash; ~' + fields + ' f\u00f3tbollavellir. '
+    + 'Borgairl\u00ednan n\u00fdtir sama vegrunn og n\u00faverandi str\u00e6tisvagnar &mdash; engin n\u00fd land \u00fef.';
+
   d3RefreshAll();
 }
 
-// ── MUNICIPALITIES ──
-function renderMunis() {
-  var total=0;
-  for(var i=0;i<municipalities.length;i++) total+=municipalities[i].pop2025;
-  var html='';
-  for(var i=0;i<municipalities.length;i++){
-    var m=municipalities[i];
-    var share=((m.pop2025/total)*100).toFixed(1);
-    var p31=Math.round(m.pop2025*Math.pow(1+m.g/100,6));
-    var p40=Math.round(m.pop2025*Math.pow(1+m.g/100,15));
-    var col=m.g>=2.0?'#34d399':m.g>=1.5?'#fbbf24':'#94a3b8';
-    html+='<div class="muni-card"><div class="muni-name">'+m.name+'</div>'
-      +'<div class="muni-row"><span>2025:</span><span>'+fmt(m.pop2025)+'</span></div>'
-      +'<div class="muni-row"><span>2031 (sp\u00e1):</span><span>'+fmt(p31)+'</span></div>'
-      +'<div class="muni-row"><span>2040 (sp\u00e1):</span><span>'+fmt(p40)+'</span></div>'
-      +'<div class="muni-row"><span>Hlutfall:</span><span>'+share+'%</span></div>'
-      +'<div style="font-size:11px;margin-top:4px;color:'+col+'">V\u00f6xtur: ~'+m.g+'%/\u00e1r \u00b7 '+m.note+'</div>'
-      +'</div>';
-  }
-  document.getElementById('muniGrid').innerHTML=html;
-}
-
-// ── TABS ──
+// ── TAB SWITCHER ──
 function showTab(name) {
-  var tabs=document.querySelectorAll('.tab');
-  for(var i=0;i<tabs.length;i++) tabs[i].classList.remove('active');
-  var panels=document.querySelectorAll('.panel');
-  for(var i=0;i<panels.length;i++) panels[i].classList.remove('active');
-  document.querySelector('[onclick="showTab(\''+name+'\')"]').classList.add('active');
-  document.getElementById('panel-'+name).classList.add('active');
-  if(name==='straeto') renderRidershipCalc();
+  document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(b)  { b.classList.remove('active'); });
+  var panel = document.getElementById('panel-' + name);
+  if (panel) panel.classList.add('active');
+  document.querySelectorAll('.tab').forEach(function(b) {
+    if (b.getAttribute('onclick') === "showTab('" + name + "')") b.classList.add('active');
+  });
+  if      (name === 'peak')    calcPeak();
+  else if (name === 'calc')    calc();
+  else if (name === 'straeto') renderRidershipCalc();
+  else if (name === 'roads')   calcRoads();
+  else if (name === 'munis')   renderMunis();
+  updateHash();
 }
 
-renderMunis();
-calcPeak();
-calc();
-updateHome();
-calcRoads();
-d3RefreshAll();
-
-// ── D3 SLIDER STYLES ──
+// ── INSTRUMENT PANEL TRACK FILL + BADGE STATES ──
 var D3_CONFIGS = [
-  {id:'peakYear',      min:2025, max:2040},
-  {id:'pkCarsNow',     min:650,  max:850},
-  {id:'pkModalShift',  min:0,    max:20},
-  {id:'schoolFactor',  min:0,    max:20},
-  {id:'numLanes',      min:1,    max:3},
-  {id:'corridorADT',   min:10000,max:50000},
-  {id:'freeFlowMin',   min:5,    max:40},
-  {id:'carsNow',       min:650,  max:850},
-  {id:'carGrowth',     min:-15,  max:15},
-  {id:'modalShift',    min:0,    max:20},
-  {id:'blYear',        min:2029, max:2035},
-  {id:'extraLanes',    min:1,    max:6},
-  {id:'inducedRate',   min:0,    max:15},
-  {id:'roadsYear',     min:2026, max:2040},
-  {id:'roadsADT',      min:10000,max:50000},
-  {id:'roadsFreeFlow', min:5,    max:40}
+  {id:'peakYear',     min:2025,  max:2040},
+  {id:'pkCarsNow',    min:650,   max:850},
+  {id:'pkModalShift', min:0,     max:20},
+  {id:'schoolFactor', min:0,     max:20},
+  {id:'numLanes',     min:1,     max:3},
+  {id:'corridorADT',  min:10000, max:50000},
+  {id:'freeFlowMin',  min:5,     max:40},
+  {id:'carsNow',      min:650,   max:850},
+  {id:'carGrowth',    min:-15,   max:15},
+  {id:'modalShift',   min:0,     max:20},
+  {id:'blYear',       min:2029,  max:2035},
+  {id:'extraLanes',   min:1,     max:6},
+  {id:'inducedRate',  min:0,     max:15},
+  {id:'roadsYear',    min:2026,  max:2040},
+  {id:'roadsADT',     min:10000, max:50000},
+  {id:'roadsFreeFlow',min:5,     max:40}
 ];
 
 function d3RefreshAll() {
@@ -1131,89 +1083,97 @@ function d3RefreshAll() {
 }
 
 // ── SHARE / URL STATE ──
-var SHARE_SLIDERS = [
-  'peakYear','pkCarsNow','pkModalShift','schoolFactor','numLanes','corridorADT','freeFlowMin',
-  'carsNow','carGrowth','modalShift','blYear',
-  'extraLanes','inducedRate','roadsYear','roadsADT','roadsFreeFlow'
-];
+var SHARE_SLIDERS = ['peakYear','pkCarsNow','pkModalShift','schoolFactor','numLanes',
+  'corridorADT','freeFlowMin','carsNow','carGrowth','modalShift','blYear',
+  'extraLanes','inducedRate','roadsYear','roadsADT','roadsFreeFlow'];
+
+function getActiveTab() {
+  var names = ['home','peak','calc','straeto','roads','munis'];
+  for (var i = 0; i < names.length; i++) {
+    var p = document.getElementById('panel-' + names[i]);
+    if (p && p.classList.contains('active')) return names[i];
+  }
+  return 'home';
+}
+
+function updateHash() {
+  var params = new URLSearchParams();
+  SHARE_SLIDERS.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) params.set(id, el.value);
+  });
+  params.set('tab', getActiveTab());
+  history.replaceState(null, '', '?' + params.toString());
+}
 
 function getShareURL() {
   var params = new URLSearchParams();
-  for (var i = 0; i < SHARE_SLIDERS.length; i++) {
-    var el = document.getElementById(SHARE_SLIDERS[i]);
-    if (el) params.set(SHARE_SLIDERS[i], el.value);
-  }
-  var activeTab = document.querySelector('.tab.active');
-  if (activeTab) {
-    var m = activeTab.getAttribute('onclick').match(/showTab\('(\w+)'\)/);
-    if (m) params.set('tab', m[1]);
-  }
-  return location.origin + location.pathname + '#' + params.toString();
+  SHARE_SLIDERS.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) params.set(id, el.value);
+  });
+  params.set('tab', getActiveTab());
+  return window.location.origin + window.location.pathname + '?' + params.toString();
 }
 
+var _copiedTimer;
 function shareLink() {
-  var url = getShareURL();
-  var btn = document.getElementById('shareBtn');
-  var toast = document.getElementById('shareToast');
-  function showCopied() {
-    btn.innerHTML = '&#10003; Afritað';
+  navigator.clipboard.writeText(getShareURL()).then(function() {
+    var btn = document.getElementById('shareBtn');
+    if (!btn) return;
+    btn.textContent = '\u2713 Afrita\u00f0!';
     btn.classList.add('copied');
-    toast.classList.add('show');
-    setTimeout(function() {
-      btn.innerHTML = '&#128279; Deila';
+    clearTimeout(_copiedTimer);
+    _copiedTimer = setTimeout(function() {
+      btn.textContent = '\uD83D\uDD17 Deila';
       btn.classList.remove('copied');
-      toast.classList.remove('show');
-    }, 2500);
-  }
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(url).then(showCopied).catch(function() {
-      prompt('Afritaðu þennan hlekk:', url);
-    });
-  } else {
-    prompt('Afritaðu þennan hlekk:', url);
-  }
+    }, 2000);
+  }).catch(function() {
+    prompt('Afrita\u00f0u \u00feessa sl\u00f3\u00f0:', getShareURL());
+  });
 }
 
-function loadFromHash() {
-  var hash = location.hash.slice(1);
-  if (!hash) return;
-  try {
-    var params = new URLSearchParams(hash);
-    var changed = false;
-    for (var i = 0; i < SHARE_SLIDERS.length; i++) {
-      if (params.has(SHARE_SLIDERS[i])) {
-        var el = document.getElementById(SHARE_SLIDERS[i]);
-        if (el) { el.value = params.get(SHARE_SLIDERS[i]); changed = true; }
-      }
+function loadFromURL() {
+  var params = new URLSearchParams(window.location.search);
+  if (!params.has('tab') && !params.has('carsNow')) return false;
+  SHARE_SLIDERS.forEach(function(id) {
+    if (params.has(id)) {
+      var el = document.getElementById(id);
+      if (el) el.value = params.get(id);
     }
-    if (changed) { calcPeak(); calc(); calcRoads(); updateHome(); }
-    if (params.has('tab')) showTab(params.get('tab'));
-  } catch(e) {}
+  });
+  var tab = params.get('tab') || 'home';
+  showTab(tab);
+  return true;
 }
 
-loadFromHash();
-
-function updateHome() {
-  var carsNow = 779;
-  var pop2025 = 249560;
-  var pop2031 = 270000;
-  var blModalShift = 0.08;
-  var carGrowth = 3;
-
-  var cars2025 = Math.round(pop2025 * carsNow / 1000);
-  var cpk2031 = carsNow + carGrowth * 6;
-  var cars2031 = Math.round(pop2031 * cpk2031 / 1000);
-  var cars2031bl = Math.round(cars2031 * (1 - blModalShift));
-  var extra = cars2031 - cars2025;
-  var saved = cars2031 - cars2031bl;
-
-  var elToday = document.getElementById('home-cars-today');
-  var el2031  = document.getElementById('home-cars-2031');
-  var elBL    = document.getElementById('home-cars-bl');
-  if (elToday) elToday.textContent = fmt(cars2025);
-  if (el2031)  el2031.textContent  = '+' + fmt(extra);
-  if (elBL)    elBL.textContent    = '−' + fmt(saved);
+// ── MUNICIPALITIES ──
+function renderMunis() {
+  var html = '';
+  municipalities.forEach(function(m) {
+    var pop2030 = Math.round(m.pop2025 * Math.pow(1 + m.g/100, 5));
+    var pop2040 = Math.round(m.pop2025 * Math.pow(1 + m.g/100, 15));
+    html += '<div class="muni-card">'
+      + '<div class="muni-name">' + m.name + '</div>'
+      + '<div class="muni-row"><span>2025</span><span>' + fmt(m.pop2025) + '</span></div>'
+      + '<div class="muni-row"><span>2030</span><span style="color:#fbbf24">' + fmt(pop2030) + '</span></div>'
+      + '<div class="muni-row"><span>2040</span><span style="color:#818cf8">' + fmt(pop2040) + '</span></div>'
+      + '<div class="muni-row" style="margin-top:6px;font-size:10px;color:#475569;">' + m.note + '</div>'
+      + '</div>';
+  });
+  document.getElementById('muniGrid').innerHTML = html;
 }
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', function() {
+  if (!loadFromURL()) {
+    calcPeak();
+    calc();
+    calcRoads();
+    renderMunis();
+    d3RefreshAll();
+  }
+});
 </script>
 </body>
 </html>
