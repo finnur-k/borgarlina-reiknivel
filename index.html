@@ -348,21 +348,6 @@
 <!-- Share toast -->
 <span id="shareToast">✓ Hlekkur afritaður!</span>
 
-<!-- Mobile: FAB + drawer (slider contents cloned here by JS) -->
-<button class="fab-forsendur" id="fabForsendur" onclick="openDrawer()">
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M1 3h12M1 7h12M1 11h12"/><circle cx="4" cy="3" r="1.5" fill="white" stroke="none"/><circle cx="9" cy="7" r="1.5" fill="white" stroke="none"/><circle cx="5" cy="11" r="1.5" fill="white" stroke="none"/></svg>
-  Forsendur
-</button>
-<div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
-<div class="mob-drawer" id="mobDrawer">
-  <div class="drawer-handle-wrap"><div class="drawer-handle"></div></div>
-  <div class="drawer-title-row">
-    <span class="drawer-title">Forsendur</span>
-    <button class="drawer-close" onclick="closeDrawer()">&#215;</button>
-  </div>
-  <div class="drawer-body" id="mob-drawer-sliders"></div>
-</div>
-
 <div class="page-wrap">
 
 <!-- ═══ HOME ═══ -->
@@ -1270,9 +1255,22 @@ function showTab(name) {
   if (ds) {
     if (sl) {
       ds.innerHTML = sl.innerHTML;
+      // Strip IDs from cloned inputs so getElementById always finds the originals
+      // (drawer is after page-wrap in DOM, so originals come first).
+      ds.querySelectorAll('input[id]').forEach(function(el) {
+        el.setAttribute('data-src', el.id);
+        el.removeAttribute('id');
+      });
+      // Wire each cloned slider: sync value to original, run calc, then sync badges back.
       ds.querySelectorAll('[oninput]').forEach(function(el) {
         var fn = el.getAttribute('oninput');
-        el.addEventListener('input', function() { eval(fn); });
+        var srcId = el.getAttribute('data-src');
+        el.removeAttribute('oninput');
+        el.addEventListener('input', function() {
+          if (srcId) { var orig = document.getElementById(srcId); if (orig) orig.value = el.value; }
+          eval(fn);
+          syncDrawerBadges();
+        });
       });
     } else {
       ds.innerHTML = '';
@@ -1416,6 +1414,26 @@ function renderMunis() {
   document.getElementById('muniGrid').innerHTML = html;
 }
 
+// ── SYNC DRAWER BADGES ──
+// After a calc runs it updates the original badges (originals come first in DOM).
+// This copies text/class/track-fill from originals into the visible drawer clones.
+function syncDrawerBadges() {
+  var ds = document.getElementById('mob-drawer-sliders');
+  if (!ds) return;
+  ds.querySelectorAll('span[id]').forEach(function(el) {
+    var orig = document.getElementById(el.id);
+    if (orig && orig !== el) el.textContent = orig.textContent;
+  });
+  ds.querySelectorAll('.d3-badge[id]').forEach(function(el) {
+    var orig = document.getElementById(el.id);
+    if (orig && orig !== el) el.className = orig.className;
+  });
+  ds.querySelectorAll('input[type=range][data-src]').forEach(function(el) {
+    var orig = document.getElementById(el.getAttribute('data-src'));
+    if (orig) el.style.background = orig.style.background;
+  });
+}
+
 // ── INIT ──
 window.addEventListener('DOMContentLoaded', function() {
   if (!loadFromURL()) {
@@ -1431,5 +1449,20 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 </div><!-- /page-wrap -->
+
+<!-- Mobile: FAB + drawer — placed AFTER page-wrap so original slider IDs come first in DOM -->
+<button class="fab-forsendur" id="fabForsendur" onclick="openDrawer()">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M1 3h12M1 7h12M1 11h12"/><circle cx="4" cy="3" r="1.5" fill="white" stroke="none"/><circle cx="9" cy="7" r="1.5" fill="white" stroke="none"/><circle cx="5" cy="11" r="1.5" fill="white" stroke="none"/></svg>
+  Forsendur
+</button>
+<div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
+<div class="mob-drawer" id="mobDrawer">
+  <div class="drawer-handle-wrap"><div class="drawer-handle"></div></div>
+  <div class="drawer-title-row">
+    <span class="drawer-title">Forsendur</span>
+    <button class="drawer-close" onclick="closeDrawer()">&#215;</button>
+  </div>
+  <div class="drawer-body" id="mob-drawer-sliders"></div>
+</div>
 </body>
 </html>
