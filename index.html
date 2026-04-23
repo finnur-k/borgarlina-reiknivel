@@ -366,7 +366,7 @@
     <div style="font-size:13px;color:#94a3b8;margin-bottom:24px;line-height:1.7;max-width:560px;">
       Líkan byggt á íbúafjöldaspá Hagstofunnar, umferðargögnum Vegagerðarinnar og rauntalningum Strætó.
     </div>
-    <div class="hero-stat-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+    <div class="hero-stat-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
       <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:20px 22px;text-align:center;">
         <div style="font-size:24px;font-weight:900;color:#f87171;" id="home-cars-today">194.000</div>
         <div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.4;">Bílar á svæðinu í dag</div>
@@ -378,6 +378,10 @@
       <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:20px 22px;text-align:center;">
         <div style="font-size:24px;font-weight:900;color:#34d399;" id="home-cars-bl">−15.000</div>
         <div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.4;">Bílar sem BL kemur í stað</div>
+      </div>
+      <div style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:8px;padding:20px 22px;text-align:center;">
+        <div style="font-size:24px;font-weight:900;color:#818cf8;" id="home-peak-cars">~830</div>
+        <div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.4;">Bílar/klst úr annatímaumferð</div>
       </div>
     </div>
   </div>
@@ -462,8 +466,15 @@
 <div class="panel" id="panel-peak">
 
   <details class="info-box">
-    <summary>&#128270; Aðferðafræði &mdash; BPR-formúla</summary>
-    <div class="info-body">BPR-formúla (Bureau of Public Roads): <code style="background:#0f172a;padding:2px 6px;border-radius:4px;font-size:12px;">t = t&#8320; &times; (1 + 0,15 &times; (V/C)&#8308;)</code> &mdash; þar sem V = umferð á klukkustund, C = þakmark leiðarinnar. Þegar V/C nálgast 1,0 eykst tafinn á veldisvísi. Þakmark Suðurlandsbrautar: <strong>900 bílar/akrein/klst</strong> (T.ark/mbl.is, mars 2026). Annatímahlutfall: ~9% af daglegri umferð (AASHTO Highway Capacity Manual). Grunnferðatími (t&#8320;) er stillanlegt hér að neðan.</div>
+    <summary>&#128270; Hvernig er tafatíminn reiknaður?</summary>
+    <div class="info-body">
+      <p>Þetta líkan notar BPR-formúlu (Bureau of Public Roads) — staðalaðferð umferðarverkfræðinga til að áætla ferðatíma eftir því hversu þétt umferðin er:</p>
+      <p><code style="background:#0f172a;padding:4px 10px;border-radius:4px;font-size:13px;display:inline-block;margin:4px 0;">t = t&#8320; &times; (1 + 0,15 &times; (V/C)&#8308;)</code></p>
+      <p><strong>V</strong> er fjöldi bíla á klukkustund. <strong>C</strong> er þakmark leiðarinnar. <strong>t&#8320;</strong> er ferðatíminn þegar umferð er engin.</p>
+      <p>Lykilatriðið er veldisvísirinn — þegar umferð nálgast þakmark eykst tafinn ekki línulega heldur skyndilega. Við 80% þakmark er tafinn lítill. Við 95% er hann margfaldur.</p>
+      <p>Þakmark á þéttbýlisgötu er um <strong>900 bílar á akrein á klukkustund</strong> (Highway Capacity Manual). Annatímar standa fyrir um 9% af daglegri umferð á hverja klukkustund.</p>
+      <p>Grunnferðatíminn (t&#8320;) og aðrar forsendur eru stillanlegar í reiknivélinni.</p>
+    </div>
   </details>
 
   <div class="split-layout">
@@ -554,7 +565,7 @@
           </div>
           <div class="d3-badge" id="pkModalShiftBadge"><span id="pkModalShiftVal">8%</span></div>
         </div>
-        <div class="d3-range-wrap"><input type="range" class="d3-range" id="pkModalShift" min="0" max="20" value="8" step="1" oninput="calcPeak()"></div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="pkModalShift" min="0" max="20" value="4" step="1" oninput="calcPeak()"></div>
         <div class="d3-scale"><span>0</span><span>20</span></div>
       </div>
     </div>
@@ -570,11 +581,14 @@
       <table>
         <thead>
           <tr>
-            <th>Atriði</th>
-            <th>N&uacute;na (2025)</th>
-            <th id="thYear">2031 &aacute;n BL</th>
-            <th id="thYearBL">2031 me&eth; BL</th>
-            <th>Munur (BL)</th>
+            <th rowspan="2">Atriði</th>
+            <th rowspan="2">Núna (2025)</th>
+            <th colspan="2" style="text-align:center;border-bottom:1px solid #334155;" id="thYearGroup">Spá 2031</th>
+            <th rowspan="2">Munur</th>
+          </tr>
+          <tr>
+            <th id="thYear">Án BL</th>
+            <th id="thYearBL">Með BL</th>
           </tr>
         </thead>
         <tbody id="peakTable"></tbody>
@@ -629,7 +643,7 @@
           </div>
           <div class="d3-badge" id="modalShiftBadge"><span id="modalShiftVal">8%</span></div>
         </div>
-        <div class="d3-range-wrap"><input type="range" class="d3-range" id="modalShift" min="0" max="20" value="8" step="1" oninput="calc()"></div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="modalShift" min="0" max="20" value="4" step="1" oninput="calc()"></div>
         <div class="d3-scale"><span>0</span><span>20</span></div>
       </div>
       <div class="d3-row">
@@ -652,9 +666,16 @@
     <table>
       <thead>
         <tr>
-          <th>&Aacute;r</th><th>&Iacute;b&uacute;ar</th><th>B&iacute;lar/1000</th>
-          <th>B&iacute;lar &aacute;n BL</th><th>B&iacute;lar me&eth; BL</th>
-          <th>BL sparar</th><th>&Delta; fr&aacute; 2025</th>
+          <th rowspan="2">Ár</th>
+          <th rowspan="2">Íbúar</th>
+          <th rowspan="2">Bílar/1000</th>
+          <th colspan="3" style="text-align:center;border-bottom:1px solid #334155;">Bílar</th>
+          <th rowspan="2">Δ frá 2025</th>
+        </tr>
+        <tr>
+          <th>Án BL</th>
+          <th>Með BL</th>
+          <th>Sparar</th>
         </tr>
       </thead>
       <tbody id="tableBody"></tbody>
@@ -726,7 +747,7 @@
         <div class="d3-header">
           <div class="d3-label-wrap">
             <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><path d="M1 8l8-6"/><circle cx="3" cy="3.5" r="1.2"/><circle cx="7" cy="6.5" r="1.2"/></svg></div>
-            <span class="d3-label">Induced demand (%/ár)</span>
+            <span class="d3-label">Framkölluð eftirspurn (%/ár)</span>
           </div>
           <div class="d3-badge" id="inducedRateBadge"><span id="inducedRateVal">8%</span></div>
         </div>
@@ -806,7 +827,7 @@
   <div class="box" id="roadsLandBox"></div>
 
   <div class="note">
-    <strong>Induced demand heimild:</strong>
+    <strong>Framkölluð eftirspurn — heimild:</strong>
  Duranton, G. &amp; Turner, M.A. (2011). "The Fundamental Law of Road Congestion."
     American Economic Review, 101(6), 2616&ndash;2652. Þeir fundu að 10% aukning á þjóðvegaafkastagetu leiddi til 10% aukningar á umferð
     á 10 árum í bandarískum borgum. Sambærilegar niðurstöður hafa fundist í Evrópu (Hymel 2019).
@@ -905,8 +926,9 @@ function calcPeak() {
   document.getElementById('schoolFactorVal').textContent= '+' + schoolPct + '%';
   document.getElementById('numLanesVal').textContent    = lanes;
 
-  document.getElementById('thYear').textContent   = yr + ' \u00e1n BL';
-  document.getElementById('thYearBL').textContent = yr + ' me\u00f0 BL';
+  document.getElementById('thYearGroup').textContent = 'Spá ' + yr;
+  document.getElementById('thYear').textContent   = '\u00c1n BL';
+  document.getElementById('thYearBL').textContent = 'Me\u00f0 BL';
 
   // Total capacity this road in both directions
   var totalCap = lanes * LANE_CAPACITY; // per direction
@@ -1094,12 +1116,19 @@ function calc() {
     +'Innflytjendur eru inni &iacute; &ouml;llum t&ouml;lum. B&iacute;lar/1000: 779 (Hagstofa 2024). '
     +'Modal shift: mat byggt &aacute; samanb&uacute;r&eth;i vi&eth; BRT-kerfi &iacute; &ouml;&eth;rum borgum.';
   if(document.getElementById('panel-straeto').classList.contains('active')) renderRidershipCalc();
+
+  // Update hero stat cards on Yfirlit
+  var el;
+  if((el=document.getElementById('home-cars-today'))) el.textContent = fmt(baseCars);
+  if((el=document.getElementById('home-cars-2031'))) el.textContent = blData ? '+ '+fmt(blData.carsNobl-baseCars) : '+35.000';
+  if((el=document.getElementById('home-cars-bl')))   el.textContent = blData ? '− '+fmt(blData.saved) : '−15.000';
+
   d3RefreshAll();
 }
 
 // ── STRAETO RIDERSHIP ──
 function renderRidershipCalc() {
-  var pct=parseInt(document.getElementById('modalShift').value)||8;
+  var pct=parseInt(document.getElementById('modalShift').value)||4;
   var cN=parseInt(document.getElementById('carsNow').value)||779;
   var blYr=parseInt(document.getElementById('blYear').value)||2031;
   var pop=getPop(blYr);
@@ -1137,7 +1166,7 @@ function calcRoads() {
 
   var BASE_LANES  = 2;   // lanes per direction (baseline)
   var POP_GROWTH  = 0.016;
-  var BL_MODAL    = 0.08;
+  var BL_MODAL    = 0.04;
   var BL_YEAR     = 2031;
 
   var years = [2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035,2036,2037,2038,2039,2040];
@@ -1174,7 +1203,7 @@ function calcRoads() {
         : '<span class="dim">&mdash;</span>';
 
     rows += '<tr' + (yr === 2025 ? ' class="row-now"' : '') + '>'
-      + '<td class="hl">' + yr + (yr === roadsYear ? ' &#128739;' : '') + (yr === BL_YEAR ? ' &#128652;' : '') + '</td>'
+      + '<td class="hl">' + yr + (yr === BL_YEAR ? ' &#128652;' : '') + '</td>'
       + '<td>' + fmt(Math.round(adtR)) + '</td>'
       + '<td><span style="color:' + losR.col + '">' + vcR.toFixed(2) + '</span></td>'
       + '<td><span style="color:' + losR.col + '">' + Math.round(delayR) + ' m\u00edn</span></td>'
@@ -1206,8 +1235,8 @@ function calcRoads() {
         + '</div>';
     }
     document.getElementById('roadsCompare').innerHTML =
-      roadCard('&#128739; Fleiri akreinar ' + roadsYear, '#f87171', compareR,
-        'Me\u00f0 ' + extraLanes + ' aukaakreinum &mdash; en induced demand ' + Math.round(inducedRate*100) + '%/\u00e1r fyllir akreinarnar')
+      roadCard('&#128664; Fleiri akreinar ' + roadsYear, '#f87171', compareR,
+        'Me\u00f0 ' + extraLanes + ' aukaakreinum &mdash; en framk\u00f6llu\u00f0 eftirspurn ' + Math.round(inducedRate*100) + '%/\u00e1r fyllir akreinarnar')
       + roadCard('&#128652; Borgarl\u00edna ' + roadsYear, '#34d399', compareBL,
         'Engar aukaakreinar &mdash; BL flytur ~8% b\u00edlfer\u00f0a af lei\u00f0inni fr\u00e1 2031');
   }
@@ -1382,75 +1411,17 @@ function getShareURL() {
     if (el) params.set(id, el.value);
   });
   params.set('tab', getActiveTab());
-  return window.location.origin + window.location.pathname + '?' + params.toString();
+  return window.l  return window.location.origin + window.location.pathname + '?' + params.toString();
 }
 
-var _copiedTimer;
 function shareLink() {
-  navigator.clipboard.writeText(getShareURL()).then(function() {
-    var btn = document.getElementById('shareBtn');
-    if (!btn) return;
-    btn.textContent = '\u2713 Afrita\u00f0!';
-    btn.classList.add('copied');
-    clearTimeout(_copiedTimer);
-    _copiedTimer = setTimeout(function() {
-      btn.textContent = '\uD83D\uDD17 Deila';
-      btn.classList.remove('copied');
-    }, 2000);
-  }).catch(function() {
-    prompt('Afrita\u00f0u \u00feessa sl\u00f3\u00f0:', getShareURL());
-  });
-}
-
-function loadFromURL() {
-  var params = new URLSearchParams(window.location.search);
-  if (!params.has('tab') && !params.has('carsNow')) return false;
-  SHARE_SLIDERS.forEach(function(id) {
-    if (params.has(id)) {
-      var el = document.getElementById(id);
-      if (el) el.value = params.get(id);
-    }
-  });
-  var tab = params.get('tab') || 'home';
-  showTab(tab);
-  return true;
-}
-
-// ── MUNICIPALITIES ──
-function renderMunis() {
-  var html = '';
-  municipalities.forEach(function(m) {
-    var pop2030 = Math.round(m.pop2025 * Math.pow(1 + m.g/100, 5));
-    var pop2040 = Math.round(m.pop2025 * Math.pow(1 + m.g/100, 15));
-    html += '<div class="muni-card">'
-      + '<div class="muni-name">' + m.name + '</div>'
-      + '<div class="muni-row"><span>2025</span><span>' + fmt(m.pop2025) + '</span></div>'
-      + '<div class="muni-row"><span>2030</span><span style="color:#fbbf24">' + fmt(pop2030) + '</span></div>'
-      + '<div class="muni-row"><span>2040</span><span style="color:#818cf8">' + fmt(pop2040) + '</span></div>'
-      + '<div class="muni-row" style="margin-top:6px;font-size:10px;color:#475569;">' + m.note + '</div>'
-      + '</div>';
-  });
-  document.getElementById('muniGrid').innerHTML = html;
-}
-
-// ── SYNC DRAWER BADGES ──
-// After a calc runs it updates the original badges (originals come first in DOM).
-// This copies text/class/track-fill from originals into the visible drawer clones.
-function syncDrawerBadges() {
-  var ds = document.getElementById('mob-drawer-sliders');
-  if (!ds) return;
-  ds.querySelectorAll('span[id]').forEach(function(el) {
-    var orig = document.getElementById(el.id);
-    if (orig && orig !== el) el.textContent = orig.textContent;
-  });
-  ds.querySelectorAll('.d3-badge[id]').forEach(function(el) {
-    var orig = document.getElementById(el.id);
-    if (orig && orig !== el) el.className = orig.className;
-  });
-  ds.querySelectorAll('input[type=range][data-src]').forEach(function(el) {
-    var orig = document.getElementById(el.getAttribute('data-src'));
-    if (orig) el.style.background = orig.style.background;
-  });
+  var url = getShareURL();
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(function() {
+      var btn = document.getElementById('shareBtn');
+      if (btn) { btn.textContent = 'Afritað!'; setTimeout(function(){ btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="2" r="1.2"/><circle cx="9" cy="9" r="1.2"/><circle cx="2" cy="5.5" r="1.2"/><path d="M3.2 5.5h4M3.2 5.5L7.8 2.5M7.8 8.5L3.2 5.5"/></svg> Deila'; }, 2000); }
+    });
+  } else { prompt('Afrita slóð:', url); }
 }
 
 // ── INIT ──
@@ -1461,31 +1432,9 @@ window.addEventListener('DOMContentLoaded', function() {
     calcRoads();
     renderMunis();
     d3RefreshAll();
-    // Default tab is 'home' which has no sliders — hide FAB
-    var fab = document.getElementById('fabForsendur');
-    if (fab) fab.style.display = 'none';
-    // Auto-open info-boxes on desktop
-    if (window.innerWidth > 768) {
-      document.querySelectorAll('details.info-box').forEach(function(d) { d.open = true; });
-    }
   }
 });
 </script>
 </div><!-- /page-wrap -->
-
-<!-- Mobile: FAB + drawer — placed AFTER page-wrap so original slider IDs come first in DOM -->
-<button class="fab-forsendur" id="fabForsendur" onclick="openDrawer()">
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M1 3h12M1 7h12M1 11h12"/><circle cx="4" cy="3" r="1.5" fill="white" stroke="none"/><circle cx="9" cy="7" r="1.5" fill="white" stroke="none"/><circle cx="5" cy="11" r="1.5" fill="white" stroke="none"/></svg>
-  Forsendur
-</button>
-<div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
-<div class="mob-drawer" id="mobDrawer">
-  <div class="drawer-handle-wrap"><div class="drawer-handle"></div></div>
-  <div class="drawer-title-row">
-    <span class="drawer-title">Forsendur</span>
-    <button class="drawer-close" onclick="closeDrawer()">&#215;</button>
-  </div>
-  <div class="drawer-body" id="mob-drawer-sliders"></div>
-</div>
 </body>
 </html>
