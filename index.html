@@ -146,26 +146,59 @@
   }
 
   /* ── Mobile responsive ── */
+  /* ── Mobile tab dropdown ── */
+  .mob-tab-selector {
+    display: none;
+    align-items: center; justify-content: space-between;
+    margin: 0 16px; padding: 9px 14px;
+    background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2);
+    border-radius: 8px; cursor: pointer; user-select: none;
+    font-size: 13px; font-weight: 600; color: #e2e8f0;
+  }
+  .mob-tab-picker {
+    display: none;
+    position: absolute; top: 100%; left: 12px; right: 12px;
+    background: #1e293b; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    z-index: 60; overflow: hidden;
+  }
+  .mob-tab-picker.open { display: block; }
+  .mob-tab-picker-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; font-size: 13px; color: #94a3b8;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer; transition: background 0.1s;
+  }
+  .mob-tab-picker-item:last-child { border-bottom: none; }
+  .mob-tab-picker-item:hover { background: rgba(255,255,255,0.04); }
+  .mob-tab-picker-item.active { color: #e2e8f0; font-weight: 600; }
+  .mob-tab-picker-backdrop {
+    display: none; position: fixed; inset: 0; z-index: 55;
+  }
+  .mob-tab-picker-backdrop.open { display: block; }
+
   @media (max-width: 768px) {
-    body { padding-top: 96px; }
+    body { padding-top: 108px; }
     .page-wrap { padding: 16px; }
     .header-top { padding: 0 16px; gap: 8px; }
     .bl-wordmark { display: none; }
     .header-title { font-size: 13px; }
     .header-title .sub { display: none; }
     .header-deila { padding: 5px 10px; font-size: 11px; }
-    .header-nav { padding: 0 16px; }
-    .tab { padding: 0 10px; font-size: 11.5px; }
+    /* hide desktop tab bar, show mobile dropdown */
+    .header-nav { display: none; }
+    .mob-tab-selector { display: flex; }
+    /* hero 3-col → 2-col */
+    .hero-stat-grid { grid-template-columns: 1fr 1fr !important; }
     /* stack split layout */
     .split-layout { grid-template-columns: 1fr !important; }
     .split-left { position: static !important; display: none; }
     .split-left.drawer-open { display: block; }
-    /* table scroll with sticky first column */
+    /* table scroll + sticky first col */
     .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .table-wrap td:first-child,
     .table-wrap th:first-child { position: sticky; left: 0; background: #0c1120; z-index: 2; }
     .table-wrap thead th:first-child { background: #1e293b; }
-    /* scenario cards stack */
     .sc-grid { grid-template-columns: 1fr 1fr; }
     .grid3 { grid-template-columns: 1fr 1fr; }
   }
@@ -292,6 +325,22 @@
     <button class="tab" onclick="showTab('roads')">Vegbreiðkun vs BL</button>
     <button class="tab" onclick="showTab('munis')">Sveitarfélögin 7</button>
   </nav>
+  <!-- Mobile tab dropdown -->
+  <div style="position:relative; padding-bottom:10px;">
+    <div class="mob-tab-selector" id="mobTabSelector" onclick="toggleTabPicker()">
+      <span id="mobTabLabel">Yfirlit</span>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#6366f1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l4 4 4-4"/></svg>
+    </div>
+    <div class="mob-tab-picker-backdrop" id="tabPickerBackdrop" onclick="closeTabPicker()"></div>
+    <div class="mob-tab-picker" id="tabPicker">
+      <div class="mob-tab-picker-item active" onclick="showTab('home');closeTabPicker()"><svg id="chk-home" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6l3 3 5-5"/></svg>Yfirlit</div>
+      <div class="mob-tab-picker-item" onclick="showTab('peak');closeTabPicker()"><svg id="chk-peak" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Annatímar &amp; tafar</div>
+      <div class="mob-tab-picker-item" onclick="showTab('calc');closeTabPicker()"><svg id="chk-calc" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Reiknivél</div>
+      <div class="mob-tab-picker-item" onclick="showTab('straeto');closeTabPicker()"><svg id="chk-straeto" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Strætó grunnlína</div>
+      <div class="mob-tab-picker-item" onclick="showTab('roads');closeTabPicker()"><svg id="chk-roads" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Vegbreiðkun vs BL</div>
+      <div class="mob-tab-picker-item" onclick="showTab('munis');closeTabPicker()"><svg id="chk-munis" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Sveitarfélögin 7</div>
+    </div>
+  </div>
 </header>
 
 <!-- Share toast -->
@@ -324,7 +373,7 @@
     <div style="font-size:13px;color:#94a3b8;margin-bottom:24px;line-height:1.7;max-width:560px;">
       Líkan byggt á íbúafjöldaspá Hagstofunnar, umferðargögnum Vegagerðarinnar og rauntalningum Strætó.
     </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+    <div class="hero-stat-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
       <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:20px 22px;text-align:center;">
         <div style="font-size:24px;font-weight:900;color:#f87171;" id="home-cars-today">194.000</div>
         <div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.4;">Bílar á svæðinu í dag</div>
@@ -1182,6 +1231,13 @@ function calcRoads() {
   d3RefreshAll();
 }
 
+// Tabs that have sliders (FAB shown on mobile only for these)
+var TABS_WITH_SLIDERS = { peak: true, calc: true, roads: true };
+var TAB_LABELS = {
+  home: 'Yfirlit', peak: 'Annatímar & tafar', calc: 'Reiknivél',
+  straeto: 'Strætó grunnlína', roads: 'Vegbreiðkun vs BL', munis: 'Sveitarfélögin 7'
+};
+
 // ── TAB SWITCHER ──
 function showTab(name) {
   document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
@@ -1191,6 +1247,36 @@ function showTab(name) {
   document.querySelectorAll('.tab').forEach(function(b) {
     if (b.getAttribute('onclick') === "showTab('" + name + "')") b.classList.add('active');
   });
+
+  // Mobile: update dropdown label + checkmarks
+  var lbl = document.getElementById('mobTabLabel');
+  if (lbl) lbl.textContent = TAB_LABELS[name] || name;
+  ['home','peak','calc','straeto','roads','munis'].forEach(function(t) {
+    var chk = document.getElementById('chk-' + t);
+    if (!chk) return;
+    chk.style.visibility = (t === name) ? 'visible' : 'hidden';
+    if (chk.parentElement) chk.parentElement.classList.toggle('active', t === name);
+  });
+
+  // Mobile: show FAB only on tabs with sliders
+  var fab = document.getElementById('fabForsendur');
+  if (fab) fab.style.display = TABS_WITH_SLIDERS[name] ? '' : 'none';
+
+  // Mobile: populate drawer with active panel's sliders
+  var sl = panel ? panel.querySelector('.split-left') : null;
+  var ds = document.getElementById('mob-drawer-sliders');
+  if (ds) {
+    if (sl) {
+      ds.innerHTML = sl.innerHTML;
+      ds.querySelectorAll('[oninput]').forEach(function(el) {
+        var fn = el.getAttribute('oninput');
+        el.addEventListener('input', function() { eval(fn); });
+      });
+    } else {
+      ds.innerHTML = '';
+    }
+  }
+
   if      (name === 'peak')    calcPeak();
   else if (name === 'calc')    calc();
   else if (name === 'straeto') renderRidershipCalc();
@@ -1198,6 +1284,21 @@ function showTab(name) {
   else if (name === 'munis')   renderMunis();
   updateHash();
 }
+
+// ── Mobile tab picker ──
+function toggleTabPicker() {
+  var open = document.getElementById('tabPicker').classList.contains('open');
+  if (open) closeTabPicker();
+  else {
+    document.getElementById('tabPicker').classList.add('open');
+    document.getElementById('tabPickerBackdrop').classList.add('open');
+  }
+}
+function closeTabPicker() {
+  document.getElementById('tabPicker').classList.remove('open');
+  document.getElementById('tabPickerBackdrop').classList.remove('open');
+}
+
 
 // ── INSTRUMENT PANEL TRACK FILL + BADGE STATES ──
 var D3_CONFIGS = [
