@@ -89,11 +89,20 @@
   }
 
   /* Split layout: sliders left, content right */
-  .split-layout { display: grid; grid-template-columns: 290px 1fr; gap: 18px; align-items: start; }
+  .split-layout { display: grid; grid-template-columns: 260px 1fr; gap: 18px; align-items: start; }
   .split-left { position: sticky; top: 20px; }
+
+  /* Sliders inside left panel: label wraps to own line above slider */
+  .split-left .slider-row { flex-wrap: wrap; gap: 2px 8px; margin-bottom: 12px; }
+  .split-left .slider-label { width: 100%; font-size: 11px; color: #94a3b8; line-height: 1.4; }
+  .split-left input[type=range] { flex: 1; min-width: 0; }
+  .split-left .slider-val { width: 52px; font-size: 12px; }
+
   @media (max-width: 760px) {
     .split-layout { grid-template-columns: 1fr; }
     .split-left { position: static; }
+    .split-left .slider-row { flex-wrap: nowrap; }
+    .split-left .slider-label { width: 140px; font-size: 11px; }
   }
 
   .share-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; }
@@ -910,13 +919,4 @@ function calcRoads() {
 function renderMunis() {
   var total=0;
   for(var i=0;i<municipalities.length;i++) total+=municipalities[i].pop2025;
-  var html='';
-  for(var i=0;i<municipalities.length;i++){
-    var m=municipalities[i];
-    var share=((m.pop2025/total)*100).toFixed(1);
-    var p31=Math.round(m.pop2025*Math.pow(1+m.g/100,6));
-    var p40=Math.round(m.pop2025*Math.pow(1+m.g/100,15));
-    var col=m.g>=2.0?'#34d399':m.g>=1.5?'#fbbf24':'#94a3b8';
-    html+='<div class="muni-card"><div class="muni-name">'+m.name+'</div>'
-      +'<div class="muni-row"><span>2025:</span><span>'+fmt(m.pop2025)+'</span></div>'
-      +'<div cla
+  var
