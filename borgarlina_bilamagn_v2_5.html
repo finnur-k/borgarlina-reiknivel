@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bílamagn vs Borgarlínan</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f172a; color: #e2e8f0; padding: 20px;
+    font-size: 14px; max-width: 980px; margin: 0 auto;
+  }
+  h1 { font-size: 18px; font-weight: 800; color: #f8fafc; margin-bottom: 2px; }
+  .subtitle { color: #64748b; font-size: 12px; margin-bottom: 18px; }
+
+  .tabs { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+  .tab {
+    padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;
+    cursor: pointer; border: 1px solid #334155; background: transparent;
+    color: #64748b; transition: all 0.15s;
+  }
+  .tab.active { background: #6366f1; border-color: #6366f1; color: #fff; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .box { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 16px; margin-bottom: 18px; }
+  .box h3 { font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .slider-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .slider-label { width: 240px; font-size: 12px; color: #cbd5e1; flex-shrink: 0; line-height: 1.4; }
+  input[type=range] { flex: 1; accent-color: #6366f1; cursor: pointer; }
+  .slider-val { width: 90px; text-align: right; font-size: 13px; font-weight: 700; color: #818cf8; }
+
+  .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid #334155; margin-bottom: 18px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { background: #1e293b; }
+  thead th { padding: 10px 14px; text-align: left; font-weight: 600; color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #334155; white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid #1e293b66; }
+  tbody tr:hover { background: #1e293b88; }
+  td { padding: 11px 14px; white-space: nowrap; }
+  .hl { color: #f8fafc; font-weight: 700; }
+  .green { color: #34d399; font-weight: 700; }
+  .red { color: #f87171; font-weight: 700; }
+  .orange { color: #fb923c; font-weight: 700; }
+  .yellow { color: #fbbf24; font-weight: 600; }
+  .dim { color: #475569; font-size: 11px; }
+  .row-now { background: #1e293b55; }
+
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 16px; text-align: center; }
+  .card .num { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+  .card .lbl { font-size: 11px; color: #64748b; line-height: 1.4; }
+
+  /* peak hour scenario cards */
+  .scenario { border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid; }
+  .scenario-now  { background: #1e293b; border-color: #334155; }
+  .scenario-2031a { background: #2d1515; border-color: #7f1d1d; }
+  .scenario-2031b { background: #0f2d1a; border-color: #14532d; }
+  .scenario h4 { font-size: 12px; font-weight: 700; margin-bottom: 12px; }
+  .sc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .sc-stat { text-align: center; }
+  .sc-stat .n { font-size: 18px; font-weight: 800; }
+  .sc-stat .l { font-size: 10px; color: #64748b; margin-top: 2px; line-height: 1.3; }
+
+  .los-bar { height: 8px; border-radius: 4px; margin: 6px 0 2px; }
+  .los-label { font-size: 10px; font-weight: 600; }
+
+  .muni-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; margin-bottom: 18px; }
+  .muni-card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 12px; }
+  .muni-name { font-size: 12px; font-weight: 700; color: #cbd5e1; margin-bottom: 6px; }
+  .muni-row { display: flex; justify-content: space-between; font-size: 11px; color: #64748b; margin-bottom: 2px; }
+  .muni-row span:last-child { color: #94a3b8; font-weight: 600; }
+
+  .info-box { background: #1e1b4b; border: 1px solid #3730a3; border-radius: 10px; padding: 12px 14px; font-size: 12px; line-height: 1.7; margin-bottom: 18px; color: #a5b4fc; }
+  .note { background: #1e293b55; border-left: 3px solid #6366f1; padding: 12px 14px; border-radius: 0 8px 8px 0; font-size: 11px; color: #64748b; line-height: 1.7; margin-bottom: 18px; }
+  .note strong { color: #94a3b8; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 10px; margin-bottom: 14px; }
+  .stat-card { background: #0f172a; border-radius: 8px; padding: 14px; text-align: center; border: 1px solid #1e293b; }
+  .stat-card .snum { font-size: 20px; font-weight: 800; margin-bottom: 3px; }
+  .stat-card .slbl { font-size: 10px; color: #64748b; line-height: 1.4; }
+
+  @media (max-width: 640px) {
+    .grid3, .sc-grid { grid-template-columns: 1fr 1fr; }
+    .grid2 { grid-template-columns: 1fr; }
+    .slider-label { width: 140px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Bílamagn vs Borgarlínan &mdash; H&ouml;fu&eth;borgarsv&aelig;&eth;i&eth;</h1>
+<p class="subtitle">&Ouml;ll 7 sveitarf&eacute;l&ouml;g &middot; Annatímagreining 07:30&ndash;09:30 og 16:00&ndash;17:30 &middot; BPR-tafamódel</p>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('home')">&#127968; Yfirlit</button>
+  <button class="tab" onclick="showTab('peak')">&#128680; Annatímar &amp; tafar</button>
+  <button class="tab" onclick="showTab('calc')">&#128202; Reikniv&eacute;l (heill dagur)</button>
+  <button class="tab" onclick="showTab('straeto')">&#128652; Str&aelig;t&oacute; grunnl&iacute;na</button>
+  <button class="tab" onclick="showTab('roads')">&#128739; Vegbreiðkun vs BL</button>
+  <button class="tab" onclick="showTab('munis')">&#127968; Sveitarf&eacute;l&ouml;gin 7</button>
+</div>
+
+<!-- ═══ HOME ═══ -->
+<div class="panel active" id="panel-home">
+
+  <!-- HERO -->
+  <div style="background:linear-gradient(135deg,#1e1b4b 0%,#0f2d1a 100%);border:1px solid #3730a3;border-radius:16px;padding:32px 28px 24px;margin-bottom:20px;">
+    <div style="font-size:11px;font-weight:700;color:#6366f1;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px;">Gagnalíkan &mdash; Höfuðborgarsvæðið 2025&ndash;2040</div>
+    <div style="font-size:30px;font-weight:900;color:#f8fafc;margin-bottom:8px;line-height:1.2;">Mun Borgarlínan<br>draga úr bílum?</div>
+    <div style="font-size:13px;color:#94a3b8;margin-bottom:24px;line-height:1.7;max-width:560px;">
+      Líkan byggt á íbúafjöldaspá Hagstofunnar, umferðargögnum Vegagerðarinnar og rauntalningum Strætó.
+      Svarar spurningunni sem Anita Jensen og aðrir hafa spurt &mdash; með tölum, ekki tilfinningum.
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+      <div style="background:#0f172a66;border:1px solid #334155;border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:24px;font-weight:900;color:#f87171;" id="home-cars-today">194.000</div>
+        <div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.4;">Bílar á svæðinu í dag</div>
+      </div>
+      <div style="background:#0f172a66;border:1px solid #334155;border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:24px;font-weight:900;color:#fbbf24;" id="home-cars-2031">+35.000</div>
+        <div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.4;">Aukabílar 2031 án BL</div>
+      </div>
+      <div style="background:#0f172a66;border:1px solid #334155;border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:24px;font-weight:900;color:#34d399;" id="home-cars-bl">−15.000</div>
+        <div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.4;">Bílar sem BL kemur í stað</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY FINDING -->
+  <div style="background:#2d1515;border:1px solid #7f1d1d;border-radius:12px;padding:16px 18px;margin-bottom:20px;display:flex;gap:14px;align-items:flex-start;">
+    <div style="font-size:22px;flex-shrink:0;">&#9888;&#65039;</div>
+    <div>
+      <div style="font-size:13px;font-weight:700;color:#fca5a5;margin-bottom:4px;">Lykilniðurstaða</div>
+      <div style="font-size:12px;color:#fecaca;line-height:1.7;">
+        Bílamagn á höfuðborgarsvæðinu <strong>mun hækka</strong> fram til 2031 &mdash; jafnvel með Borgarlínunni.
+        Ástæðan: íbúafjöldinn eykst um ~20.000 á þessum tíma, og BL (við 8% modal shift) kemur aðeins í stað ~15.000 bíla.
+        <strong>BL dregur úr vextinum en snýr honum ekki við ein og sér.</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS GUIDE -->
+  <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">Veldu flipann sem þig vantar</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+
+    <div onclick="showTab('peak')" style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='#6366f1';this.style.background='#1e293bdd'" onmouseout="this.style.borderColor='#334155';this.style.background='#1e293b'">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="font-size:20px;">&#128680;</span>
+        <span style="font-size:13px;font-weight:700;color:#f8fafc;">Annatímar &amp; tafar</span>
+        <span style="margin-left:auto;font-size:10px;color:#6366f1;font-weight:600;background:#1e1b4b;padding:2px 8px;border-radius:99px;">Aðal</span>
+      </div>
+      <div style="font-size:11px;color:#64748b;line-height:1.6;">
+        BPR-umferðarlíkan &mdash; reiknar ferðatíma og þjónststig (LOS) á lykilleiðum á álagstímum 07:30&ndash;09:30 og 16:00&ndash;17:30, með og án BL. Sérstaklega skóladagar.
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:#6366f1;font-weight:600;">Opna &#8594;</div>
+    </div>
+
+    <div onclick="showTab('calc')" style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='#6366f1';this.style.background='#1e293bdd'" onmouseout="this.style.borderColor='#334155';this.style.background='#1e293b'">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="font-size:20px;">&#128202;</span>
+        <span style="font-size:13px;font-weight:700;color:#f8fafc;">Reiknivél &mdash; heill dagur</span>
+      </div>
+      <div style="font-size:11px;color:#64748b;line-height:1.6;">
+        Heildarfjöldi bíla á svæðinu 2025&ndash;2040, með og án BL. Stillanlegar forsendur: bílar á mann, modal shift % og opnunarár.
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:#6366f1;font-weight:600;">Opna &#8594;</div>
+    </div>
+
+    <div onclick="showTab('straeto')" style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='#6366f1';this.style.background='#1e293bdd'" onmouseout="this.style.borderColor='#334155';this.style.background='#1e293b'">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="font-size:20px;">&#128652;</span>
+        <span style="font-size:13px;font-weight:700;color:#f8fafc;">Strætó grunnlína</span>
+      </div>
+      <div style="font-size:11px;color:#64748b;line-height:1.6;">
+        Raunverulegar innstigatölur Strætó 2019&ndash;2024. Hversu mörg ný innstig þarf BL að skila? Markmið 2040: 60 milljónir.
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:#6366f1;font-weight:600;">Opna &#8594;</div>
+    </div>
+
+    <div onclick="showTab('munis')" style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='#6366f1';this.style.background='#1e293bdd'" onmouseout="this.style.borderColor='#334155';this.style.background='#1e293b'">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="font-size:20px;">&#127968;</span>
+        <span style="font-size:13px;font-weight:700;color:#f8fafc;">Sveitarfélögin 7</span>
+      </div>
+      <div style="font-size:11px;color:#64748b;line-height:1.6;">
+        Íbúafjöldi og vöxtarspá fyrir öll 7 sveitarfélög. Innflytjendur eru inni í öllum tölum &mdash; þess vegna er vöxturinn hraðari en spáð var 2015.
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:#6366f1;font-weight:600;">Opna &#8594;</div>
+    </div>
+
+  </div>
+
+  <!-- SOURCES -->
+  <div class="note">
+    <strong>Heimildir:</strong> Hagstofa Íslands (íbúafjöldi 2025: 249.560) &middot;
+    Þingsvar félags- og húsnæðismálaráðherra sept. 2025 (spá 2030: 260&ndash;275þús) &middot;
+    SSH Þróunaráætlun 2024 (1,6%/ár vöxtur) &middot;
+    Sjálfbærniskýrsla Strætó 2023&ndash;2024 &middot;
+    T.ark arkitektastofa / mbl.is mars 2026 (þakmark Suðurlandsbrautar: 900 bílar/akrein/klst) &middot;
+    Wikipedia / Hagstofa (779 bílar/1000 íbúar, 2024).
+  </div>
+</div>
+
+<!-- ═══ PEAK HOUR ═══ -->
+<div class="panel" id="panel-peak">
+
+  <div class="info-box">
+    <strong>&#128270; Aðferðafræði:</strong> BPR-formúla (Bureau of Public Roads): <code style="background:#0f172a;padding:2px 6px;border-radius:4px;font-size:12px;">t = t&#8320; &times; (1 + 0,15 &times; (V/C)&#8308;)</code> &mdash; þar sem V = umferð á klukkustund, C = þakmark leiðarinnar. Þegar V/C nálgast 1,0 eykst tafinn á veldisvísi. Þakmark Suðurlandsbrautar: <strong>900 bílar/akrein/klst</strong> (T.ark/mbl.is, mars 2026). Annatímahlutfall: ~9% af daglegri umferð (AASHTO Highway Capacity Manual). Grunnferðatími (t&#8320;) er stillanlegt hér að neðan.
+  </div>
+
+  <div class="box">
+    <h3>Stillingar annatíma</h3>
+    <div class="slider-row">
+      <span class="slider-label">&#128197; &Aacute;r til greiningar</span>
+      <input type="range" id="peakYear" min="2025" max="2040" value="2031" step="1" oninput="calcPeak()">
+      <span class="slider-val" id="peakYearVal">2031</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">&#128663; B&iacute;lar/1000 &iacute;b&uacute;ar (2025)</span>
+      <input type="range" id="pkCarsNow" min="650" max="850" value="779" step="1" oninput="calcPeak()">
+      <span class="slider-val" id="pkCarsNowVal">779</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">&#128652; Modal shift vegna BL (%)</span>
+      <input type="range" id="pkModalShift" min="0" max="20" value="8" step="1" oninput="calcPeak()">
+      <span class="slider-val" id="pkModalShiftVal">8%</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">&#127979; Skólaáhrif (% aukning á skóladögum)</span>
+      <input type="range" id="schoolFactor" min="0" max="20" value="10" step="1" oninput="calcPeak()">
+      <span class="slider-val" id="schoolFactorVal">+10%</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">&#128739; Akreinar í hvora &aacute;tt</span>
+      <input type="range" id="numLanes" min="1" max="3" value="2" step="1" oninput="calcPeak()">
+      <span class="slider-val" id="numLanesVal">2</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">&#128202; Dagleg umfer&eth; á lei&eth;inni (&Aacute;DU, b&aacute;&eth;ar &aacute;ttir)</span>
+      <input type="range" id="corridorADT" min="10000" max="50000" value="28000" step="1000" oninput="calcPeak()">
+      <span class="slider-val" id="corridorADTVal">28.000</span>
+    </div>
+    <p style="font-size:11px;color:#475569;margin-top:-4px;margin-bottom:10px;">
+      Su&eth;urlandsbraut ~25-35&thorn;. &middot; Miklabraut ~30-40&thorn;. &middot; Hærri=meiri umfer&eth; á lykillei&eth;
+    </p>
+    <div class="slider-row">
+      <span class="slider-label">&#9201; Grunnfer&eth;at&iacute;mi (frj&aacute;lsakstur, m&iacute;n&uacute;tur)</span>
+      <input type="range" id="freeFlowMin" min="5" max="40" value="20" step="1" oninput="calcPeak()">
+      <span class="slider-val" id="freeFlowMinVal">20 m&iacute;n</span>
+    </div>
+    <p style="font-size:11px;color:#475569;margin-top:-4px;margin-bottom:8px;">
+      T.d. 20 m&iacute;n = pendlun á lægstu lykillei&eth; (~10 km vi&eth; 50 km/klst). 30 m&iacute;n = löng leiðin (t.d. Mosfellsbær&rarr;mi&eth;borg).
+    </p>
+  </div>
+
+  <div id="scenarioCards"></div>
+
+  <div class="box" style="margin-bottom:18px;">
+    <h3>Samanburður á annatíma &mdash; &aacute;hrif BL</h3>
+    <div class="table-wrap" style="margin-bottom:0;">
+      <table>
+        <thead>
+          <tr>
+            <th>Atriði</th>
+            <th>N&uacute;na (2025)</th>
+            <th id="thYear">2031 &aacute;n BL</th>
+            <th id="thYearBL">2031 me&eth; BL</th>
+            <th>Munur (BL)</th>
+          </tr>
+        </thead>
+        <tbody id="peakTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="note" id="peakNote"></div>
+</div>
+
+<!-- ═══ CALC (full day) ═══ -->
+<div class="panel" id="panel-calc">
+  <div class="box">
+    <h3>Forsendur &mdash; stillanlegar</h3>
+    <div class="slider-row">
+      <span class="slider-label">&#128663; B&iacute;lar/1000 &iacute;b&uacute;ar (2025)</span>
+      <input type="range" id="carsNow" min="650" max="850" value="779" step="1" oninput="calc()">
+      <span class="slider-val" id="carsNowVal">779</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">&#128200; Breyting b&iacute;la/1000 &aacute; &aacute;ri (&aacute;n BL)</span>
+      <input type="range" id="carGrowth" min="-15" max="15" value="3" step="1" oninput="calc()">
+      <span class="slider-val" id="carGrowthVal">+3/&aacute;ri</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">&#128652; Modal shift vegna BL (%)</span>
+      <input type="range" id="modalShift" min="0" max="20" value="8" step="1" oninput="calc()">
+      <span class="slider-val" id="modalShiftVal">8%</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">&#128197; BL opnar (Phase 1)</span>
+      <input type="range" id="blYear" min="2029" max="2035" value="2031" step="1" oninput="calc()">
+      <span class="slider-val" id="blYearVal">2031</span>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>&Aacute;r</th><th>&Iacute;b&uacute;ar</th><th>B&iacute;lar/1000</th>
+          <th>B&iacute;lar &aacute;n BL</th><th>B&iacute;lar me&eth; BL</th>
+          <th>BL sparar</th><th>&Delta; fr&aacute; 2025</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+  <div class="grid3" id="summary"></div>
+  <div class="note" id="calcNote"></div>
+</div>
+
+<!-- ═══ STRAETO ═══ -->
+<div class="panel" id="panel-straeto">
+  <div class="info-box">
+    <strong>Raunverulegar t&ouml;lur &uacute;r sj&aacute;lfb&aelig;rnisky;rslum Str&aelig;t&oacute; bs.</strong><br>
+    Innstig = eitt skipti sem far&thorn;egi st&iacute;gur upp &iacute; vagn.
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>&Aacute;r</th><th>Innstig (m)</th><th>&Aacute; dag</th><th>&Aacute; &iacute;b&uacute;a</th><th>Athugasemd</th></tr></thead>
+      <tbody>
+        <tr><td class="hl">2019</td><td>12,18</td><td>~33.400</td><td>~32</td><td class="dim">Met fyrir Covid</td></tr>
+        <tr><td class="hl">2020</td><td>~8,5</td><td>~23.300</td><td>~22</td><td class="dim">Covid-lokun</td></tr>
+        <tr><td class="hl">2022</td><td>~11,1</td><td>~30.400</td><td>~29</td><td class="dim">Bati</td></tr>
+        <tr class="row-now"><td class="hl">2023 &#127942;</td><td class="green">12,64</td><td class="green">~34.600</td><td class="green">~33</td><td class="green">Met&aacute;r</td></tr>
+        <tr><td class="hl">2024</td><td class="yellow">11,90</td><td class="yellow">~32.600</td><td class="yellow">~31</td><td class="dim">&minus;6% &mdash; Hlemmslokun + 24% seinkanir</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="box">
+    <h3>Hversu m&ouml;rg n&yacute; innstig &thorn;arf BL a&eth; skila?</h3>
+    <div class="stat-grid" id="ridershipStats"></div>
+    <div class="note" style="margin-bottom:0;" id="ridershipNote"></div>
+  </div>
+  <div class="note">
+    <strong>Heimildir:</strong> Sj&aacute;lfb&aelig;rnisky;rsla Str&aelig;t&oacute; 2023 og 2024.
+    Mark mi&eth; sv&aelig;&eth;isskipulags 2040: ~60m innstig &mdash; 5&times; n&uacute;verandi notkun.
+    Samanb&uacute;r&eth;ur: &Aacute;ri&eth; 1960 voru ~20m innstig &iacute; Reykjav&iacute;k einni vi&eth; ~70&thorn;&uacute;s &iacute;b&uacute;a.
+  </div>
+</div>
+
+
+<!-- ═══ ROADS ═══ -->
+<div class="panel" id="panel-roads">
+
+  <div class="info-box">
+    <strong>&#128270; Fundamental law of road congestion</strong> (Duranton &amp; Turner, 2011):
+    10% aukning á vegaafkastagetu leiðir til ~10% aukningar á umferð innan 5&ndash;10 ára.
+    Fólk sem var að forðast álagstímann, taka aðra leið, eða vinna heiman eykur bílanotkun þegar rúm gefst.
+    Nýjar akreinar fyllast &mdash; BL gerir það ekki.
+  </div>
+
+  <div class="box">
+    <h3>Stillingar &mdash; vegbreiðkun</h3>
+    <div class="slider-row">
+      <span class="slider-label">&#128739; Aukaakreinar &aacute; lykilleið (báðar áttir)</span>
+      <input type="range" id="extraLanes" min="1" max="6" value="2" step="1" oninput="calcRoads()">
+      <span class="slider-val" id="extraLanesVal">2</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">&#128200; Induced demand &mdash; umferðaraukning &aacute; &aacute;ri (%)</span>
+      <input type="range" id="inducedRate" min="0" max="15" value="8" step="1" oninput="calcRoads()">
+      <span class="slider-val" id="inducedRateVal">8%</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">&#128197; Ár til samanburðar</span>
+      <input type="range" id="roadsYear" min="2026" max="2040" value="2031" step="1" oninput="calcRoads()">
+      <span class="slider-val" id="roadsYearVal">2031</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">&#128202; Dagleg umferð &aacute; leið (&Aacute;DU, n&uacute;verandi)</span>
+      <input type="range" id="roadsADT" min="10000" max="50000" value="28000" step="1000" oninput="calcRoads()">
+      <span class="slider-val" id="roadsADTVal">28.000</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">&#9201; Grunnferðatími (frjálsakstur, mín.)</span>
+      <input type="range" id="roadsFreeFlow" min="5" max="40" value="20" step="1" oninput="calcRoads()">
+      <span class="slider-val" id="roadsFreeFlowVal">20 mín</span>
+    </div>
+  </div>
+
+  <!-- COMPARISON CARDS -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;" id="roadsCompare"></div>
+
+  <!-- YEAR BY YEAR TABLE -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Ár</th>
+          <th>ÁDU &mdash; vegbreiðkun</th>
+          <th>V/C &mdash; vegbreiðkun</th>
+          <th>Ferðatími &mdash; vegbreiðkun</th>
+          <th>ÁDU &mdash; BL</th>
+          <th>V/C &mdash; BL</th>
+          <th>Ferðatími &mdash; BL</th>
+          <th>BL betri um</th>
+        </tr>
+      </thead>
+      <tbody id="roadsTable"></tbody>
+    </table>
+  </div>
+
+  <!-- LAND USE BOX -->
+  <div class="box" id="roadsLandBox"></div>
+
+  <div class="note">
+    <strong>Induced demand heimild:</strong> Duranton, G. &amp; Turner, M.A. (2011). "The Fundamental Law of Road Congestion."
+    American Economic Review, 101(6), 2616&ndash;2652. Þeir fundu að 10% aukning á þjóðvegaafkastagetu leiddi til 10% aukningar á umferð
+    á 10 árum í bandarískum borgum. Sambærilegar niðurstöður hafa fundist í Evrópu (Hymel 2019).
+    BPR-formúla: t = t&#8320; &times; (1 + 0,15 &times; (V/C)&#8308;).
+    Þakmark: 900 bílar/akrein/klst (T.ark/mbl.is 2026). Akreinabreidd: 3,5 m.
+  </div>
+</div>
+
+<!-- ═══ MUNIS ═══ -->
+<div class="panel" id="panel-munis">
+  <div class="info-box">
+    <strong>H&ouml;fu&eth;borgarsv&aelig;&eth;i&eth; = 7 sveitarf&eacute;l&ouml;g</strong> &middot; &Iacute;b&uacute;ar 2025: <strong>249.560</strong> (Hagstofa, jan. 2025)
+  </div>
+  <div class="muni-grid" id="muniGrid"></div>
+  <div class="note">
+    <strong>Heimildir:</strong> Hagstofa &Iacute;slands. Vöxtur 1,6%/&aacute;r (SSH 2024). Innflytjendur eru inni &iacute; &ouml;llum t&ouml;lum.
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+var popSchedule = {
+  2025:249560, 2026:253500, 2027:257600, 2028:261700, 2029:265900,
+  2030:267500, 2031:270000, 2032:272000, 2033:274000, 2034:275000,
+  2035:276000, 2040:283000
+};
+
+var municipalities = [
+  {name:"Reykjav\u00edkurborg",          pop2025:136894, g:1.5, note:"~55% af sv\u00e6\u00f0inu"},
+  {name:"K\u00f3pavgsb\u00e6r",           pop2025:38200,  g:1.5, note:"N\u00e6st st\u00e6rst"},
+  {name:"Hafnarfjar\u00f0arkaupsta\u00f0ur",pop2025:31500, g:1.8, note:"Vaxandi"},
+  {name:"Gar\u00f0ab\u00e6r",             pop2025:16800,  g:2.1, note:"Hra\u00f0vaxandi"},
+  {name:"Mosfellsb\u00e6r",              pop2025:12400,  g:2.3, note:"Hra\u00f0vaxandi"},
+  {name:"Seltjarnarnesb\u00e6r",         pop2025:4600,   g:0.8, note:"L\u00edtil fj\u00f6lgun"},
+  {name:"Kj\u00f3sarhreppur",            pop2025:166,    g:1.0, note:"F\u00e1mennt"}
+];
+
+// Road params (Suðurlandsbraut, T.ark/mbl.is 2026)
+var LANE_CAPACITY = 900;   // bílar/akrein/klst
+var FREE_FLOW_MIN = 8;     // mínútur frjálsakstur á lykilleiðum (~6km við 50km/h)
+var PEAK_SHARE = 0.09;     // 9% of daily traffic in peak hour (AASHTO standard)
+var DAILY_TRIPS_PER_CAR = 1.8; // ferðir á dag á bíl
+
+// BL Phase 1 capacity at 7-min headway, 125 pax, replaces car trips
+var BL_BUS_CAPACITY = 125;
+var BL_HEADWAY_MIN  = 7;
+var BL_ROUTES       = 2;   // Route A + Route B in Phase 1 corridor
+
+function fmt(n)    { return Math.round(n).toLocaleString('is-IS'); }
+function fmtM(n)   { return n.toFixed(1); }
+function fmtT(m)   { return Math.round(m) + ' mín'; }
+
+function getPop(yr) {
+  if (popSchedule[yr]) return popSchedule[yr];
+  // linear interpolation
+  var keys = Object.keys(popSchedule).map(Number).sort(function(a,b){return a-b;});
+  for (var i=0; i<keys.length-1; i++) {
+    if (yr >= keys[i] && yr <= keys[i+1]) {
+      var t = (yr - keys[i]) / (keys[i+1] - keys[i]);
+      return Math.round(popSchedule[keys[i]] * (1-t) + popSchedule[keys[i+1]] * t);
+    }
+  }
+  return popSchedule[2040];
+}
+
+// BPR congestion function
+// t = t0 * (1 + 0.15 * (v/c)^4)
+function bprDelay(volumePerLane, capacityPerLane, freeFlowMin) {
+  var vc = Math.min(volumePerLane / capacityPerLane, 1.5); // cap at 1.5 to avoid infinity
+  return freeFlowMin * (1 + 0.15 * Math.pow(vc, 4));
+}
+
+// Level of Service based on V/C
+function getLOS(vc) {
+  if (vc < 0.6)  return {los:'A', col:'#34d399', label:'Frjáls umferð'};
+  if (vc < 0.70) return {los:'B', col:'#86efac', label:'Stöðugt flæði'};
+  if (vc < 0.80) return {los:'C', col:'#fbbf24', label:'Stöðugt en þröngt'};
+  if (vc < 0.90) return {los:'D', col:'#fb923c', label:'Tafar byrja'};
+  if (vc < 1.00) return {los:'E', col:'#f87171', label:'Þétt &mdash; tafir líklegar'};
+  return {los:'F', col:'#dc2626', label:'&Ouml;ngþveiti &mdash; miklar tafar'};
+}
+
+// ── PEAK HOUR CALCULATOR ──
+function calcPeak() {
+  var yr         = parseInt(document.getElementById('peakYear').value);
+  var carsNow    = parseInt(document.getElementById('pkCarsNow').value);
+  var modalPct   = parseInt(document.getElementById('pkModalShift').value);
+  var schoolPct  = parseInt(document.getElementById('schoolFactor').value);
+  var lanes      = parseInt(document.getElementById('numLanes').value);
+
+  document.getElementById('peakYearVal').textContent    = yr;
+  document.getElementById('pkCarsNowVal').textContent   = carsNow;
+  document.getElementById('pkModalShiftVal').textContent= modalPct + '%';
+  document.getElementById('schoolFactorVal').textContent= '+' + schoolPct + '%';
+  document.getElementById('numLanesVal').textContent    = lanes;
+
+  document.getElementById('thYear').textContent   = yr + ' \u00e1n BL';
+  document.getElementById('thYearBL').textContent = yr + ' me\u00f0 BL';
+
+  // Total capacity this road in both directions
+  var totalCap = lanes * LANE_CAPACITY; // per direction
+
+  var corridorADT = parseInt(document.getElementById('corridorADT').value);
+  var FREE_FLOW_DYN = parseInt(document.getElementById('freeFlowMin').value);
+  document.getElementById('freeFlowMinVal').textContent = FREE_FLOW_DYN + ' mín';
+  document.getElementById('corridorADTVal').textContent = corridorADT.toLocaleString('is-IS');
+
+  // Growth factor: corridor ADT grows proportionally with total car fleet
+  var pop2025 = 249560;
+  var cars2025 = Math.round(pop2025 * carsNow / 1000);
+  var popYr = getPop(yr);
+  var carsPerK = carsNow + 3 * (yr - 2025);
+  var carsYr = Math.round(popYr * carsPerK / 1000);
+  var growthFactor = carsYr / cars2025;
+
+  // ── 2025 BASELINE ──
+  // Peak hour = ADT * 9% (AASHTO), one direction = /2, per lane = /lanes
+  var peakVol25 = Math.round(corridorADT * PEAK_SHARE / 2);   // one direction, all lanes
+  var peakVolPerLane25 = Math.round(peakVol25 / lanes);
+  var vc25 = peakVol25 / (lanes * LANE_CAPACITY);
+  var delay25 = bprDelay(peakVolPerLane25, LANE_CAPACITY, FREE_FLOW_DYN);
+  var los25 = getLOS(vc25);
+  var peakVolSchool25 = Math.round(peakVol25 * (1 + schoolPct/100));
+  var vcSchool25 = peakVolSchool25 / (lanes * LANE_CAPACITY);
+  var delaySchool25 = bprDelay(Math.round(peakVolSchool25/lanes), LANE_CAPACITY, FREE_FLOW_DYN);
+
+  // ── FUTURE: no BL ──
+  var adtYr = Math.round(corridorADT * growthFactor);
+  var peakVolYr = Math.round(adtYr * PEAK_SHARE / 2);
+  var peakVolPerLaneYr = Math.round(peakVolYr / lanes);
+  var vcYr = peakVolYr / (lanes * LANE_CAPACITY);
+  var delayYr = bprDelay(peakVolPerLaneYr, LANE_CAPACITY, FREE_FLOW_DYN);
+  var losYr = getLOS(vcYr);
+  var peakVolSchoolYr = Math.round(peakVolYr * (1 + schoolPct/100));
+  var vcSchoolYr = peakVolSchoolYr / (lanes * LANE_CAPACITY);
+  var delaySchoolYr = bprDelay(Math.round(peakVolSchoolYr/lanes), LANE_CAPACITY, FREE_FLOW_DYN);
+
+  // ── FUTURE: with BL ──
+  // BL removes modal-shift share from the corridor, amplified at peak (1.3x)
+  var modalFractionCorridor = (modalPct / 100) * 1.3;
+  var adtYrBL = Math.round(adtYr * (1 - modalFractionCorridor));
+  var peakVolBL = Math.round(adtYrBL * PEAK_SHARE / 2);
+  var peakVolPerLaneBL = Math.round(peakVolBL / lanes);
+  var vcBL = peakVolBL / (lanes * LANE_CAPACITY);
+  var delayBL = bprDelay(peakVolPerLaneBL, LANE_CAPACITY, FREE_FLOW_DYN);
+  var losBL = getLOS(vcBL);
+  var peakVolSchoolBL = Math.round(peakVolBL * (1 + schoolPct/100));
+  var vcSchoolBL = peakVolSchoolBL / (lanes * LANE_CAPACITY);
+  var delaySchoolBL = bprDelay(Math.round(peakVolSchoolBL/lanes), LANE_CAPACITY, FREE_FLOW_DYN);
+  var carsRemovedPeak = Math.round(adtYr * modalFractionCorridor * PEAK_SHARE / 2);
+
+  // Total capital-area cars with BL (for display in scenario/table)
+  var carsYrBL = Math.round(carsYr * (1 - modalPct/100));
+
+  // BL peak capacity (buses per hour each direction * passengers / avg occupancy converts to car-equivalents)
+  var blBusesPerHour = Math.floor(60 / BL_HEADWAY_MIN) * BL_ROUTES;
+  var blPaxPerHour   = blBusesPerHour * BL_BUS_CAPACITY;
+  var blCarEquiv     = Math.round(blPaxPerHour / 1.2); // avg 1.2 people/car
+
+  // ── RENDER SCENARIO CARDS ──
+  function scenCard(cls, title, col, cars, peakV, vcVal, delay, delaySchool, losObj, vcS, extraNote) {
+    var barW = Math.min(vcVal * 100, 100);
+    var barWs = Math.min(vcS * 100, 100);
+    return '<div class="scenario ' + cls + '">'
+      + '<h4 style="color:' + col + '">' + title + '</h4>'
+      + '<div class="sc-grid">'
+      + '<div class="sc-stat"><div class="n" style="color:' + col + '">' + fmt(cars) + '</div><div class="l">Bílar á svæðinu</div></div>'
+      + '<div class="sc-stat"><div class="n" style="color:' + col + '">' + fmt(peakV) + '</div><div class="l">Bílar/klst á lykilleiðum<br>(annatími)</div></div>'
+      + '<div class="sc-stat"><div class="n" style="color:' + losObj.col + '">' + fmtT(delay) + '</div><div class="l">Áætlaður ferðatími<br>(venjulegur annatími)</div></div>'
+      + '<div class="sc-stat"><div class="n" style="color:' + (vcS > 0.9 ? '#f87171' : '#fbbf24') + '">' + fmtT(delaySchool) + '</div><div class="l">Ferðatími á<br>skóladegi</div></div>'
+      + '</div>'
+      + '<div style="margin-top:12px;">'
+      + '<div style="font-size:10px;color:#64748b;margin-bottom:3px;">V/C venjulegur annatími: ' + vcVal.toFixed(2) + ' &mdash; þjónustustig: <span style="color:' + losObj.col + ';font-weight:700;">' + losObj.los + ' (' + losObj.label + ')</span></div>'
+      + '<div class="los-bar" style="background:linear-gradient(to right,' + losObj.col + ' ' + barW + '%, #1e293b ' + barW + '%)"></div>'
+      + '<div style="font-size:10px;color:#64748b;margin-bottom:3px;">V/C á skóladegi: ' + vcS.toFixed(2) + '</div>'
+      + '<div class="los-bar" style="background:linear-gradient(to right,' + (vcS>0.9?'#f87171':'#fbbf24') + ' ' + barWs + '%, #1e293b ' + barWs + '%)"></div>'
+      + (extraNote ? '<div style="font-size:10px;color:#94a3b8;margin-top:6px;">' + extraNote + '</div>' : '')
+      + '</div>'
+      + '</div>';
+  }
+
+  var s = '';
+  s += scenCard('scenario-now', '&#128205; 2025 &mdash; N&uacute;verandi sta&eth;a', '#94a3b8',
+    cars2025, peakVol25, vc25, delay25, delaySchool25, los25, vcSchool25, '');
+  s += scenCard('scenario-2031a', '&#9888;&#65039; ' + yr + ' &mdash; &Aacute;n Borgairl&iacute;nu', '#f87171',
+    carsYr, peakVolYr, vcYr, delayYr, delaySchoolYr, losYr, vcSchoolYr,
+    'Án aðgerða &mdash; íbúafjölgun eins og spáð');
+  s += scenCard('scenario-2031b', '&#128994; ' + yr + ' &mdash; Me&eth; Borgarlínu (' + modalPct + '% shift)', '#34d399',
+    carsYrBL, peakVolBL, vcBL, delayBL, delaySchoolBL, losBL, vcSchoolBL,
+    'BL fjarlægir ~' + fmt(carsRemovedPeak) + ' bílar/klst af þessari leið á annatíma. BL afkastageta: ~' + fmt(blPaxPerHour) + ' farþegar/klst = ~' + fmt(blCarEquiv) + ' bílajafngildi.');
+  document.getElementById('scenarioCards').innerHTML = s;
+
+  // ── COMPARISON TABLE ──
+  function diffStr(a, b, unit, invert) {
+    var d = b - a;
+    var better = invert ? d < 0 : d > 0;
+    var cls = better ? 'green' : (Math.abs(d) < 0.05 * a ? 'yellow' : 'red');
+    return '<span class="' + cls + '">' + (d >= 0 ? '+' : '') + (unit === 'mín' ? d.toFixed(1) : fmt(d)) + ' ' + unit + '</span>';
+  }
+
+  var rows = [
+    ['Bílar á svæðinu (heild)', fmt(cars2025), fmt(carsYr), fmt(carsYrBL),
+      '<span class="green">&minus;' + fmt(carsYr - carsYrBL) + '</span>'],
+    ['&Aacute;DU á leiðinni', fmt(corridorADT), fmt(adtYr), fmt(adtYrBL),
+      '<span class="green">&minus;' + fmt(adtYr - adtYrBL) + '</span>'],
+    ['Bílar/klst á annatíma (lykilleiðir)', fmt(peakVol25), fmt(peakVolYr), fmt(peakVolBL),
+      '<span class="green">&minus;' + fmt(peakVolYr - peakVolBL) + '</span>'],
+    ['V/C hlutfall (annatími)', vc25.toFixed(2), vcYr.toFixed(2), vcBL.toFixed(2),
+      '<span class="green">&minus;' + (vcYr - vcBL).toFixed(2) + '</span>'],
+    ['Þjónststig (LOS)', los25.los, losYr.los, losBL.los, '&mdash;'],
+    ['Ferðatími (frjálsakstur: ' + FREE_FLOW_MIN + ' mín)', fmtT(delay25), fmtT(delayYr), fmtT(delayBL),
+      '<span class="green">&minus;' + Math.round(delayYr - delayBL) + ' mín</span>'],
+    ['Ferðatími á skóladegi', fmtT(delaySchool25), fmtT(delaySchoolYr), fmtT(delaySchoolBL),
+      '<span class="green">&minus;' + Math.round(delaySchoolYr - delaySchoolBL) + ' mín</span>'],
+    ['BL afkastageta (farþegar/klst)', '&mdash;', '&mdash;', fmt(blPaxPerHour),
+      '+' + fmt(blPaxPerHour)]
+  ];
+
+  var tbody = '';
+  for (var i=0; i<rows.length; i++) {
+    tbody += '<tr><td class="hl">' + rows[i][0] + '</td><td>' + rows[i][1] + '</td><td>' + rows[i][2] + '</td><td>' + rows[i][3] + '</td><td>' + rows[i][4] + '</td></tr>';
+  }
+  document.getElementById('peakTable').innerHTML = tbody;
+
+  document.getElementById('peakNote').innerHTML =
+    '<strong>BPR-formúla:</strong> t = t&#8320; &times; (1 + 0,15 &times; (V/C)&sup4;) &mdash; þ.e. þegar umferð nálgast þakmark eykst tafinn á veldisvísi, ekki línulega. '
+    + 'Þakmark: 900 bílar/akrein/klst (T.ark arkitektastofa, byggt á Suðurlandsbraut gögnum, mbl.is mars 2026). '
+    + 'Skólaáhrif: Íslenskar grunnskólur byrja 08:00&ndash;08:30 &mdash; þetta skapar þríhyrning í umferð 07:30&ndash;09:00 þar sem foreldrar aka börnum OG fara sjálfir í vinnu samtímis. '
+    + 'Annatímahlutfall 9% (AASHTO Highway Capacity Manual). '
+    + '<strong>Takmörk líkansins:</strong> BPR er simplified &mdash; tekur ekki tillit til gatnamóta, umferðarljósa eða dreifingar bíla milli leiða. Notaðu tölurnar sem vísbendingu, ekki nákvæma spá.';
+}
+
+// ── FULL DAY CALCULATOR ──
+function calc() {
+  var carsNow    = parseInt(document.getElementById('carsNow').value);
+  var carGrowth  = parseInt(document.getElementById('carGrowth').value);
+  var modalShift = parseInt(document.getElementById('modalShift').value)/100;
+  var blYear     = parseInt(document.getElementById('blYear').value);
+
+  document.getElementById('carsNowVal').textContent    = carsNow;
+  document.getElementById('carGrowthVal').textContent  = (carGrowth>=0?'+':'')+carGrowth+'/\u00e1ri';
+  document.getElementById('modalShiftVal').textContent = Math.round(modalShift*100)+'%';
+  document.getElementById('blYearVal').textContent     = blYear;
+
+  var basePop  = 249560;
+  var baseCars = Math.round(basePop*carsNow/1000);
+  var years    = Object.keys(popSchedule).map(Number).sort(function(a,b){return a-b;});
+  var rows='', blData=null;
+
+  for(var i=0;i<years.length;i++){
+    var yr=years[i], pop=popSchedule[yr];
+    var cpk=carsNow+carGrowth*(yr-2025);
+    var cNobl=Math.round(pop*cpk/1000);
+    var hasBL=yr>=blYear;
+    var cBL=hasBL?Math.round(cNobl*(1-modalShift)):null;
+    var saved=hasBL?cNobl-cBL:0;
+    if(yr===blYear&&!blData) blData={carsNobl:cNobl,carsBL:cBL,saved:saved};
+    var disp=hasBL?cBL:cNobl, delta=disp-baseCars;
+    var dcls=delta>5000?(hasBL?'yellow':'red'):(delta<-1000?'green':'');
+    rows+='<tr'+(yr===2025?' class="row-now"':'')+'>'
+      +'<td class="hl">'+yr+(yr===blYear?' &#128652;':'')+'</td>'
+      +'<td>'+fmt(pop)+'</td><td class="dim">'+Math.round(cpk)+'</td>'
+      +'<td>'+fmt(cNobl)+'</td>'
+      +'<td>'+(hasBL?fmt(cBL):'<span class="dim">&mdash;</span>')+'</td>'
+      +'<td>'+(saved>0?'<span class="green">&minus;'+fmt(saved)+'</span>':'<span class="dim">&mdash;</span>')+'</td>'
+      +'<td><span class="'+dcls+'">'+(delta>=0?'+':'')+fmt(delta)+'</span></td>'
+      +'</tr>';
+  }
+  document.getElementById('tableBody').innerHTML=rows;
+
+  var extra=blData?blData.carsNobl-baseCars:0;
+  var saved=blData?blData.saved:0;
+  var net=blData?blData.carsBL-baseCars:0;
+  var nc=net>0?'#fbbf24':'#34d399';
+  document.getElementById('summary').innerHTML=
+    '<div class="card"><div class="num" style="color:#f87171">'+fmt(baseCars)+'</div><div class="lbl">B\u00edlar \u00ed dag (2025)</div></div>'
+    +'<div class="card"><div class="num" style="color:#fbbf24">+'+fmt(extra)+'</div><div class="lbl">Aukab\u00edlar '+blYear+' \u00e1n BL</div></div>'
+    +'<div class="card"><div class="num" style="color:#34d399">&minus;'+fmt(saved)+'</div><div class="lbl">BL kemur \u00ed sta\u00f0 ('+blYear+')<br>Nett\u00f3: <strong style="color:'+nc+'">'+(net>=0?'+':'')+fmt(net)+'</strong></div></div>';
+
+  document.getElementById('calcNote').innerHTML=
+    '<strong>Heimildir:</strong> &Iacute;b&uacute;ar 2025: 249.560 (Hagstofa). Sp&aacute; 2030: 260&ndash;275&thorn;&uacute;s (&thorn;ingsvar sept. 2025). '
+    +'Innflytjendur eru inni &iacute; &ouml;llum t&ouml;lum. B&iacute;lar/1000: 779 (Hagstofa 2024). '
+    +'Modal shift: mat byggt &aacute; samanb&uacute;r&eth;i vi&eth; BRT-kerfi &iacute; &ouml;&eth;rum borgum.';
+  if(document.getElementById('panel-straeto').classList.contains('active')) renderRidershipCalc();
+}
+
+// ── STRAETO RIDERSHIP ──
+function renderRidershipCalc() {
+  var pct=parseInt(document.getElementById('modalShift').value)||8;
+  var cN=parseInt(document.getElementById('carsNow').value)||779;
+  var blYr=parseInt(document.getElementById('blYear').value)||2031;
+  var pop=getPop(blYr);
+  var cpk=cN+3*(blYr-2025);
+  var total=Math.round(pop*cpk/1000);
+  var repl=Math.round(total*pct/100);
+  var dTrips=Math.round(repl*1.8);
+  var dBoard=Math.round(dTrips*1.3);
+  var aBoard=+(dBoard*300/1e6).toFixed(1);
+  var newTot=+(11.9+aBoard).toFixed(1);
+  document.getElementById('ridershipStats').innerHTML=
+    '<div class="stat-card"><div class="snum" style="color:#f87171">'+fmt(repl)+'</div><div class="slbl">B\u00edlar sem BL kemur \u00ed sta\u00f0 ('+blYr+')<br>vi\u00f0 '+pct+'% modal shift</div></div>'
+    +'<div class="stat-card"><div class="snum" style="color:#fbbf24">'+fmt(dTrips)+'</div><div class="slbl">B\u00edlafer\u00f0ir/dag sem f\u00e6rast \u00ed BL</div></div>'
+    +'<div class="stat-card"><div class="snum" style="color:#34d399">'+fmt(dBoard)+'</div><div class="slbl">N\u00fd innstig \u00e1 dag \u00ed BL</div></div>'
+    +'<div class="stat-card"><div class="snum" style="color:#818cf8">+'+aBoard+'m</div><div class="slbl">Aukning innstig \u00e1 \u00e1ri</div></div>';
+  document.getElementById('ridershipNote').innerHTML=
+    'Str\u00e6t\u00f3 grunnl\u00edna 2024: ~11,9m. Me\u00f0 BL: ~'+newTot+'m. Mark mi\u00f0 2040: 60m. '
+    +'Forsendur: 1,8 b\u00edlafer\u00f0ir/dag, 1,3 innstig/fer\u00f0.';
+}
+
+
+// ── ROADS VS BL ──
+function calcRoads() {
+  var extraLanes   = parseInt(document.getElementById('extraLanes').value);
+  var inducedRate  = parseInt(document.getElementById('inducedRate').value) / 100;
+  var roadsYear    = parseInt(document.getElementById('roadsYear').value);
+  var adt          = parseInt(document.getElementById('roadsADT').value);
+  var freeFlow     = parseInt(document.getElementById('roadsFreeFlow').value);
+
+  document.getElementById('extraLanesVal').textContent    = extraLanes;
+  document.getElementById('inducedRateVal').textContent   = (inducedRate*100) + '%';
+  document.getElementById('roadsYearVal').textContent     = roadsYear;
+  document.getElementById('roadsADTVal').textContent      = adt.toLocaleString('is-IS');
+  document.getElementById('roadsFreeFlowVal').textContent = freeFlow + ' mín';
+
+  var LANE_CAP   = 900;   // bílar/akrein/klst
+  var PEAK_SH    = 0.09;  // 9% of ADT per hour
+  var BL_PAX_HR  = Math.floor(60/7) * 2 * 125; // 2 routes, 7min headway, 125 pax
+  var BL_CAR_EQ  = Math.round(BL_PAX_HR / 1.2);
+
+  var baseLanes  = 2; // existing lanes per direction
+  var newLanes   = baseLanes + extraLanes;
+
+  var years = [];
+  for (var y = 2025; y <= 2040; y++) years.push(y);
+
+  var tableRows = '';
+  var compareData = {};
+
+  for (var i = 0; i < years.length; i++) {
+    var yr = years[i];
+    var yrsFromNow = yr - 2025;
+
+    // --- ROAD WIDENING ---
+    // New capacity after widening
+    var newCap = newLanes * LANE_CAP; // per direction
+
+    // Induced demand: ADT grows by inducedRate% per year after widening
+    var adtRoad = yr >= 2027
+      ? Math.round(adt * Math.pow(1 + inducedRate, Math.min(yrsFromNow, yr - 2027 + 1)))
+      : adt;
+    // Also grows from population (+1.6%/yr)
+    adtRoad = Math.round(adtRoad * Math.pow(1.016, yrsFromNow));
+    var peakRoad = Math.round(adtRoad * PEAK_SH / 2);
+    var vcRoad   = peakRoad / (newLanes * LANE_CAP);
+    var tRoad    = freeFlow * (1 + 0.15 * Math.pow(Math.min(vcRoad, 1.5), 4));
+
+    // --- BORGARLÍNAN (modal shift 8%, BL opens 2031) ---
+    var adtBL = Math.round(adt * Math.pow(1.016, yrsFromNow));
+    if (yr >= 2031) adtBL = Math.round(adtBL * (1 - 0.08 * 1.3));
+    var peakBL = Math.round(adtBL * PEAK_SH / 2);
+    var vcBL   = peakBL / (baseLanes * LANE_CAP);
+    var tBL    = freeFlow * (1 + 0.15 * Math.pow(Math.min(vcBL, 1.5), 4));
+
+    var losRoad = getLOS(vcRoad);
+    var losBL   = getLOS(vcBL);
+    var diff    = tRoad - tBL;
+
+    if (yr === roadsYear) compareData = {
+      adtRoad:adtRoad, vcRoad:vcRoad, tRoad:tRoad, losRoad:losRoad,
+      adtBL:adtBL, vcBL:vcBL, tBL:tBL, losBL:losBL,
+      peakRoad:peakRoad, peakBL:peakBL, diff:diff
+    };
+
+    var isNow = yr === 2025;
+    var isBL  = yr === 2031;
+    var diffStr = diff > 0.5
+      ? '<span class="green">BL betri um ' + Math.round(diff) + ' mín</span>'
+      : diff < -0.5
+        ? '<span class="red">Vegur betri um ' + Math.round(-diff) + ' mín</span>'
+        : '<span class="dim">Jafntefli</span>';
+
+    tableRows += '<tr' + (isNow ? ' class="row-now"' : '') + '>'
+      + '<td class="hl">' + yr + (isBL ? ' &#128652;' : '') + '</td>'
+      + '<td>' + fmt(adtRoad) + '</td>'
+      + '<td><span style="color:' + losRoad.col + ';font-weight:700;">' + vcRoad.toFixed(2) + ' (' + losRoad.los + ')</span></td>'
+      + '<td>' + Math.round(tRoad) + ' mín</td>'
+      + '<td>' + fmt(adtBL) + '</td>'
+      + '<td><span style="color:' + losBL.col + ';font-weight:700;">' + vcBL.toFixed(2) + ' (' + losBL.los + ')</span></td>'
+      + '<td>' + Math.round(tBL) + ' mín</td>'
+      + '<td>' + diffStr + '</td>'
+      + '</tr>';
+  }
+
+  document.getElementById('roadsTable').innerHTML = tableRows;
+
+  // COMPARE CARDS
+  var cd = compareData;
+  document.getElementById('roadsCompare').innerHTML =
+    '<div style="background:#1a1a2e;border:1px solid #334155;border-radius:12px;padding:18px;">'
+    + '<div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;">&#128739; Vegbreiðkun (+' + extraLanes + ' akreinar) &mdash; ' + roadsYear + '</div>'
+    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'
+    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:' + cd.losRoad.col + '">' + fmt(cd.adtRoad) + '</div><div style="font-size:10px;color:#64748b;margin-top:2px;">ÁDU (induced demand innifalið)</div></div>'
+    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:' + cd.losRoad.col + '">' + cd.vcRoad.toFixed(2) + '</div><div style="font-size:10px;color:#64748b;margin-top:2px;">V/C &mdash; LOS ' + cd.losRoad.los + '</div></div>'
+    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:' + cd.losRoad.col + '">' + Math.round(cd.tRoad) + ' mín</div><div style="font-size:10px;color:#64748b;margin-top:2px;">Ferðatími á annatíma</div></div>'
+    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:#64748b;">' + (newLanes) + ' akreinar</div><div style="font-size:10px;color:#64748b;margin-top:2px;">Í hvora átt eftir breiðkun</div></div>'
+    + '</div></div>'
+
+    + '<div style="background:#0f2d1a;border:1px solid #14532d;border-radius:12px;padding:18px;">'
+    + '<div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;">&#128652; Borgarlínan (8% modal shift) &mdash; ' + roadsYear + '</div>'
+    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'
+    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:' + cd.losBL.col + '">' + fmt(cd.adtBL) + '</div><div style="font-size:10px;color:#64748b;margin-top:2px;">ÁDU (BL dregur úr umferð)</div></div>'
+    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:' + cd.losBL.col + '">' + cd.vcBL.toFixed(2) + '</div><div style="font-size:10px;color:#64748b;margin-top:2px;">V/C &mdash; LOS ' + cd.losBL.los + '</div></div>'
+    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:' + cd.losBL.col + '">' + Math.round(cd.tBL) + ' mín</div><div style="font-size:10px;color:#64748b;margin-top:2px;">Ferðatími á annatíma</div></div>'
+    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:#34d399;">' + fmt(BL_PAX_HR) + '</div><div style="font-size:10px;color:#64748b;margin-top:2px;">Farþegar/klst á BL leiðum</div></div>'
+    + '</div></div>';
+
+  // LAND USE
+  var laneLen    = 14500; // 14.5 km Phase 1 corridor
+  var laneW      = 3.5;
+  var sqm        = extraLanes * 2 * laneLen * laneW;
+  var ha         = (sqm / 10000).toFixed(1);
+  var footballs  = Math.round(sqm / 7140);
+  var blCost     = 48600; // milljónir kr Phase 1
+  var costPerSqm = Math.round(blCost * 1e6 / (14500 * (3.5 * 2 * 2 + 3.0))); // rough BL cost per m2 corridor
+
+  document.getElementById('roadsLandBox').innerHTML =
+    '<h3>Landnotkun &mdash; vegbreiðkun á 14,5 km (BL-leiðarlengd)</h3>'
+    + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;">'
+    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:#fbbf24;">' + fmt(Math.round(sqm)) + ' m²</div><div style="font-size:10px;color:#64748b;margin-top:2px;">Nýtt malbik (' + extraLanes + '×2 akreinar × 14,5 km × 3,5 m)</div></div>'
+    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:#fbbf24;">' + ha + ' ha</div><div style="font-size:10px;color:#64748b;margin-top:2px;">Hektarar af borgarlandi</div></div>'
+    + '<div style="text-align:center;background:#0f172a;border-radius:8px;padding:12px;"><div style="font-size:20px;font-weight:800;color:#fbbf24;">~' + footballs + '</div><div style="font-size:10px;color:#64748b;margin-top:2px;">Fótboltavellir (til samanburðar)</div></div>'
+    + '</div>'
+    + '<div style="font-size:12px;color:#94a3b8;line-height:1.8;">'
+    + '&#128308; Vegbreiðkun þarf <strong style="color:#fbbf24;">' + ha + ' hektara</strong> af nýju landi &mdash; sem þarf að kaupa, flytja lagnir, breyta bílastæðum.<br>'
+    + '&#128308; Induced demand þýðir að þetta er ekki varanleg lausn &mdash; umferð fyllir upp á ' + Math.round(1/inducedRate * 10) + ' árum við ' + Math.round(inducedRate*100) + '% induced demand á ári.<br>'
+    + '&#128994; BL sérakreinar taka ~3,5 m af miðju Suðurlandsbrautar &mdash; sama land, engin kaup. Induced demand á bílakerfi eykst ekki þegar BL tekur rúm.<br>'
+    + '&#128994; BL afkastageta: <strong style="color:#34d399;">' + fmt(BL_PAX_HR) + ' farþegar/klst</strong> &mdash; sama og ~' + fmt(BL_CAR_EQ) + ' bílar/klst á tveimur akreinum.'
+    + '</div>';
+}
+
+// ── MUNICIPALITIES ──
+function renderMunis() {
+  var total=0;
+  for(var i=0;i<municipalities.length;i++) total+=municipalities[i].pop2025;
+  var html='';
+  for(var i=0;i<municipalities.length;i++){
+    var m=municipalities[i];
+    var share=((m.pop2025/total)*100).toFixed(1);
+    var p31=Math.round(m.pop2025*Math.pow(1+m.g/100,6));
+    var p40=Math.round(m.pop2025*Math.pow(1+m.g/100,15));
+    var col=m.g>=2.0?'#34d399':m.g>=1.5?'#fbbf24':'#94a3b8';
+    html+='<div class="muni-card"><div class="muni-name">'+m.name+'</div>'
+      +'<div class="muni-row"><span>2025:</span><span>'+fmt(m.pop2025)+'</span></div>'
+      +'<div class="muni-row"><span>2031 (sp\u00e1):</span><span>'+fmt(p31)+'</span></div>'
+      +'<div class="muni-row"><span>2040 (sp\u00e1):</span><span>'+fmt(p40)+'</span></div>'
+      +'<div class="muni-row"><span>Hlutfall:</span><span>'+share+'%</span></div>'
+      +'<div style="font-size:11px;margin-top:4px;color:'+col+'">V\u00f6xtur: ~'+m.g+'%/\u00e1r \u00b7 '+m.note+'</div>'
+      +'</div>';
+  }
+  document.getElementById('muniGrid').innerHTML=html;
+}
+
+// ── TABS ──
+function showTab(name) {
+  var tabs=document.querySelectorAll('.tab');
+  for(var i=0;i<tabs.length;i++) tabs[i].classList.remove('active');
+  var panels=document.querySelectorAll('.panel');
+  for(var i=0;i<panels.length;i++) panels[i].classList.remove('active');
+  document.querySelector('[onclick="showTab(\''+name+'\')"]').classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+  if(name==='straeto') renderRidershipCalc();
+}
+
+renderMunis();
+calcPeak();
+calc();
+updateHome();
+calcRoads();
+
+function updateHome() {
+  var carsNow = 779;
+  var pop2025 = 249560;
+  var pop2031 = 270000;
+  var blModalShift = 0.08;
+  var carGrowth = 3;
+
+  var cars2025 = Math.round(pop2025 * carsNow / 1000);
+  var cpk2031 = carsNow + carGrowth * 6;
+  var cars2031 = Math.round(pop2031 * cpk2031 / 1000);
+  var cars2031bl = Math.round(cars2031 * (1 - blModalShift));
+  var extra = cars2031 - cars2025;
+  var saved = cars2031 - cars2031bl;
+
+  var elToday = document.getElementById('home-cars-today');
+  var el2031  = document.getElementById('home-cars-2031');
+  var elBL    = document.getElementById('home-cars-bl');
+  if (elToday) elToday.textContent = fmt(cars2025);
+  if (el2031)  el2031.textContent  = '+' + fmt(extra);
+  if (elBL)    elBL.textContent    = '−' + fmt(saved);
+}
+</script>
+</body>
+</html>
