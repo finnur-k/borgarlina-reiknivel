@@ -477,7 +477,7 @@
       <p><code style="background:#0f172a;padding:4px 10px;border-radius:4px;font-size:13px;display:inline-block;margin:4px 0;">t = t&#8320; &times; (1 + 0,15 &times; (V/C)&#8308;)</code></p>
       <p><strong>V</strong> er fjöldi bíla á klukkustund. <strong>C</strong> er þakmark leiðarinnar. <strong>t&#8320;</strong> er ferðatíminn þegar umferð er engin.</p>
       <p>Lykilatriðið er veldisvísirinn — þegar umferð nálgast þakmark eykst tafinn ekki línulega heldur skyndilega. Við 80% þakmark er tafinn lítill. Við 95% er hann margfaldur.</p>
-      <p>Þakmark á þéttbýlisgötu er um <strong>900 bílar á akrein á klukkustund</strong> (Highway Capacity Manual). Annatímar standa fyrir um 9% af daglegri umferð á hverja klukkustund.</p>
+      <p>Þakmark á þéttbýlisgötu er um <strong>900 bílar á akrein á klukkustund</strong> (Highway Capacity Manual). Annatímar standa fyrir um 7,3% af daglegri umferð á hverja klukkustund (Vegagerðin, lykilteljarar á höfuðborgarsvæðinu, 2024).</p>
       <p>Grunnferðatíminn (t&#8320;) og aðrar forsendur eru stillanlegar í reiknivélinni.</p>
     </div>
   </details>
@@ -520,9 +520,9 @@
             <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><rect x="1" y="5" width="2.5" height="4"/><rect x="3.75" y="3" width="2.5" height="6"/><rect x="6.5" y="1" width="2.5" height="8"/></svg></div>
             <span class="d3-label">Akreinar í hvora átt</span>
           </div>
-          <div class="d3-badge" id="numLanesBadge"><span id="numLanesVal">2</span></div>
+          <div class="d3-badge" id="numLanesBadge"><span id="numLanesVal">3</span></div>
         </div>
-        <div class="d3-range-wrap"><input type="range" class="d3-range" id="numLanes" min="1" max="3" value="2" step="1" oninput="calcPeak()"></div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="numLanes" min="1" max="3" value="3" step="1" oninput="calcPeak()"></div>
         <div class="d3-scale"><span>1</span><span>3</span></div>
       </div>
       <div class="d3-row">
@@ -531,10 +531,10 @@
             <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><path d="M1 5h1.5l1.5-3 2 6 1.5-3H9"/></svg></div>
             <span class="d3-label">Dagleg umferð (ÁDU)</span>
           </div>
-          <div class="d3-badge" id="corridorADTBadge"><span id="corridorADTVal">28.000</span></div>
+          <div class="d3-badge" id="corridorADTBadge"><span id="corridorADTVal">43.000</span></div>
         </div>
-        <div class="d3-range-wrap"><input type="range" class="d3-range" id="corridorADT" min="10000" max="50000" value="28000" step="1000" oninput="calcPeak()"></div>
-        <div class="d3-scale"><span>10k</span><span>50k</span></div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="corridorADT" min="10000" max="100000" value="43000" step="1000" oninput="calcPeak()"></div>
+        <div class="d3-scale"><span>10k</span><span>100k</span></div>
       </div>
       <div class="d3-row">
         <div class="d3-header">
@@ -873,7 +873,7 @@
   </div>
 
   <div class="note">
-    <strong>Um gögnin:</strong> Útreikningar byggja á Frumdragaskýrslu Borgarlínu (2021) og umferðartölum Vegagerðarinnar á Miklabraut (ÁDU 43.000). Miðað er við að hver vagn flytji 125 farþegar og fari sjö ferðir á klukkustund á álagstímum (07:30–09:00). Meðalfjöldi í hverjum einkabíl er ætlaður 1,2 farþegar skv. tölum Samgöngustofu.
+    <strong>Um gögnin:</strong> Útreikningar byggja á Frumdragaskýrslu Borgarlínu (2021) og umferðartölum Vegagerðarinnar. Grunnálag (V/C 0,91) er dregið af lykilteljaranum á Vesturlandsvegi ofan Ártúnsbrekku (stöð 49-01, ÁDU 64.700 árið 2025) þar sem 7,3% af daglegri umferð kemur á milli 08:00–09:00 á virkum dögum. Miklabraut: 3 akreinar til miðborgar, þolmörk 900 b/akrein/klst. Miðað er við að hver vagn flytji 125 farþegar og fari sjö ferðir á klukkustund á álagstímum (07:30–09:00). Meðalfjöldi í hverjum einkabíl er ætlaður 1,2 farþegar skv. tölum Samgöngustofu.
   </div>
 
 </div>
@@ -910,7 +910,7 @@ var municipalities = [
 // Road params (Suðurlandsbraut, T.ark/mbl.is 2026)
 var LANE_CAPACITY = 900;   // bílar/akrein/klst
 var FREE_FLOW_MIN = 8;     // mínútur frjálsakstur á lykilleiðum (~6km við 50km/h)
-var PEAK_SHARE = 0.09;     // 9% of daily traffic in peak hour (AASHTO standard)
+var PEAK_SHARE = 0.073;    // 7.3% of daily traffic in peak hour (Vegagerðin, lykilteljarar HBS, stöð 49-01, 2024)
 var DAILY_TRIPS_PER_CAR = 1.8; // ferðir á dag á bíl
 
 // BL Phase 1 capacity at 7-min headway, 125 pax, replaces car trips
@@ -987,7 +987,7 @@ function calcPeak() {
   var growthFactor = carsYr / cars2025;
 
   // ── 2025 BASELINE ──
-  // Peak hour = ADT * 9% (AASHTO), one direction = /2, per lane = /lanes
+  // Peak hour = ADT * 7.3% (Vegagerðin, stöð 49-01, 2024), one direction = /2, per lane = /lanes
   var peakVol25 = Math.round(corridorADT * PEAK_SHARE / 2);   // one direction, all lanes
   var peakVolPerLane25 = Math.round(peakVol25 / lanes);
   var vc25 = peakVol25 / (lanes * LANE_CAPACITY);
@@ -1099,7 +1099,7 @@ function calcPeak() {
     '<strong>BPR-formúla:</strong> t = t&#8320; &times; (1 + 0,15 &times; (V/C)&sup4;) &mdash; þ.e. þegar umferð nálgast þakmark eykst tafinn á veldisvísi, ekki línulega. '
     + 'Þakmark: 900 bílar/akrein/klst (T.ark arkitektastofa, byggt á Suðurlandsbraut gögnum, mbl.is mars 2026). '
     + 'Skólaáhrif: Íslenskar grunnskólur byrja 08:00&ndash;08:30 &mdash; þetta skapar þríhyrning í umferð 07:30&ndash;09:00 þar sem foreldrar aka börnum OG fara sjálfir í vinnu samtímis. '
-    + 'Annatímahlutfall 9% (AASHTO Highway Capacity Manual). '
+    + 'Annatímahlutfall 7,3% (Vegagerðin, lykilteljarar á höfuðborgarsvæðinu, stöð 49-01, 2024). '
     + '<strong>Takmörk líkansins:</strong> BPR er simplified &mdash; tekur ekki tillit til gatnamóta, umferðarljósa eða dreifingar bíla milli leiða. Notaðu tölurnar sem vísbendingu, ekki nákvæma spá.';
   d3RefreshAll();
 }
@@ -1192,9 +1192,9 @@ function renderRidershipCalc() {
 
 // ── ROADS CALCULATOR ──
 var ART_CAP      = 2700;
-var ART_BASE_LOW = 1960;
-var ART_BASE_MID = 2200;
-var ART_BASE_HIGH= 2450;
+var ART_BASE_LOW = 2100;  // ~0.78 × ART_CAP (LOS C/D grið)
+var ART_BASE_MID = 2457;  // = 0.91 × ART_CAP; derived from Vegagerðin stöð 49-01 ÁDU 64.700 (2025) × 7.3% morgunháannatíma × ~52% áttingarhlutfall
+var ART_BASE_HIGH= 2600;  // ~0.96 × ART_CAP (LOS E/F grið)
 var ART_BUS_HR  = 7;
 var ART_PAX     = 125;
 var ART_OCC     = 1.2;
@@ -1396,7 +1396,7 @@ var D3_CONFIGS = [
   {id:'pkModalShift', min:0,     max:20},
   {id:'schoolFactor', min:0,     max:20},
   {id:'numLanes',     min:1,     max:3},
-  {id:'corridorADT',  min:10000, max:50000},
+  {id:'corridorADT',  min:10000, max:100000},
   {id:'freeFlowMin',  min:5,     max:40},
   {id:'carsNow',      min:650,   max:850},
   {id:'carGrowth',    min:-15,   max:15},
