@@ -334,7 +334,7 @@
     <button class="tab" onclick="showTab('peak')">Annatímar &amp; tafar</button>
     <button class="tab" onclick="showTab('calc')">Reiknivél</button>
     <button class="tab" onclick="showTab('straeto')">Strætó grunnlína</button>
-    <button class="tab" onclick="showTab('roads')">Ártúnsbrekka</button>
+    <button class="tab" onclick="showTab('roads')">Háannatími <span style="font-size:9px;background:#7c3aed;color:#fff;border-radius:4px;padding:1px 5px;vertical-align:middle;font-weight:600;letter-spacing:.3px;">Vinna í gangi</span></button>
     <button class="tab" onclick="showTab('munis')">Sveitarfélögin 7</button>
   </nav>
   <!-- Mobile tab dropdown -->
@@ -349,7 +349,7 @@
       <div class="mob-tab-picker-item" onclick="showTab('peak');closeTabPicker()"><svg id="chk-peak" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Annatímar &amp; tafar</div>
       <div class="mob-tab-picker-item" onclick="showTab('calc');closeTabPicker()"><svg id="chk-calc" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Reiknivél</div>
       <div class="mob-tab-picker-item" onclick="showTab('straeto');closeTabPicker()"><svg id="chk-straeto" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Strætó grunnlína</div>
-      <div class="mob-tab-picker-item" onclick="showTab('roads');closeTabPicker()"><svg id="chk-roads" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Ártúnsbrekka</div>
+      <div class="mob-tab-picker-item" onclick="showTab('roads');closeTabPicker()"><svg id="chk-roads" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Háannatími <span style="font-size:9px;background:#7c3aed;color:#fff;border-radius:4px;padding:1px 5px;font-weight:600;">Vinna í gangi</span></div>
       <div class="mob-tab-picker-item" onclick="showTab('munis');closeTabPicker()"><svg id="chk-munis" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Sveitarfélögin 7</div>
     </div>
   </div>
@@ -1366,7 +1366,7 @@ function calcRoads() {
 var TABS_WITH_SLIDERS = { peak: true, calc: true };
 var TAB_LABELS = {
   home: 'Yfirlit', peak: 'Annatímar & tafar', calc: 'Reiknivél',
-  straeto: 'Strætó grunnlína', roads: 'Ártúnsbrekka', munis: 'Sveitarfélögin 7'
+  straeto: 'Strætó grunnlína', roads: 'Háannatími', munis: 'Sveitarfélögin 7'
 };
 
 // ── TAB SWITCHER ──
