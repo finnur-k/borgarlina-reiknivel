@@ -1251,8 +1251,8 @@ function calcRoads() {
   var capBar = document.getElementById('artCapBar');
   var capDot = document.getElementById('artCapDot');
   var capLbl = document.getElementById('artCapLbl');
-  if (capBar) capBar.style.width = Math.min(100, (ART_BASE_MID / ART_CAP) * 100) + '%';
-  if (capDot) { capDot.style.left = Math.min(100, vc * 100) + '%'; capDot.style.background = los.c; }
+  if (capBar) { capBar.style.width = Math.min(100, (load / ART_CAP) * 100) + '%'; capBar.style.background = los.c; }
+  if (capDot) capDot.style.background = los.c;
   if (capLbl) capLbl.textContent = fmt(load) + ' / ' + fmt(ART_CAP) + ' bílar/klst';
 
   // Slider info row
