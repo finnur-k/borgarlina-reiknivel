@@ -866,9 +866,9 @@
         <div style="width:2px;height:8px;background:#f87171;"></div>
         <div style="font-size:9px;color:#f87171;font-weight:700;white-space:nowrap;">Há 0.91</div>
       </div>
-      <div style="position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;transition:left .3s;" id="artGaugeMarker">
+      <div style="position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:1px;transition:left .3s;" id="artGaugeMarker">
         <div style="width:2px;height:8px;" id="artGaugeBar"></div>
-        <div style="font-size:10px;font-weight:700;white-space:nowrap;color:#e2e8f0;" id="artGaugeLbl">V/C 0.55 — Frjálst flæði</div>
+        <div style="font-size:9px;font-weight:700;white-space:nowrap;" id="artGaugeLbl">BL 0.55</div>
       </div>
     </div>
     <div style="display:flex;justify-content:space-between;font-size:9px;color:#475569;margin-bottom:4px;"><span>0.0</span><span>0.2</span><span>0.4</span><span>0.6</span><span>0.8</span><span>1.0</span></div>
@@ -1296,7 +1296,7 @@ function calcRoads() {
   var gaugeLbl    = document.getElementById('artGaugeLbl');
   if (gaugeMarker) { gaugeMarker.style.left = Math.min(100, vc * 100) + '%'; gaugeMarker.style.background = los.c; }
   if (gaugeBar)    { gaugeBar.style.background = los.c; }
-  if (gaugeLbl)    { gaugeLbl.textContent = 'V/C ' + vc.toFixed(2) + ' — ' + los.t; }
+  if (gaugeLbl)    { gaugeLbl.textContent = 'BL ' + vc.toFixed(2); gaugeLbl.style.color = los.c; }
 
   d3RefreshAll();
 }
