@@ -1356,7 +1356,7 @@ function calcRoads() {
   var gaugeBar    = document.getElementById('artGaugeBar');
   var gaugeLbl    = document.getElementById('artGaugeLbl');
   if (gaugeMarker) { gaugeMarker.style.left = Math.min(100, vc * 100) + '%'; gaugeMarker.style.background = los.c; }
-  if (gaugeBar)    { gaugeBar.style.width = Math.min(100, vc * 100) + '%'; gaugeBar.style.background = los.c; }
+  if (gaugeBar)    { gaugeBar.style.background = los.c; }
   if (gaugeLbl)    { gaugeLbl.textContent = 'V/C ' + vc.toFixed(2) + ' — ' + los.t; }
 
   d3RefreshAll();
