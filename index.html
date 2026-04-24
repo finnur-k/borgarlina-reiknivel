@@ -90,6 +90,8 @@
   .slider-val { width: 90px; text-align: right; font-size: 13px; font-weight: 700; color: #818cf8; font-variant-numeric: tabular-nums; }
 
   .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid #334155; margin-bottom: 18px; }
+  .artun-compare { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; margin-bottom: 16px; align-items: start; }
+  .artun-arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 8px; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   thead tr { background: #1e293b; }
   thead th { padding: 10px 14px; text-align: left; font-weight: 600; color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #334155; white-space: nowrap; }
@@ -184,6 +186,8 @@
   .mob-tab-picker-backdrop.open { display: block; }
 
   @media (max-width: 768px) {
+    .artun-compare { grid-template-columns: 1fr; }
+    .artun-arrow { display: none; }
     body { padding-top: 108px; }
     .page-wrap { padding: 16px; }
     .header-top { padding: 0 16px; gap: 8px; }
@@ -330,7 +334,7 @@
     <button class="tab" onclick="showTab('peak')">Annatímar &amp; tafar</button>
     <button class="tab" onclick="showTab('calc')">Reiknivél</button>
     <button class="tab" onclick="showTab('straeto')">Strætó grunnlína</button>
-    <button class="tab" onclick="showTab('roads')">Fleiri akreinar vs BL</button>
+    <button class="tab" onclick="showTab('roads')">Ártúnsbrekka</button>
     <button class="tab" onclick="showTab('munis')">Sveitarfélögin 7</button>
   </nav>
   <!-- Mobile tab dropdown -->
@@ -345,7 +349,7 @@
       <div class="mob-tab-picker-item" onclick="showTab('peak');closeTabPicker()"><svg id="chk-peak" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Annatímar &amp; tafar</div>
       <div class="mob-tab-picker-item" onclick="showTab('calc');closeTabPicker()"><svg id="chk-calc" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Reiknivél</div>
       <div class="mob-tab-picker-item" onclick="showTab('straeto');closeTabPicker()"><svg id="chk-straeto" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Strætó grunnlína</div>
-      <div class="mob-tab-picker-item" onclick="showTab('roads');closeTabPicker()"><svg id="chk-roads" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Fleiri akreinar vs BL</div>
+      <div class="mob-tab-picker-item" onclick="showTab('roads');closeTabPicker()"><svg id="chk-roads" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Ártúnsbrekka</div>
       <div class="mob-tab-picker-item" onclick="showTab('munis');closeTabPicker()"><svg id="chk-munis" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Sveitarfélögin 7</div>
     </div>
   </div>
@@ -718,124 +722,237 @@
 </div>
 
 
-<!-- ═══ ROADS ═══ -->
+<!-- ═══ ROADS / ÁRTÚNSBREKKA ═══ -->
 <div class="panel" id="panel-roads">
 
   <details class="info-box">
-    <summary>&#128270; Fundamental law of road congestion</summary>
-    <div class="info-body">(Duranton &amp; Turner, 2011): 10% aukning á vegaafkastagetu leiðir til ~10% aukningar á umferð innan 5&ndash;10 ára. Fólk sem var að forðast álagstímann, taka aðra leið, eða vinna heiman eykur bílanotkun þegar rúm gefst. Nýjar akreinar fyllast &mdash; BL gerir það ekki.</div>
+    <summary>&#128205; Ártúnsbrekka · Suðurlandsbraut — Morgunháannatími 07:30–09:00</summary>
+    <div class="info-body">
+      <p>Borgarlínan keyrir á eigin akrein meðfram Suðurlandsbraut — hún stagnar ekki í umferð. Þegar farþegar skipta yfir frá bíl á BL minnkar umferðarþyngd á veginum og V/C lækkar.</p>
+      <p><strong>Forsendur:</strong> 7 rútur/klst (á ~8 mín. fresti), 125 farþegar/rútu, 1,2 farþegar/bíl. Hringbraut: 2 akreinar inbound, þakmark 900 b/akrein/klst. Grunnumferð: 1.640 b/klst (V/C 0,91 — LOS E).</p>
+    </div>
   </details>
 
-  <div class="split-layout">
-  <div class="split-left">
-  <div class="d3-panel">
-
-    <div class="d3-group">
-      <div class="d3-group-title">Fleiri akreinar</div>
-      <div class="d3-row">
-        <div class="d3-header">
-          <div class="d3-label-wrap">
-            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><rect x="1" y="5" width="2.5" height="4"/><rect x="3.75" y="3" width="2.5" height="6"/><rect x="6.5" y="1" width="2.5" height="8"/></svg></div>
-            <span class="d3-label">Aukaakreinar (báðar áttir)</span>
-          </div>
-          <div class="d3-badge" id="extraLanesBadge"><span id="extraLanesVal">2</span></div>
-        </div>
-        <div class="d3-range-wrap"><input type="range" class="d3-range" id="extraLanes" min="1" max="6" value="2" step="1" oninput="calcRoads()"></div>
-        <div class="d3-scale"><span>1</span><span>6</span></div>
-      </div>
-      <div class="d3-row">
-        <div class="d3-header">
-          <div class="d3-label-wrap">
-            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><path d="M1 8l8-6"/><circle cx="3" cy="3.5" r="1.2"/><circle cx="7" cy="6.5" r="1.2"/></svg></div>
-            <span class="d3-label">Framkölluð eftirspurn (%/ár)</span>
-          </div>
-          <div class="d3-badge" id="inducedRateBadge"><span id="inducedRateVal">8%</span></div>
-        </div>
-        <div class="d3-range-wrap"><input type="range" class="d3-range" id="inducedRate" min="0" max="15" value="8" step="1" oninput="calcRoads()"></div>
-        <div class="d3-scale"><span>0</span><span>15</span></div>
-      </div>
+  <!-- 2×2 hero -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+    <div class="box" style="border-top:2px solid #f87171;padding:18px 20px;">
+      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">V/C — Án BL</div>
+      <div style="font-size:36px;font-weight:800;color:#f87171;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;">0.91</div>
+      <div style="font-size:12px;font-weight:700;color:#f87171;margin-top:4px;">LOS E</div>
+      <div style="margin-top:10px;height:5px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden;"><div style="height:100%;width:91%;background:#f87171;border-radius:3px;"></div></div>
+      <div style="font-size:11px;color:#475569;margin-top:5px;">Óstöðugt flæði</div>
     </div>
-
-    <div class="d3-group">
-      <div class="d3-group-title">Umferð</div>
-      <div class="d3-row">
-        <div class="d3-header">
-          <div class="d3-label-wrap">
-            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><path d="M1 5h1.5l1.5-3 2 6 1.5-3H9"/></svg></div>
-            <span class="d3-label">Dagleg umferð (ÁDU)</span>
-          </div>
-          <div class="d3-badge" id="roadsADTBadge"><span id="roadsADTVal">28.000</span></div>
-        </div>
-        <div class="d3-range-wrap"><input type="range" class="d3-range" id="roadsADT" min="10000" max="50000" value="28000" step="1000" oninput="calcRoads()"></div>
-        <div class="d3-scale"><span>10k</span><span>50k</span></div>
-      </div>
-      <div class="d3-row">
-        <div class="d3-header">
-          <div class="d3-label-wrap">
-            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><circle cx="5" cy="5" r="3.5"/><path d="M5 3v2l1.5 1.5"/></svg></div>
-            <span class="d3-label">Grunnferðatími (mín)</span>
-          </div>
-          <div class="d3-badge" id="roadsFreeFlowBadge"><span id="roadsFreeFlowVal">20 mín</span></div>
-        </div>
-        <div class="d3-range-wrap"><input type="range" class="d3-range" id="roadsFreeFlow" min="5" max="40" value="20" step="1" oninput="calcRoads()"></div>
-        <div class="d3-scale"><span>5</span><span>40</span></div>
-      </div>
-      <div class="d3-row">
-        <div class="d3-header">
-          <div class="d3-label-wrap">
-            <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><circle cx="5" cy="5" r="3.5"/><path d="M5 3v2l1.5 1.5"/></svg></div>
-            <span class="d3-label">Ár til samanburðar</span>
-          </div>
-          <div class="d3-badge" id="roadsYearBadge"><span id="roadsYearVal">2031</span></div>
-        </div>
-        <div class="d3-range-wrap"><input type="range" class="d3-range" id="roadsYear" min="2026" max="2040" value="2031" step="1" oninput="calcRoads()"></div>
-        <div class="d3-scale"><span>2026</span><span>2040</span></div>
-      </div>
+    <div class="box" style="padding:18px 20px;" id="artVCCard">
+      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">V/C — Með BL</div>
+      <div style="font-size:36px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;" id="artVCBig">0.55</div>
+      <div style="font-size:12px;font-weight:700;margin-top:4px;" id="artLOSBig">LOS B</div>
+      <div style="margin-top:10px;height:5px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden;"><div style="height:100%;border-radius:3px;transition:width .3s,background .3s;" id="artVCBar"></div></div>
+      <div style="font-size:11px;color:#475569;margin-top:5px;" id="artVCLbl">Stöðugt flæði</div>
     </div>
-
-  </div>
-  </div><!-- /split-left -->
-  <div class="split-right">
-
-  <!-- COMPARISON CARDS -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;" id="roadsCompare"></div>
-
-  <!-- YEAR BY YEAR TABLE -->
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th rowspan="2">Ár</th>
-          <th colspan="3" style="text-align:center;border-bottom:1px solid #334155;">Fleiri akreinar</th>
-          <th colspan="3" style="text-align:center;border-bottom:1px solid #334155;">Borgarlínan</th>
-          <th rowspan="2">Munur</th>
-        </tr>
-        <tr>
-          <th>ÁDU</th>
-          <th>V/C</th>
-          <th>Mín</th>
-          <th>ÁDU</th>
-          <th>V/C</th>
-          <th>Mín</th>
-        </tr>
-      </thead>
-      <tbody id="roadsTable"></tbody>
-    </table>
+    <div class="box" style="border-top:2px solid #34d399;padding:18px 20px;">
+      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Bílar fjarlægðir/klst</div>
+      <div style="font-size:36px;font-weight:800;color:#34d399;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;" id="artCarsHr">656</div>
+      <div style="font-size:11px;color:#475569;margin-top:8px;">á morgunháannatíma</div>
+    </div>
+    <div class="box" style="border-top:2px solid #818cf8;padding:18px 20px;">
+      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Farþegar/klst</div>
+      <div style="font-size:36px;font-weight:800;color:#818cf8;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;" id="artPaxHr">788</div>
+      <div style="font-size:11px;color:#475569;margin-top:8px;">7 rútur/klst × 125 farþegar</div>
+    </div>
   </div>
 
-  <!-- LAND USE BOX -->
-  <div class="box" id="roadsLandBox"></div>
+  <!-- Capacity bar -->
+  <div class="box" style="margin-bottom:16px;">
+    <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;">Hringbraut geta · 2 akreinar × 900 = 1.800 bílar/klst</div>
+    <div style="position:relative;height:20px;">
+      <div style="position:absolute;top:6px;left:0;right:0;height:8px;border-radius:3px;background:rgba(255,255,255,.05);"></div>
+      <div style="position:absolute;top:6px;left:0;height:8px;width:91%;border-radius:3px;background:#f87171;opacity:.4;"></div>
+      <div style="position:absolute;top:6px;left:0;height:8px;border-radius:3px;opacity:.7;transition:width .4s,background .4s;" id="artCapBar"></div>
+    </div>
+    <div style="display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:3px;background:#f87171;border-radius:1px;opacity:.6;"></div><span style="font-size:11px;color:#475569;">1.640 núv. (0.91)</span></div>
+      <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:3px;border-radius:1px;opacity:.8;" id="artCapDot"></div><span style="font-size:11px;color:#475569;" id="artCapLbl">984 með BL (0.55)</span></div>
+    </div>
+  </div>
+
+  <!-- SVG Corridor diagram -->
+  <div class="box" style="margin-bottom:16px;overflow-x:auto;">
+    <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;">Korridorinn · Ártúnshöfði → Hlemmur</div>
+    <div style="font-size:11px;color:#475569;margin-bottom:12px;">BL keyrir á eigin akrein — framhjá öllum 4 teppustaðum</div>
+    <div style="min-width:500px;">
+      <svg viewBox="0 0 740 172" style="width:100%;display:block;">
+        <defs>
+          <marker id="mRed" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#f87171"/></marker>
+          <marker id="mBL" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#6366f1"/></marker>
+        </defs>
+        <rect x="10" y="58" width="720" height="58" rx="3" fill="#0f172a"/>
+        <line x1="10" y1="87" x2="730" y2="87" stroke="#1e293b" stroke-width="1" stroke-dasharray="14 8"/>
+        <line x1="10" y1="58" x2="730" y2="58" stroke="#334155" stroke-width="1.5"/>
+        <line x1="10" y1="116" x2="730" y2="116" stroke="#334155" stroke-width="1.5"/>
+        <path d="M20,69 L55,69" stroke="#f87171" stroke-width="1.5" marker-end="url(#mRed)" opacity=".5"/>
+        <path d="M115,69 L150,69" stroke="#f87171" stroke-width="1.5" marker-end="url(#mRed)" opacity=".5"/>
+        <path d="M240,69 L275,69" stroke="#f87171" stroke-width="1.5" marker-end="url(#mRed)" opacity=".5"/>
+        <path d="M390,69 L425,69" stroke="#f87171" stroke-width="1.5" marker-end="url(#mRed)" opacity=".5"/>
+        <path d="M520,69 L555,69" stroke="#f87171" stroke-width="1.5" marker-end="url(#mRed)" opacity=".5"/>
+        <path d="M640,69 L675,69" stroke="#f87171" stroke-width="1.5" marker-end="url(#mRed)" opacity=".5"/>
+        <path d="M20,105 L55,105" stroke="#f87171" stroke-width="1.5" marker-end="url(#mRed)" opacity=".5"/>
+        <path d="M140,105 L175,105" stroke="#f87171" stroke-width="1.5" marker-end="url(#mRed)" opacity=".5"/>
+        <path d="M290,105 L325,105" stroke="#f87171" stroke-width="1.5" marker-end="url(#mRed)" opacity=".5"/>
+        <path d="M450,105 L485,105" stroke="#f87171" stroke-width="1.5" marker-end="url(#mRed)" opacity=".5"/>
+        <path d="M580,105 L615,105" stroke="#f87171" stroke-width="1.5" marker-end="url(#mRed)" opacity=".5"/>
+        <path d="M660,105 L695,105" stroke="#f87171" stroke-width="1.5" marker-end="url(#mRed)" opacity=".5"/>
+        <!-- A: Ártúnstorg -->
+        <line x1="100" y1="52" x2="100" y2="122" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3 3" opacity=".7"/>
+        <circle cx="100" cy="46" r="9" fill="#fbbf24" opacity=".15"/><circle cx="100" cy="46" r="6" fill="#fbbf24" opacity=".25"/>
+        <text x="100" y="50" fill="#fbbf24" font-size="8" font-weight="800" font-family="Inter,sans-serif" text-anchor="middle">A</text>
+        <text x="100" y="36" fill="#fbbf24" font-size="7" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">SAMRUNI</text>
+        <text x="100" y="26" fill="#fbbf24" font-size="7" font-family="Inter,sans-serif" text-anchor="middle" opacity=".8">Ártúnstorg</text>
+        <!-- B: Suðurlandsbraut -->
+        <line x1="270" y1="52" x2="270" y2="122" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3 3" opacity=".7"/>
+        <circle cx="270" cy="46" r="9" fill="#fbbf24" opacity=".15"/><circle cx="270" cy="46" r="6" fill="#fbbf24" opacity=".25"/>
+        <text x="270" y="50" fill="#fbbf24" font-size="8" font-weight="800" font-family="Inter,sans-serif" text-anchor="middle">B</text>
+        <text x="270" y="36" fill="#fbbf24" font-size="7" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">VEIFUN</text>
+        <text x="270" y="26" fill="#fbbf24" font-size="7" font-family="Inter,sans-serif" text-anchor="middle" opacity=".8">Suðurlandsbraut</text>
+        <!-- C: Kringlumýrar -->
+        <line x1="450" y1="52" x2="450" y2="122" stroke="#f97316" stroke-width="1.5" stroke-dasharray="3 3" opacity=".7"/>
+        <circle cx="450" cy="46" r="9" fill="#f97316" opacity=".15"/><circle cx="450" cy="46" r="6" fill="#f97316" opacity=".25"/>
+        <text x="450" y="50" fill="#f97316" font-size="8" font-weight="800" font-family="Inter,sans-serif" text-anchor="middle">C</text>
+        <text x="450" y="36" fill="#f97316" font-size="7" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">ÁTREKNINGUR</text>
+        <text x="450" y="26" fill="#f97316" font-size="7" font-family="Inter,sans-serif" text-anchor="middle" opacity=".8">Kringlumýrar</text>
+        <!-- D: Grensás (critical) -->
+        <line x1="620" y1="52" x2="620" y2="122" stroke="#f87171" stroke-width="1.5" stroke-dasharray="3 3" opacity=".7"/>
+        <circle cx="620" cy="46" r="9" fill="#f87171" opacity=".15"/><circle cx="620" cy="46" r="6" fill="#f87171" opacity=".25"/>
+        <text x="620" y="50" fill="#f87171" font-size="8" font-weight="800" font-family="Inter,sans-serif" text-anchor="middle">D</text>
+        <text x="620" y="36" fill="#f87171" font-size="7" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">LJÓS</text>
+        <text x="620" y="26" fill="#f87171" font-size="7" font-family="Inter,sans-serif" text-anchor="middle" opacity=".8">Grensás</text>
+        <!-- BL dedicated lane -->
+        <rect x="10" y="130" width="720" height="18" rx="3" fill="rgba(99,102,241,.08)" stroke="rgba(99,102,241,.3)" stroke-width="1" stroke-dasharray="6 4"/>
+        <path d="M15,139 L723,139" stroke="#6366f1" stroke-width="1.5" marker-end="url(#mBL)" opacity=".6"/>
+        <text x="370" y="143" fill="#6366f1" font-size="9" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle" letter-spacing=".04em">BORGARLÍNA — eigin akrein, framhjá A B C D</text>
+        <text x="14" y="54" fill="#334155" font-size="8.5" font-weight="500" font-family="Inter,sans-serif">Ártúnshöfði →</text>
+        <text x="726" y="54" fill="#334155" font-size="8.5" font-weight="500" font-family="Inter,sans-serif" text-anchor="end">→ Hlemmur</text>
+      </svg>
+    </div>
+    <div style="display:flex;gap:14px;margin-top:10px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:5px;"><div style="width:14px;height:2px;background:#f87171;opacity:.6;"></div><span style="font-size:10px;color:#475569;">Þrengd umferð</span></div>
+      <div style="display:flex;align-items:center;gap:5px;"><div style="width:14px;height:2px;background:#6366f1;opacity:.8;"></div><span style="font-size:10px;color:#475569;">Borgarlína</span></div>
+      <div style="display:flex;align-items:center;gap:5px;"><div style="width:8px;height:8px;border-radius:50%;background:#fbbf24;opacity:.5;"></div><span style="font-size:10px;color:#475569;">Teppustaður</span></div>
+      <div style="display:flex;align-items:center;gap:5px;"><div style="width:8px;height:8px;border-radius:50%;background:#f87171;opacity:.5;"></div><span style="font-size:10px;color:#475569;">Mikilvægur teppustaður</span></div>
+    </div>
+  </div>
+
+  <!-- Before / After -->
+  <div class="artun-compare">
+    <div class="box" style="border-top:2px solid #f87171;">
+      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;">Án Borgarlínu</div>
+      <div style="font-size:11px;color:#475569;margin-bottom:12px;">Núverandi ástand · 07:30–09:00</div>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px;">
+        <div style="font-size:30px;font-weight:800;color:#f87171;line-height:1;font-variant-numeric:tabular-nums;">0.91</div>
+        <div style="font-size:14px;font-weight:700;color:#f87171;">LOS E</div>
+      </div>
+      <div style="font-size:10px;color:#475569;margin-bottom:6px;font-weight:500;">Þverskurður akrainanna</div>
+      <div style="margin-bottom:4px;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;margin-bottom:2px;"><span>Akrein 1</span><span>900/900</span></div>
+        <div style="height:8px;border-radius:2px;background:rgba(255,255,255,.04);overflow:hidden;"><div style="height:100%;width:100%;background:#f87171;opacity:.65;border-radius:2px;"></div></div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;margin-bottom:2px;"><span>Akrein 2</span><span>740/900</span></div>
+        <div style="height:8px;border-radius:2px;background:rgba(255,255,255,.04);overflow:hidden;"><div style="height:100%;width:82%;background:#f87171;opacity:.65;border-radius:2px;"></div></div>
+      </div>
+      <div style="padding:10px 12px;background:rgba(255,255,255,.025);border-radius:6px;border:1px solid rgba(255,255,255,.04);margin-bottom:10px;">
+        <div style="font-size:10px;color:#475569;margin-bottom:6px;font-weight:600;">Teppustaðir</div>
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;"><div style="width:16px;height:16px;border-radius:3px;background:rgba(251,191,36,.15);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#fbbf24;flex-shrink:0;">A</div><span style="font-size:11px;color:#94a3b8;">Ártúnstorg — samruni</span></div>
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;"><div style="width:16px;height:16px;border-radius:3px;background:rgba(251,191,36,.15);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#fbbf24;flex-shrink:0;">B</div><span style="font-size:11px;color:#94a3b8;">Suðurlandsbraut — veifun</span></div>
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;"><div style="width:16px;height:16px;border-radius:3px;background:rgba(249,115,22,.12);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#f97316;flex-shrink:0;">C</div><span style="font-size:11px;color:#94a3b8;">Kringlumýrar — átrekningur</span></div>
+        <div style="display:flex;align-items:center;gap:7px;"><div style="width:16px;height:16px;border-radius:3px;background:rgba(248,113,113,.15);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#f87171;flex-shrink:0;">D</div><span style="font-size:11px;color:#94a3b8;">Grensás — rautt ljós <span style="color:#f87171;font-weight:600;">verst</span></span></div>
+      </div>
+      <div style="font-size:12px;color:#f87171;font-weight:600;">Óstöðugt flæði</div>
+      <div style="font-size:10px;color:#475569;margin-top:2px;">1.640 bílar/klst · 1.800 geta</div>
+    </div>
+    <div class="artun-arrow">
+      <svg width="20" height="40" viewBox="0 0 20 40" fill="none"><path d="M10 4 L10 36 M10 36 L4 26 M10 36 L16 26" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div style="font-size:9px;font-weight:600;color:#475569;letter-spacing:.06em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg);margin-top:6px;">BL í rekstri</div>
+    </div>
+    <div class="box" id="artAfterCard">
+      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;">Með Borgarlínu</div>
+      <div style="font-size:11px;color:#475569;margin-bottom:12px;" id="artAfterTag">90% hlutfall · 656 bílar/klst fjarlægt</div>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px;">
+        <div style="font-size:30px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;" id="artAfterVC">0.55</div>
+        <div style="font-size:14px;font-weight:700;" id="artAfterLOS">LOS B</div>
+      </div>
+      <div style="font-size:10px;color:#475569;margin-bottom:6px;font-weight:500;">Þverskurður akrainanna</div>
+      <div style="margin-bottom:4px;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;margin-bottom:2px;"><span>Akrein 1</span><span id="artL1Val">900/900</span></div>
+        <div style="height:8px;border-radius:2px;background:rgba(255,255,255,.04);overflow:hidden;"><div style="height:100%;border-radius:2px;transition:width .3s,background .3s;" id="artL1Bar"></div></div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;margin-bottom:2px;"><span>Akrein 2</span><span id="artL2Val">84/900</span></div>
+        <div style="height:8px;border-radius:2px;background:rgba(255,255,255,.04);overflow:hidden;"><div style="height:100%;border-radius:2px;transition:width .3s,background .3s;" id="artL2Bar"></div></div>
+      </div>
+      <div style="padding:10px 12px;background:rgba(255,255,255,.025);border-radius:6px;border:1px solid rgba(255,255,255,.04);margin-bottom:10px;">
+        <div style="font-size:10px;color:#475569;margin-bottom:6px;font-weight:600;">Teppustaðir</div>
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;"><div style="width:16px;height:16px;border-radius:3px;background:rgba(16,185,129,.12);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#10b981;flex-shrink:0;">A</div><span style="font-size:11px;color:#475569;text-decoration:line-through;">Ártúnstorg</span><span style="font-size:9px;color:#10b981;font-weight:600;margin-left:auto;white-space:nowrap;">framhjá</span></div>
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;"><div style="width:16px;height:16px;border-radius:3px;background:rgba(16,185,129,.12);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#10b981;flex-shrink:0;">B</div><span style="font-size:11px;color:#475569;text-decoration:line-through;">Suðurlandsbraut</span><span style="font-size:9px;color:#10b981;font-weight:600;margin-left:auto;white-space:nowrap;">framhjá</span></div>
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;"><div style="width:16px;height:16px;border-radius:3px;background:rgba(16,185,129,.12);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#10b981;flex-shrink:0;">C</div><span style="font-size:11px;color:#475569;text-decoration:line-through;">Kringlumýrar</span><span style="font-size:9px;color:#10b981;font-weight:600;margin-left:auto;white-space:nowrap;">framhjá</span></div>
+        <div style="display:flex;align-items:center;gap:7px;"><div style="width:16px;height:16px;border-radius:3px;background:rgba(16,185,129,.12);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#10b981;flex-shrink:0;">D</div><span style="font-size:11px;color:#475569;text-decoration:line-through;">Grensás ljós</span><span style="font-size:9px;color:#10b981;font-weight:600;margin-left:auto;white-space:nowrap;">framhjá</span></div>
+      </div>
+      <div style="font-size:12px;font-weight:600;" id="artAfterStatus">Stöðugt flæði</div>
+      <div style="font-size:10px;color:#475569;margin-top:2px;" id="artAfterLoad">984 bílar/klst · 1.800 geta</div>
+    </div>
+  </div>
+
+  <!-- Slider -->
+  <div class="box" style="margin-bottom:16px;">
+    <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;">Þroskun farþega — Kvikur reiknivél</div>
+    <div style="font-size:12px;color:#475569;margin-bottom:14px;">Stilltu hlutfall farþega til að sjá áhrif á umferðarflæði</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+      <div style="padding:10px;background:rgba(255,255,255,.025);border-radius:6px;border:1px solid rgba(255,255,255,.04);">
+        <div style="font-size:9px;color:#475569;margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Farþegar/klst</div>
+        <div style="font-size:18px;font-weight:700;color:#818cf8;font-variant-numeric:tabular-nums;" id="artSlPax">788</div>
+      </div>
+      <div style="padding:10px;background:rgba(255,255,255,.025);border-radius:6px;border:1px solid rgba(255,255,255,.04);">
+        <div style="font-size:9px;color:#475569;margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Bílar fjarlægðir/klst</div>
+        <div style="font-size:18px;font-weight:700;color:#34d399;font-variant-numeric:tabular-nums;" id="artSlCars">656</div>
+      </div>
+      <div style="padding:10px;background:rgba(255,255,255,.025);border-radius:6px;border:1px solid rgba(255,255,255,.04);">
+        <div style="font-size:9px;color:#475569;margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">V/C eftir BL</div>
+        <div style="font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;" id="artSlVC">0.55 · LOS B</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <span style="font-size:11px;color:#475569;white-space:nowrap;">50%</span>
+      <input type="range" id="artunnLoadPct" min="50" max="100" step="1" value="90" oninput="calcRoads()" style="flex:1;accent-color:#6366f1;">
+      <span style="font-size:11px;color:#475569;white-space:nowrap;">100%</span>
+      <span style="font-size:18px;font-weight:800;color:#818cf8;min-width:44px;text-align:right;font-variant-numeric:tabular-nums;" id="artPctVal">90%</span>
+    </div>
+    <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px;">
+      <div style="flex:10;background:#059669;opacity:.3;"></div><div style="flex:10;background:#10b981;opacity:.3;"></div>
+      <div style="flex:10;background:#34d399;opacity:.3;"></div><div style="flex:10;background:#fbbf24;opacity:.3;"></div>
+      <div style="flex:10;background:#f97316;opacity:.3;"></div><div style="flex:50;background:#f87171;opacity:.3;"></div>
+    </div>
+    <div style="position:relative;height:20px;margin-bottom:4px;">
+      <div style="position:absolute;left:91%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:1px;">
+        <div style="width:2px;height:8px;background:#f87171;"></div>
+        <div style="font-size:9px;color:#f87171;font-weight:700;white-space:nowrap;">Núv. 0.91</div>
+      </div>
+      <div style="position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:1px;transition:left .3s;" id="artGaugeMarker">
+        <div style="width:2px;height:8px;" id="artGaugeBar"></div>
+        <div style="font-size:9px;font-weight:700;white-space:nowrap;" id="artGaugeLbl">BL 0.55</div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:#475569;"><span>0.0</span><span>0.2</span><span>0.4</span><span>0.6</span><span>0.8</span><span>1.0</span></div>
+  </div>
+
+  <!-- Phase 4 callout -->
+  <div style="background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:12px;color:#94a3b8;line-height:1.7;">
+    <strong style="color:#fbbf24;">&#9203; Kringlumýrarbraut — Phase 4 (~2040)</strong><br>
+    Borgarlínan nær til Kringlumýrarbrautar og Miklabrautar-gatnamótanna fyrst í Phase 4. Þetta er stærsta teppustaðurinn á inngöngu að borg frá suðri — en vandinn bíður þar til 2040.
+  </div>
 
   <div class="note">
-    <strong>Framkölluð eftirspurn — heimild:</strong>
- Duranton, G. &amp; Turner, M.A. (2011). "The Fundamental Law of Road Congestion."
-    American Economic Review, 101(6), 2616&ndash;2652. Þeir fundu að 10% aukning á þjóðvegaafkastagetu leiddi til 10% aukningar á umferð
-    á 10 árum í bandarískum borgum. Sambærilegar niðurstöður hafa fundist í Evrópu (Hymel 2019).
-    BPR-formúla: t = t&#8320; &times; (1 + 0,15 &times; (V/C)&#8308;).
-    Þakmark: 900 bílar/akrein/klst (T.ark/mbl.is 2026). Akreinabreidd: 3,5 m.
+    <strong>Heimildir:</strong> Hringbraut: 2 akreinar inbound (Vegagerðin). BL: 7 rútur/klst í háannatíma (Wikipedia / Frumdragaskýrsla Borgarlínu 2021), 125 farþegar/rútu (SSH). Meðalfjöldi í bíl: 1,2 (Samgöngustofa). Þakmark: 900 b/akrein/klst (HCM 6). Grunnumferð 1.640 b/klst: mat byggt á ÁDU + K-stuðull 9%.
   </div>
-  </div><!-- /split-right -->
-  </div><!-- /split-layout -->
+
 </div>
 
 <!-- ═══ MUNIS ═══ -->
@@ -1151,116 +1268,105 @@ function renderRidershipCalc() {
 }
 
 // ── ROADS CALCULATOR ──
+var ART_CAP     = 1800;
+var ART_BASE    = 1640;
+var ART_BUS_HR  = 7;
+var ART_PAX     = 125;
+var ART_OCC     = 1.2;
+
+function artLOS(vc) {
+  if (vc <= 0.60) return {l:'A', t:'Frjálst flæði',        c:'#059669'};
+  if (vc <= 0.70) return {l:'B', t:'Stöðugt flæði',        c:'#10b981'};
+  if (vc <= 0.80) return {l:'C', t:'Stöðugt, breytilegt',  c:'#34d399'};
+  if (vc <= 0.90) return {l:'D', t:'Nálægt óstöðugleika',  c:'#fbbf24'};
+  if (vc <= 1.00) return {l:'E', t:'Óstöðugt flæði',       c:'#f97316'};
+  return                 {l:'F', t:'Samdráttarflæði',       c:'#f87171'};
+}
+
 function calcRoads() {
-  var extraLanes   = parseInt(document.getElementById('extraLanes').value);
-  var inducedRate  = parseInt(document.getElementById('inducedRate').value) / 100;
-  var roadsADT     = parseInt(document.getElementById('roadsADT').value);
-  var roadsFreeFlow= parseInt(document.getElementById('roadsFreeFlow').value);
-  var roadsYear    = parseInt(document.getElementById('roadsYear').value);
+  var pct   = parseInt(document.getElementById('artunnLoadPct').value) || 90;
+  var paxHr = Math.round(ART_BUS_HR * ART_PAX * pct / 100);
+  var carsHr= Math.round(paxHr / ART_OCC);
+  var load  = Math.max(0, ART_BASE - carsHr);
+  var vc    = load / ART_CAP;
+  var los   = artLOS(vc);
 
-  document.getElementById('extraLanesVal').textContent    = extraLanes;
-  document.getElementById('inducedRateVal').textContent   = Math.round(inducedRate*100) + '%';
-  document.getElementById('roadsADTVal').textContent      = fmt(roadsADT);
-  document.getElementById('roadsFreeFlowVal').textContent = roadsFreeFlow + ' m\u00edn';
-  document.getElementById('roadsYearVal').textContent     = roadsYear;
+  // Per-lane split (two lanes, cap 900 each)
+  var l1 = Math.min(load, 900);
+  var l2 = Math.max(0, load - 900);
 
-  var BASE_LANES  = 2;   // lanes per direction (baseline)
-  var POP_GROWTH  = 0.016;
-  var BL_MODAL    = 0.04;
-  var BL_YEAR     = 2031;
+  // Update slider readout
+  var pctEl = document.getElementById('artPctVal');
+  if (pctEl) pctEl.textContent = pct + '%';
 
-  var years = [2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035,2036,2037,2038,2039,2040];
-  var rows = '', compareR = null, compareBL = null;
+  // Hero cards
+  var vcBig = document.getElementById('artVCBig');
+  var losBig = document.getElementById('artLOSBig');
+  var vcBar  = document.getElementById('artVCBar');
+  var vcLbl  = document.getElementById('artVCLbl');
+  var carsEl = document.getElementById('artCarsHr');
+  var paxEl  = document.getElementById('artPaxHr');
+  if (vcBig)  { vcBig.textContent = vc.toFixed(2); vcBig.style.color = los.c; }
+  if (losBig) { losBig.textContent = los.l; losBig.style.color = los.c; }
+  if (vcBar)  { vcBar.style.width = Math.min(100, vc * 100) + '%'; vcBar.style.background = los.c; }
+  if (vcLbl)  { vcLbl.textContent = los.t; vcLbl.style.color = los.c; }
+  if (carsEl) carsEl.textContent = fmt(carsHr) + ' bílar/klst fjarlægðir';
+  if (paxEl)  paxEl.textContent  = fmt(paxHr)  + ' farþgar/klst á strætó';
 
-  for (var i = 0; i < years.length; i++) {
-    var yr = years[i];
-    var t  = yr - 2025;
+  // Capacity bar
+  var capBar = document.getElementById('artCapBar');
+  var capDot = document.getElementById('artCapDot');
+  var capLbl = document.getElementById('artCapLbl');
+  if (capBar) capBar.style.width = Math.min(100, (ART_BASE / ART_CAP) * 100) + '%';
+  if (capDot) { capDot.style.left = Math.min(100, vc * 100) + '%'; capDot.style.background = los.c; }
+  if (capLbl) capLbl.textContent = fmt(load) + ' / ' + fmt(ART_CAP) + ' bílar/klst';
 
-    // Base ADT grows with population
-    var adtBase = roadsADT * Math.pow(1 + POP_GROWTH, t);
+  // Slider info row
+  var slPax  = document.getElementById('artSlPax');
+  var slCars = document.getElementById('artSlCars');
+  var slVC   = document.getElementById('artSlVC');
+  if (slPax)  slPax.textContent  = fmt(paxHr);
+  if (slCars) slCars.textContent = fmt(carsHr);
+  if (slVC)   { slVC.textContent = vc.toFixed(2); slVC.style.color = los.c; }
 
-    // ROAD WIDENING: add extraLanes/2 per direction, induced demand kicks in from roadsYear
-    var lanesR     = BASE_LANES + (yr >= roadsYear ? extraLanes / 2 : 0);
-    var indYrs     = yr >= roadsYear ? yr - roadsYear : 0;
-    var adtR       = adtBase * Math.pow(1 + inducedRate, indYrs);
-    var peakR      = adtR * PEAK_SHARE / 2;
-    var vcR        = peakR / (lanesR * LANE_CAPACITY);
-    var delayR     = bprDelay(peakR / lanesR, LANE_CAPACITY, roadsFreeFlow);
-    var losR       = getLOS(vcR);
+  // After card
+  var afterCard = document.getElementById('artAfterCard');
+  var afterTag  = document.getElementById('artAfterTag');
+  var afterVC   = document.getElementById('artAfterVC');
+  var afterLOS  = document.getElementById('artAfterLOS');
+  var l1Val = document.getElementById('artL1Val');
+  var l1Bar = document.getElementById('artL1Bar');
+  var l2Val = document.getElementById('artL2Val');
+  var l2Bar = document.getElementById('artL2Bar');
+  var afterStatus = document.getElementById('artAfterStatus');
+  var afterLoad   = document.getElementById('artAfterLoad');
+  if (afterCard) afterCard.style.borderColor = los.c;
+  if (afterTag)  { afterTag.textContent = los.l + ' — ' + los.t; afterTag.style.background = los.c + '33'; afterTag.style.color = los.c; }
+  if (afterVC)   { afterVC.textContent = vc.toFixed(2); afterVC.style.color = los.c; }
+  if (afterLOS)  { afterLOS.textContent = los.l; afterLOS.style.color = los.c; }
+  if (l1Val) l1Val.textContent = fmt(l1) + '/900';
+  if (l1Bar) { l1Bar.style.width = Math.min(100, (l1/900)*100) + '%'; l1Bar.style.background = artLOS(l1/900).c; }
+  if (l2Val) l2Val.textContent = fmt(l2) + '/900';
+  if (l2Bar) { l2Bar.style.width = Math.min(100, (l2/900)*100) + '%'; l2Bar.style.background = artLOS(Math.max(0,l2)/900).c; }
+  if (afterStatus) { afterStatus.textContent = los.t; afterStatus.style.color = los.c; }
+  if (afterLoad) afterLoad.textContent = fmt(load) + ' bílar/klst eftir';
 
-    // BL: no extra lanes, modal shift from BL_YEAR
-    var adtBL      = yr >= BL_YEAR ? adtBase * (1 - BL_MODAL) : adtBase;
-    var peakBL     = adtBL * PEAK_SHARE / 2;
-    var vcBL       = peakBL / (BASE_LANES * LANE_CAPACITY);
-    var delayBL    = bprDelay(peakBL / BASE_LANES, LANE_CAPACITY, roadsFreeFlow);
-    var losBL      = getLOS(vcBL);
-
-    var diff = Math.round(delayR - delayBL);
-    var diffStr = diff > 0
-      ? '<span class="green">&minus;' + diff + ' m\u00edn</span>'
-      : diff < 0
-        ? '<span class="red">+' + Math.abs(diff) + ' m\u00edn</span>'
-        : '<span class="dim">&mdash;</span>';
-
-    rows += '<tr' + (yr === 2025 ? ' class="row-now"' : '') + '>'
-      + '<td class="hl">' + yr + (yr === BL_YEAR ? ' &#128652;' : '') + '</td>'
-      + '<td>' + fmt(Math.round(adtR)) + '</td>'
-      + '<td><span style="color:' + losR.col + '">' + vcR.toFixed(2) + '</span></td>'
-      + '<td><span style="color:' + losR.col + '">' + Math.round(delayR) + ' m\u00edn</span></td>'
-      + '<td>' + fmt(Math.round(adtBL)) + '</td>'
-      + '<td><span style="color:' + losBL.col + '">' + vcBL.toFixed(2) + '</span></td>'
-      + '<td><span style="color:' + losBL.col + '">' + Math.round(delayBL) + ' m\u00edn</span></td>'
-      + '<td>' + diffStr + '</td>'
-      + '</tr>';
-
-    if (yr === roadsYear) {
-      compareR  = { adt: Math.round(adtR),  vc: vcR,  delay: Math.round(delayR),  los: losR  };
-      compareBL = { adt: Math.round(adtBL), vc: vcBL, delay: Math.round(delayBL), los: losBL };
-    }
-  }
-  document.getElementById('roadsTable').innerHTML = rows;
-
-  // Comparison cards
-  if (compareR && compareBL) {
-    function roadCard(title, col, d, note) {
-      return '<div style="background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.055);border-radius:10px;padding:16px;">'
-        + '<h4 style="color:' + col + ';margin-bottom:12px;font-size:13px;">' + title + '</h4>'
-        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">'
-        + '<div><div style="font-size:20px;font-weight:700;color:' + col + '">' + fmt(d.adt) + '</div><div style="font-size:10px;color:#64748b;">\u00c1DU</div></div>'
-        + '<div><div style="font-size:20px;font-weight:700;color:' + col + '">' + d.vc.toFixed(2) + '</div><div style="font-size:10px;color:#64748b;">V/C hlutfall</div></div>'
-        + '<div><div style="font-size:20px;font-weight:700;color:' + col + '">' + d.delay + ' m\u00edn</div><div style="font-size:10px;color:#64748b;">Fer\u00f0at\u00edmi</div></div>'
-        + '<div><div style="font-size:20px;font-weight:700;color:' + col + '">' + d.los.los + '</div><div style="font-size:10px;color:#64748b;">\u00dej\u00f3nuststig</div></div>'
-        + '</div>'
-        + '<div style="font-size:10px;color:#64748b;">' + note + '</div>'
-        + '</div>';
-    }
-    document.getElementById('roadsCompare').innerHTML =
-      roadCard('&#128664; Fleiri akreinar ' + roadsYear, '#f87171', compareR,
-        'Me\u00f0 ' + extraLanes + ' aukaakreinum &mdash; en framk\u00f6llu\u00f0 eftirspurn ' + Math.round(inducedRate*100) + '%/\u00e1r fyllir akreinarnar')
-      + roadCard('&#128652; Borgarl\u00edna ' + roadsYear, '#34d399', compareBL,
-        'Engar aukaakreinar &mdash; BL flytur ~8% b\u00edlfer\u00f0a af lei\u00f0inni fr\u00e1 2031');
-  }
-
-  // Land use
-  var corridorKm = 10;
-  var extraM2    = extraLanes * 3.5 * corridorKm * 1000;
-  var extraHa    = (extraM2 / 10000).toFixed(1);
-  var fields     = Math.round(extraM2 / 7140);
-  document.getElementById('roadsLandBox').innerHTML =
-    '<strong>&#127758; Landnotkun akreinaaukningar:</strong> '
-    + extraLanes + ' aukaakreinar \u00e1 ' + corridorKm + ' km lei\u00f0 = '
-    + '<strong>' + fmt(Math.round(extraM2)) + ' m\u00b2</strong> (' + extraHa + ' ha) '
-    + '&mdash; ~' + fields + ' f\u00f3tbollavellir. '
-    + 'Borgarl\u00ednan n\u00fdtir sama vegrunn og n\u00faverandi str\u00e6tisvagnar &mdash; engin n\u00fd land \u00fef.';
+  // V/C gauge
+  var gaugeMarker = document.getElementById('artGaugeMarker');
+  var gaugeBar    = document.getElementById('artGaugeBar');
+  var gaugeLbl    = document.getElementById('artGaugeLbl');
+  if (gaugeMarker) { gaugeMarker.style.left = Math.min(100, vc * 100) + '%'; gaugeMarker.style.background = los.c; }
+  if (gaugeBar)    { gaugeBar.style.width = Math.min(100, vc * 100) + '%'; gaugeBar.style.background = los.c; }
+  if (gaugeLbl)    { gaugeLbl.textContent = 'V/C ' + vc.toFixed(2) + ' — ' + los.t; gaugeLbl.style.color = los.c; }
 
   d3RefreshAll();
 }
 
 // Tabs that have sliders (FAB shown on mobile only for these)
-var TABS_WITH_SLIDERS = { peak: true, calc: true, roads: true };
+var TABS_WITH_SLIDERS = { peak: true, calc: true };
 var TAB_LABELS = {
   home: 'Yfirlit', peak: 'Annatímar & tafar', calc: 'Reiknivél',
-  straeto: 'Strætó grunnlína', roads: 'Fleiri akreinar vs BL', munis: 'Sveitarfélögin 7'
+  straeto: 'Strætó grunnlína', roads: 'Ártúnsbrekka', munis: 'Sveitarfélögin 7'
 };
 
 // ── TAB SWITCHER ──
@@ -1361,11 +1467,7 @@ var D3_CONFIGS = [
   {id:'carGrowth',    min:-15,   max:15},
   {id:'modalShift',   min:0,     max:20},
   {id:'blYear',       min:2029,  max:2035},
-  {id:'extraLanes',   min:1,     max:6},
-  {id:'inducedRate',  min:0,     max:15},
-  {id:'roadsYear',    min:2026,  max:2040},
-  {id:'roadsADT',     min:10000, max:50000},
-  {id:'roadsFreeFlow',min:5,     max:40}
+  {id:'artunnLoadPct',min:50,    max:100}
 ];
 
 function d3RefreshAll() {
@@ -1383,7 +1485,7 @@ function d3RefreshAll() {
 // ── SHARE / URL STATE ──
 var SHARE_SLIDERS = ['peakYear','pkCarsNow','pkModalShift','schoolFactor','numLanes',
   'corridorADT','freeFlowMin','carsNow','carGrowth','modalShift','blYear',
-  'extraLanes','inducedRate','roadsYear','roadsADT','roadsFreeFlow'];
+  'artunnLoadPct'];
 
 function getActiveTab() {
   var names = ['home','peak','calc','straeto','roads','munis'];
