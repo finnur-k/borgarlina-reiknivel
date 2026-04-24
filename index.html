@@ -148,6 +148,7 @@
   .stat-card .slbl { font-size: 10px; color: #64748b; line-height: 1.4; }
 
   @media (max-width: 640px) {
+    .art-hero-grid { grid-template-columns: 1fr 1fr !important; }
     .grid3, .sc-grid { grid-template-columns: 1fr 1fr; }
     .grid2 { grid-template-columns: 1fr; }
     .slider-label { width: 140px; font-size: 11px; }
@@ -732,31 +733,37 @@
       <p style="font-size:11px;color:#475569;"><strong>Forsendur:</strong> 7 rúur/klst (á ~8 mín. fresti), 125 farþgar/rútu, 1,2 farþgar/bíl. Miklabraut: 3 akreinar inbound, þkmark 900 b/akrein/klst. Grunnumferð: 1.960–2.450 b/klst mat (V/C 0,73–0,91 — byggð á ÁDU 43.000, Vegagerðin 2017).</p>
   </details>
 
-  <!-- 2×2 hero -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
-    <div class="box" style="border-top:2px solid #f87171;padding:18px 20px;">
-      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">V/C — Án BL</div>
-      <div style="font-size:26px;font-weight:800;color:#f87171;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;">0.73–0.91</div>
-      <div style="font-size:12px;font-weight:700;color:#fbbf24;margin-top:4px;">LOS C–E</div>
-      <div style="margin-top:10px;height:5px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden;"><div style="height:100%;width:82%;background:linear-gradient(to right,#fbbf24,#f87171);border-radius:3px;opacity:.8;"></div></div>
-      <div style="font-size:11px;color:#475569;margin-top:5px;">Mat 2025 — 3 akreinar / 2.700 geta</div>
+  <!-- 4-col hero -->
+  <div class="art-hero-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">
+    <div class="box" style="border-top:2px solid #f97316;padding:16px 18px;">
+      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;">V/C — Án BL</div>
+      <div style="display:flex;align-items:baseline;gap:8px;">
+        <div style="font-size:34px;font-weight:800;color:#f97316;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;">0.91</div>
+        <div style="font-size:14px;font-weight:700;color:#f97316;">LOS E</div>
+      </div>
+      <div style="margin-top:10px;height:4px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden;"><div style="height:100%;width:91%;background:#f97316;border-radius:2px;opacity:.7;"></div></div>
+      <div style="font-size:11px;color:#64748b;margin-top:6px;">Unstable</div>
     </div>
-    <div class="box" style="padding:18px 20px;" id="artVCCard">
-      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">V/C — Með BL</div>
-      <div style="font-size:36px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;" id="artVCBig">0.55</div>
-      <div style="font-size:12px;font-weight:700;margin-top:4px;" id="artLOSBig">LOS B</div>
-      <div style="margin-top:10px;height:5px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden;"><div style="height:100%;border-radius:3px;transition:width .3s,background .3s;" id="artVCBar"></div></div>
-      <div style="font-size:11px;color:#475569;margin-top:5px;" id="artVCLbl">Stöðugt flæði</div>
+    <div class="box" style="padding:16px 18px;" id="artVCCard">
+      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;">V/C — Með BL</div>
+      <div style="display:flex;align-items:baseline;gap:8px;">
+        <div style="font-size:34px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;" id="artVCBig">0.55</div>
+        <div style="font-size:14px;font-weight:700;" id="artLOSBig">LOS B</div>
+      </div>
+      <div style="margin-top:10px;height:4px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden;"><div style="height:100%;border-radius:2px;transition:width .3s,background .3s;" id="artVCBar"></div></div>
+      <div style="font-size:11px;color:#64748b;margin-top:6px;" id="artVCLbl">Stöðugt flæði</div>
     </div>
-    <div class="box" style="border-top:2px solid #34d399;padding:18px 20px;">
-      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Bílar fjarlægðir/klst</div>
-      <div style="font-size:36px;font-weight:800;color:#34d399;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;" id="artCarsHr">656</div>
-      <div style="font-size:11px;color:#475569;margin-top:8px;">á morgunháannatíma</div>
+    <div class="box" style="border-top:2px solid #34d399;padding:16px 18px;">
+      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;">Bílar fjarlægðir/klst</div>
+      <div style="font-size:34px;font-weight:800;color:#34d399;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;" id="artCarsHr">656</div>
+      <div style="margin-top:10px;height:4px;border-radius:2px;background:rgba(255,255,255,.06);"></div>
+      <div style="font-size:11px;color:#64748b;margin-top:6px;">á morgunháannatíma</div>
     </div>
-    <div class="box" style="border-top:2px solid #818cf8;padding:18px 20px;">
-      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Farþegar/klst</div>
-      <div style="font-size:36px;font-weight:800;color:#818cf8;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;" id="artPaxHr">788</div>
-      <div style="font-size:11px;color:#475569;margin-top:8px;">7 rútur/klst × 125 farþegar</div>
+    <div class="box" style="border-top:2px solid #818cf8;padding:16px 18px;">
+      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;">Bílar fjarlægðir / 90 mín</div>
+      <div style="font-size:34px;font-weight:800;color:#818cf8;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;" id="artTotalCars">1.125</div>
+      <div style="margin-top:10px;height:4px;border-radius:2px;background:rgba(255,255,255,.06);"></div>
+      <div style="font-size:11px;color:#64748b;margin-top:6px;" id="artTotalLbl">11 rúur × 125 farþgar × 90%</div>
     </div>
   </div>
 
@@ -1223,14 +1230,18 @@ function calcRoads() {
   var losBig = document.getElementById('artLOSBig');
   var vcBar  = document.getElementById('artVCBar');
   var vcLbl  = document.getElementById('artVCLbl');
-  var carsEl = document.getElementById('artCarsHr');
-  var paxEl  = document.getElementById('artPaxHr');
-  if (vcBig)  { vcBig.textContent = vc.toFixed(2); vcBig.style.color = los.c; }
-  if (losBig) { losBig.textContent = los.l; losBig.style.color = los.c; }
-  if (vcBar)  { vcBar.style.width = Math.min(100, vc * 100) + '%'; vcBar.style.background = los.c; }
-  if (vcLbl)  { vcLbl.textContent = los.t; vcLbl.style.color = los.c; }
-  if (carsEl) carsEl.textContent = fmt(carsHr) + ' bílar/klst fjarlægðir';
-  if (paxEl)  paxEl.textContent  = fmt(paxHr)  + ' farþgar/klst á strætó';
+  var carsEl     = document.getElementById('artCarsHr');
+  var totalCarsEl= document.getElementById('artTotalCars');
+  var totalLblEl = document.getElementById('artTotalLbl');
+  var buses90    = Math.round(ART_BUS_HR * 1.5);
+  var totalCars  = Math.round(buses90 * ART_PAX * pct / 100 / ART_OCC);
+  if (vcBig)      { vcBig.textContent = vc.toFixed(2); vcBig.style.color = los.c; }
+  if (losBig)     { losBig.textContent = 'LOS ' + los.l; losBig.style.color = los.c; }
+  if (vcBar)      { vcBar.style.width = Math.min(100, vc * 100) + '%'; vcBar.style.background = los.c; }
+  if (vcLbl)      { vcLbl.textContent = los.t; vcLbl.style.color = los.c; }
+  if (carsEl)     carsEl.textContent = fmt(carsHr);
+  if (totalCarsEl)totalCarsEl.textContent = fmt(totalCars);
+  if (totalLblEl) totalLblEl.textContent  = buses90 + ' rúur × ' + ART_PAX + ' farþgar × ' + pct + '%';
 
   // Capacity bar
   var capBar = document.getElementById('artCapBar');
