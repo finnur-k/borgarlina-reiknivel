@@ -1208,10 +1208,10 @@ var ART_PAX     = 125;
 var ART_OCC     = 1.2;
 
 function artLOS(vc) {
-  if (vc <= 0.60) return {l:'A', t:'Frjálst flæði',        c:'#059669'};
-  if (vc <= 0.70) return {l:'B', t:'Stöðugt flæði',        c:'#10b981'};
-  if (vc <= 0.80) return {l:'C', t:'Stöðugt, breytilegt',  c:'#34d399'};
-  if (vc <= 0.90) return {l:'D', t:'Nálægt óstöðugleika',  c:'#fbbf24'};
+  if (vc <= 0.35) return {l:'A', t:'Frjálst flæði',        c:'#059669'};
+  if (vc <= 0.54) return {l:'B', t:'Stöðugt flæði',        c:'#10b981'};
+  if (vc <= 0.77) return {l:'C', t:'Stöðugt, breytilegt',  c:'#34d399'};
+  if (vc <= 0.93) return {l:'D', t:'Nálægt óstöðugleika',  c:'#fbbf24'};
   if (vc <= 1.00) return {l:'E', t:'Óstöðugt flæði',       c:'#f97316'};
   return                 {l:'F', t:'Samdráttarflæði',       c:'#f87171'};
 }
