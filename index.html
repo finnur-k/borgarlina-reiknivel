@@ -1411,7 +1411,7 @@ function getShareURL() {
     if (el) params.set(id, el.value);
   });
   params.set('tab', getActiveTab());
-  return window.l  return window.location.origin + window.location.pathname + '?' + params.toString();
+  return window.location.origin + window.location.pathname + '?' + params.toString();
 }
 
 function shareLink() {
@@ -1424,6 +1424,55 @@ function shareLink() {
   } else { prompt('Afrita slóð:', url); }
 }
 
+function loadFromURL() {
+  var params = new URLSearchParams(window.location.search);
+  if (!params.has('tab') && !params.has('carsNow')) return false;
+  SHARE_SLIDERS.forEach(function(id) {
+    if (params.has(id)) {
+      var el = document.getElementById(id);
+      if (el) el.value = params.get(id);
+    }
+  });
+  var tab = params.get('tab') || 'home';
+  showTab(tab);
+  return true;
+}
+
+// ── MUNICIPALITIES ──
+function renderMunis() {
+  var html = '';
+  municipalities.forEach(function(m) {
+    var pop2030 = Math.round(m.pop2025 * Math.pow(1 + m.g/100, 5));
+    var pop2040 = Math.round(m.pop2025 * Math.pow(1 + m.g/100, 15));
+    html += '<div class="muni-card">'
+      + '<div class="muni-name">' + m.name + '</div>'
+      + '<div class="muni-row"><span>2025</span><span>' + fmt(m.pop2025) + '</span></div>'
+      + '<div class="muni-row"><span>2030</span><span style="color:#fbbf24">' + fmt(pop2030) + '</span></div>'
+      + '<div class="muni-row"><span>2040</span><span style="color:#818cf8">' + fmt(pop2040) + '</span></div>'
+      + '<div class="muni-row" style="margin-top:6px;font-size:10px;color:#475569;">' + m.note + '</div>'
+      + '</div>';
+  });
+  document.getElementById('muniGrid').innerHTML = html;
+}
+
+// ── SYNC DRAWER BADGES ──
+function syncDrawerBadges() {
+  var ds = document.getElementById('mob-drawer-sliders');
+  if (!ds) return;
+  ds.querySelectorAll('span[id]').forEach(function(el) {
+    var orig = document.getElementById(el.id);
+    if (orig && orig !== el) el.textContent = orig.textContent;
+  });
+  ds.querySelectorAll('.d3-badge[id]').forEach(function(el) {
+    var orig = document.getElementById(el.id);
+    if (orig && orig !== el) el.className = orig.className;
+  });
+  ds.querySelectorAll('input[type=range][data-src]').forEach(function(el) {
+    var orig = document.getElementById(el.getAttribute('data-src'));
+    if (orig) el.style.background = orig.style.background;
+  });
+}
+
 // ── INIT ──
 window.addEventListener('DOMContentLoaded', function() {
   if (!loadFromURL()) {
@@ -1432,9 +1481,27 @@ window.addEventListener('DOMContentLoaded', function() {
     calcRoads();
     renderMunis();
     d3RefreshAll();
+    // Default tab is 'home' which has no sliders — hide FAB
+    var fab = document.getElementById('fabForsendur');
+    if (fab) fab.style.display = 'none';
   }
 });
 </script>
 </div><!-- /page-wrap -->
+
+<!-- Mobile: FAB + drawer — placed AFTER page-wrap so original slider IDs come first in DOM -->
+<button class="fab-forsendur" id="fabForsendur" onclick="openDrawer()">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M1 3h12M1 7h12M1 11h12"/><circle cx="4" cy="3" r="1.5" fill="white" stroke="none"/><circle cx="9" cy="7" r="1.5" fill="white" stroke="none"/><circle cx="5" cy="11" r="1.5" fill="white" stroke="none"/></svg>
+  Forsendur
+</button>
+<div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
+<div class="mob-drawer" id="mobDrawer">
+  <div class="drawer-handle-wrap"><div class="drawer-handle"></div></div>
+  <div class="drawer-title-row">
+    <span class="drawer-title">Forsendur</span>
+    <button class="drawer-close" onclick="closeDrawer()">&#215;</button>
+  </div>
+  <div class="drawer-body" id="mob-drawer-sliders"></div>
+</div>
 </body>
 </html>
