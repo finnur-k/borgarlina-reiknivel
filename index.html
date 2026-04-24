@@ -729,7 +729,7 @@
     <summary>&#128205; Ártúnsbrekka · Suðurlandsbraut — Morgunháannatími 07:30–09:00</summary>
     <div class="info-body">
       <p>Borgarlínan keyrir á eigin akrein meðfram Suðurlandsbraut — hún stagnar ekki í umferð. Þegar farþegar skipta yfir frá bíl á BL minnkar umferðarþyngd á veginum og V/C lækkar.</p>
-      <p><strong>Forsendur:</strong> 7 rútur/klst (á ~8 mín. fresti), 125 farþegar/rútu, 1,2 farþegar/bíl. Hringbraut: 2 akreinar inbound, þakmark 900 b/akrein/klst. Grunnumferð: 1.640 b/klst (V/C 0,91 — LOS E).</p>
+      <p><strong>Forsendur:</strong> 7 rúur/klst (á ~8 mín. fresti), 125 farþgar/rútu, 1,2 farþgar/bíl. Miklabraut: 3 akreinar inbound, þkmark 900 b/akrein/klst. Grunnumferð: 1.960–2.450 b/klst mat (V/C 0,73–0,91 — byggð á ÁDU 43.000, Vegagerðin 2017).</p>
     </div>
   </details>
 
@@ -737,10 +737,10 @@
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
     <div class="box" style="border-top:2px solid #f87171;padding:18px 20px;">
       <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">V/C — Án BL</div>
-      <div style="font-size:36px;font-weight:800;color:#f87171;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;">0.91</div>
-      <div style="font-size:12px;font-weight:700;color:#f87171;margin-top:4px;">LOS E</div>
-      <div style="margin-top:10px;height:5px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden;"><div style="height:100%;width:91%;background:#f87171;border-radius:3px;"></div></div>
-      <div style="font-size:11px;color:#475569;margin-top:5px;">Óstöðugt flæði</div>
+      <div style="font-size:26px;font-weight:800;color:#f87171;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;">0.73–0.91</div>
+      <div style="font-size:12px;font-weight:700;color:#fbbf24;margin-top:4px;">LOS C–E</div>
+      <div style="margin-top:10px;height:5px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden;"><div style="height:100%;width:82%;background:linear-gradient(to right,#fbbf24,#f87171);border-radius:3px;opacity:.8;"></div></div>
+      <div style="font-size:11px;color:#475569;margin-top:5px;">Mat 2025 — 3 akreinar / 2.700 geta</div>
     </div>
     <div class="box" style="padding:18px 20px;" id="artVCCard">
       <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">V/C — Með BL</div>
@@ -763,14 +763,14 @@
 
   <!-- Capacity bar -->
   <div class="box" style="margin-bottom:16px;">
-    <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;">Hringbraut geta · 2 akreinar × 900 = 1.800 bílar/klst</div>
+    <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;">Miklabraut geta · 3 akreinar × 900 = 2.700 bílar/klst</div>
     <div style="position:relative;height:20px;">
       <div style="position:absolute;top:6px;left:0;right:0;height:8px;border-radius:3px;background:rgba(255,255,255,.05);"></div>
       <div style="position:absolute;top:6px;left:0;height:8px;width:91%;border-radius:3px;background:#f87171;opacity:.4;"></div>
       <div style="position:absolute;top:6px;left:0;height:8px;border-radius:3px;opacity:.7;transition:width .4s,background .4s;" id="artCapBar"></div>
     </div>
     <div style="display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;">
-      <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:3px;background:#f87171;border-radius:1px;opacity:.6;"></div><span style="font-size:11px;color:#475569;">1.640 núv. (0.91)</span></div>
+      <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:3px;background:#f87171;border-radius:1px;opacity:.6;"></div><span style="font-size:11px;color:#475569;">~2.200 núv. (0.73–0.91)</span></div>
       <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:3px;border-radius:1px;opacity:.8;" id="artCapDot"></div><span style="font-size:11px;color:#475569;" id="artCapLbl">984 með BL (0.55)</span></div>
     </div>
   </div>
@@ -847,17 +847,21 @@
       <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;">Án Borgarlínu</div>
       <div style="font-size:11px;color:#475569;margin-bottom:12px;">Núverandi ástand · 07:30–09:00</div>
       <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px;">
-        <div style="font-size:30px;font-weight:800;color:#f87171;line-height:1;font-variant-numeric:tabular-nums;">0.91</div>
-        <div style="font-size:14px;font-weight:700;color:#f87171;">LOS E</div>
+        <div style="font-size:24px;font-weight:800;color:#f87171;line-height:1;font-variant-numeric:tabular-nums;">0.73–0.91</div>
+        <div style="font-size:14px;font-weight:700;color:#fbbf24;">LOS C–E</div>
       </div>
       <div style="font-size:10px;color:#475569;margin-bottom:6px;font-weight:500;">Þverskurður akrainanna</div>
       <div style="margin-bottom:4px;">
-        <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;margin-bottom:2px;"><span>Akrein 1</span><span>900/900</span></div>
-        <div style="height:8px;border-radius:2px;background:rgba(255,255,255,.04);overflow:hidden;"><div style="height:100%;width:100%;background:#f87171;opacity:.65;border-radius:2px;"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;margin-bottom:2px;"><span>Akrein 1</span><span>~900/900</span></div>
+        <div style="height:8px;border-radius:2px;background:rgba(255,255,255,.04);overflow:hidden;"><div style="height:100%;width:100%;background:#f87171;opacity:.6;border-radius:2px;"></div></div>
+      </div>
+      <div style="margin-bottom:4px;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;margin-bottom:2px;"><span>Akrein 2</span><span>~900/900</span></div>
+        <div style="height:8px;border-radius:2px;background:rgba(255,255,255,.04);overflow:hidden;"><div style="height:100%;width:90%;background:#fbbf24;opacity:.6;border-radius:2px;"></div></div>
       </div>
       <div style="margin-bottom:12px;">
-        <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;margin-bottom:2px;"><span>Akrein 2</span><span>740/900</span></div>
-        <div style="height:8px;border-radius:2px;background:rgba(255,255,255,.04);overflow:hidden;"><div style="height:100%;width:82%;background:#f87171;opacity:.65;border-radius:2px;"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;margin-bottom:2px;"><span>Akrein 3</span><span>~500/900</span></div>
+        <div style="height:8px;border-radius:2px;background:rgba(255,255,255,.04);overflow:hidden;"><div style="height:100%;width:56%;background:#fbbf24;opacity:.5;border-radius:2px;"></div></div>
       </div>
       <div style="padding:10px 12px;background:rgba(255,255,255,.025);border-radius:6px;border:1px solid rgba(255,255,255,.04);margin-bottom:10px;">
         <div style="font-size:10px;color:#475569;margin-bottom:6px;font-weight:600;">Teppustaðir</div>
@@ -866,8 +870,8 @@
         <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;"><div style="width:16px;height:16px;border-radius:3px;background:rgba(249,115,22,.12);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#f97316;flex-shrink:0;">C</div><span style="font-size:11px;color:#94a3b8;">Kringlumýrar — átrekningur</span></div>
         <div style="display:flex;align-items:center;gap:7px;"><div style="width:16px;height:16px;border-radius:3px;background:rgba(248,113,113,.15);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#f87171;flex-shrink:0;">D</div><span style="font-size:11px;color:#94a3b8;">Grensás — rautt ljós <span style="color:#f87171;font-weight:600;">verst</span></span></div>
       </div>
-      <div style="font-size:12px;color:#f87171;font-weight:600;">Óstöðugt flæði</div>
-      <div style="font-size:10px;color:#475569;margin-top:2px;">1.640 bílar/klst · 1.800 geta</div>
+      <div style="font-size:12px;color:#fbbf24;font-weight:600;">Stöðugt breytilegt — Óstöðugt</div>
+      <div style="font-size:10px;color:#475569;margin-top:2px;">~2.200 bílar/klst · 2.700 geta</div>
     </div>
     <div class="artun-arrow">
       <svg width="20" height="40" viewBox="0 0 20 40" fill="none"><path d="M10 4 L10 36 M10 36 L4 26 M10 36 L16 26" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -885,9 +889,13 @@
         <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;margin-bottom:2px;"><span>Akrein 1</span><span id="artL1Val">900/900</span></div>
         <div style="height:8px;border-radius:2px;background:rgba(255,255,255,.04);overflow:hidden;"><div style="height:100%;border-radius:2px;transition:width .3s,background .3s;" id="artL1Bar"></div></div>
       </div>
-      <div style="margin-bottom:12px;">
+      <div style="margin-bottom:4px;">
         <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;margin-bottom:2px;"><span>Akrein 2</span><span id="artL2Val">84/900</span></div>
         <div style="height:8px;border-radius:2px;background:rgba(255,255,255,.04);overflow:hidden;"><div style="height:100%;border-radius:2px;transition:width .3s,background .3s;" id="artL2Bar"></div></div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;margin-bottom:2px;"><span>Akrein 3</span><span id="artL3Val">0/900</span></div>
+        <div style="height:8px;border-radius:2px;background:rgba(255,255,255,.04);overflow:hidden;"><div style="height:100%;border-radius:2px;transition:width .3s,background .3s;" id="artL3Bar"></div></div>
       </div>
       <div style="padding:10px 12px;background:rgba(255,255,255,.025);border-radius:6px;border:1px solid rgba(255,255,255,.04);margin-bottom:10px;">
         <div style="font-size:10px;color:#475569;margin-bottom:6px;font-weight:600;">Teppustaðir</div>
@@ -897,7 +905,7 @@
         <div style="display:flex;align-items:center;gap:7px;"><div style="width:16px;height:16px;border-radius:3px;background:rgba(16,185,129,.12);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#10b981;flex-shrink:0;">D</div><span style="font-size:11px;color:#475569;text-decoration:line-through;">Grensás ljós</span><span style="font-size:9px;color:#10b981;font-weight:600;margin-left:auto;white-space:nowrap;">framhjá</span></div>
       </div>
       <div style="font-size:12px;font-weight:600;" id="artAfterStatus">Stöðugt flæði</div>
-      <div style="font-size:10px;color:#475569;margin-top:2px;" id="artAfterLoad">984 bílar/klst · 1.800 geta</div>
+      <div style="font-size:10px;color:#475569;margin-top:2px;" id="artAfterLoad"><span id="artAfterLoadNum">1.544 bílar/klst</span> · 2.700 geta</div>
     </div>
   </div>
 
@@ -931,9 +939,13 @@
       <div style="flex:10;background:#f97316;opacity:.3;"></div><div style="flex:50;background:#f87171;opacity:.3;"></div>
     </div>
     <div style="position:relative;height:30px;margin-bottom:4px;">
+      <div style="position:absolute;left:73%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:1px;">
+        <div style="width:2px;height:8px;background:#fbbf24;"></div>
+        <div style="font-size:9px;color:#fbbf24;font-weight:700;white-space:nowrap;">Lág 0.73</div>
+      </div>
       <div style="position:absolute;left:91%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:1px;">
         <div style="width:2px;height:8px;background:#f87171;"></div>
-        <div style="font-size:9px;color:#f87171;font-weight:700;white-space:nowrap;">Núv. 0.91</div>
+        <div style="font-size:9px;color:#f87171;font-weight:700;white-space:nowrap;">Há 0.91</div>
       </div>
       <div style="position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;transition:left .3s;" id="artGaugeMarker">
         <div style="width:2px;height:8px;" id="artGaugeBar"></div>
@@ -950,7 +962,7 @@
   </div>
 
   <div class="note">
-    <strong>Heimildir:</strong> Hringbraut: 2 akreinar inbound (Vegagerðin). BL: 7 rútur/klst í háannatíma (Wikipedia / Frumdragaskýrsla Borgarlínu 2021), 125 farþegar/rútu (SSH). Meðalfjöldi í bíl: 1,2 (Samgöngustofa). Þakmark: 900 b/akrein/klst (HCM 6). Grunnumferð 1.640 b/klst: mat byggt á ÁDU + K-stuðull 9%.
+    <strong>Heimildir:</strong> Miklabraut: 3 akreinar inbound. BL: 7 rúur/klst í háanntíma, 125 farþgar/rútu (Frumdragaskýrsla Borgarlinu 2021). Meðalfjoldi í bíl: 1,2 (Samgöngustofa). Þkmark: 900 b/akrein/klst (HCM 6). Grunnumferð: ÁDU 43.000 (Vegagerðin 2017, Miklabraut við Lönguhlíð), K-stuðull 9%, vöxtur 1,6%/ár.
   </div>
 
 </div>
@@ -1268,8 +1280,10 @@ function renderRidershipCalc() {
 }
 
 // ── ROADS CALCULATOR ──
-var ART_CAP     = 1800;
-var ART_BASE    = 1640;
+var ART_CAP      = 2700;
+var ART_BASE_LOW = 1960;
+var ART_BASE_MID = 2200;
+var ART_BASE_HIGH= 2450;
 var ART_BUS_HR  = 7;
 var ART_PAX     = 125;
 var ART_OCC     = 1.2;
@@ -1287,13 +1301,14 @@ function calcRoads() {
   var pct   = parseInt(document.getElementById('artunnLoadPct').value) || 90;
   var paxHr = Math.round(ART_BUS_HR * ART_PAX * pct / 100);
   var carsHr= Math.round(paxHr / ART_OCC);
-  var load  = Math.max(0, ART_BASE - carsHr);
+  var load  = Math.max(0, ART_BASE_MID - carsHr);
   var vc    = load / ART_CAP;
   var los   = artLOS(vc);
 
-  // Per-lane split (two lanes, cap 900 each)
+  // Per-lane split (three lanes, cap 900 each)
   var l1 = Math.min(load, 900);
-  var l2 = Math.max(0, load - 900);
+  var l2 = Math.min(Math.max(0, load - 900), 900);
+  var l3 = Math.max(0, load - 1800);
 
   // Update slider readout
   var pctEl = document.getElementById('artPctVal');
@@ -1317,7 +1332,7 @@ function calcRoads() {
   var capBar = document.getElementById('artCapBar');
   var capDot = document.getElementById('artCapDot');
   var capLbl = document.getElementById('artCapLbl');
-  if (capBar) capBar.style.width = Math.min(100, (ART_BASE / ART_CAP) * 100) + '%';
+  if (capBar) capBar.style.width = Math.min(100, (ART_BASE_MID / ART_CAP) * 100) + '%';
   if (capDot) { capDot.style.left = Math.min(100, vc * 100) + '%'; capDot.style.background = los.c; }
   if (capLbl) capLbl.textContent = fmt(load) + ' / ' + fmt(ART_CAP) + ' bílar/klst';
 
@@ -1348,8 +1363,13 @@ function calcRoads() {
   if (l1Bar) { l1Bar.style.width = Math.min(100, (l1/900)*100) + '%'; l1Bar.style.background = artLOS(l1/900).c; }
   if (l2Val) l2Val.textContent = fmt(l2) + '/900';
   if (l2Bar) { l2Bar.style.width = Math.min(100, (l2/900)*100) + '%'; l2Bar.style.background = artLOS(Math.max(0,l2)/900).c; }
+  var l3Val = document.getElementById('artL3Val');
+  var l3Bar = document.getElementById('artL3Bar');
+  if (l3Val) l3Val.textContent = fmt(l3) + '/900';
+  if (l3Bar) { l3Bar.style.width = Math.min(100, (l3/900)*100) + '%'; l3Bar.style.background = artLOS(l3/900).c; }
   if (afterStatus) { afterStatus.textContent = los.t; afterStatus.style.color = los.c; }
-  if (afterLoad) afterLoad.textContent = fmt(load) + ' bílar/klst eftir';
+  var afterLoadNum = document.getElementById('artAfterLoadNum');
+  if (afterLoadNum) afterLoadNum.textContent = fmt(load) + ' bílar/klst';
 
   // V/C gauge
   var gaugeMarker = document.getElementById('artGaugeMarker');
