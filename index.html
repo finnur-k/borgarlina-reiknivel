@@ -529,12 +529,12 @@
         <div class="d3-header">
           <div class="d3-label-wrap">
             <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><path d="M1 5h1.5l1.5-3 2 6 1.5-3H9"/></svg></div>
-            <span class="d3-label">Dagleg umferð (ÁDU, báðar áttir)</span>
+            <span class="d3-label">Bílar/klst á annatíma (ein átt)</span>
           </div>
-          <div class="d3-badge" id="corridorADTBadge"><span id="corridorADTVal">64.000</span></div>
+          <div class="d3-badge" id="peakHrVolBadge"><span id="peakHrVolVal">2.400</span></div>
         </div>
-        <div class="d3-range-wrap"><input type="range" class="d3-range" id="corridorADT" min="10000" max="100000" value="64000" step="1000" oninput="calcPeak()"></div>
-        <div class="d3-scale"><span>10k</span><span>100k</span></div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="peakHrVol" min="500" max="5000" value="2400" step="100" oninput="calcPeak()"></div>
+        <div class="d3-scale"><span>500</span><span>5.000</span></div>
       </div>
       <div class="d3-row">
         <div class="d3-header">
@@ -973,12 +973,12 @@ function calcPeak() {
   // Total capacity this road in both directions
   var totalCap = lanes * LANE_CAPACITY; // per direction
 
-  var corridorADT = parseInt(document.getElementById('corridorADT').value);
+  var peakHrVol = parseInt(document.getElementById('peakHrVol').value);
   var FREE_FLOW_DYN = parseInt(document.getElementById('freeFlowMin').value);
   document.getElementById('freeFlowMinVal').textContent = FREE_FLOW_DYN + ' mín';
-  document.getElementById('corridorADTVal').textContent = corridorADT.toLocaleString('is-IS');
+  document.getElementById('peakHrVolVal').textContent = peakHrVol.toLocaleString('is-IS');
 
-  // Growth factor: corridor ADT grows proportionally with total car fleet
+  // Growth factor: peak hour volume grows proportionally with total car fleet
   var pop2025 = 249560;
   var cars2025 = Math.round(pop2025 * carsNow / 1000);
   var popYr = getPop(yr);
@@ -987,8 +987,8 @@ function calcPeak() {
   var growthFactor = carsYr / cars2025;
 
   // ── 2025 BASELINE ──
-  // ÁDU input is bidirectional (standard); /2 gives one direction; × 7.3% peak share (Vegagerðin, stöð 49-01, 2024)
-  var peakVol25 = Math.round(corridorADT * PEAK_SHARE / 2);   // one direction, all lanes
+  // Direct input: bílar/klst á annatíma í eina átt (ein átt, allar akreinar)
+  var peakVol25 = peakHrVol;
   var peakVolPerLane25 = Math.round(peakVol25 / lanes);
   var vc25 = peakVol25 / (lanes * LANE_CAPACITY);
   var delay25 = bprDelay(peakVolPerLane25, LANE_CAPACITY, FREE_FLOW_DYN);
@@ -998,8 +998,7 @@ function calcPeak() {
   var delaySchool25 = bprDelay(Math.round(peakVolSchool25/lanes), LANE_CAPACITY, FREE_FLOW_DYN);
 
   // ── FUTURE: no BL ──
-  var adtYr = Math.round(corridorADT * growthFactor);
-  var peakVolYr = Math.round(adtYr * PEAK_SHARE / 2);
+  var peakVolYr = Math.round(peakHrVol * growthFactor);
   var peakVolPerLaneYr = Math.round(peakVolYr / lanes);
   var vcYr = peakVolYr / (lanes * LANE_CAPACITY);
   var delayYr = bprDelay(peakVolPerLaneYr, LANE_CAPACITY, FREE_FLOW_DYN);
@@ -1009,10 +1008,9 @@ function calcPeak() {
   var delaySchoolYr = bprDelay(Math.round(peakVolSchoolYr/lanes), LANE_CAPACITY, FREE_FLOW_DYN);
 
   // ── FUTURE: with BL ──
-  // BL removes modal-shift share from the corridor, amplified at peak (1.3x)
+  // BL removes modal-shift share from the corridor peak, amplified at peak (1.3x)
   var modalFractionCorridor = (modalPct / 100) * 1.3;
-  var adtYrBL = Math.round(adtYr * (1 - modalFractionCorridor));
-  var peakVolBL = Math.round(adtYrBL * PEAK_SHARE / 2);
+  var peakVolBL = Math.round(peakVolYr * (1 - modalFractionCorridor));
   var peakVolPerLaneBL = Math.round(peakVolBL / lanes);
   var vcBL = peakVolBL / (lanes * LANE_CAPACITY);
   var delayBL = bprDelay(peakVolPerLaneBL, LANE_CAPACITY, FREE_FLOW_DYN);
@@ -1020,7 +1018,7 @@ function calcPeak() {
   var peakVolSchoolBL = Math.round(peakVolBL * (1 + schoolPct/100));
   var vcSchoolBL = peakVolSchoolBL / (lanes * LANE_CAPACITY);
   var delaySchoolBL = bprDelay(Math.round(peakVolSchoolBL/lanes), LANE_CAPACITY, FREE_FLOW_DYN);
-  var carsRemovedPeak = Math.round(adtYr * modalFractionCorridor * PEAK_SHARE / 2);
+  var carsRemovedPeak = Math.round(peakVolYr * modalFractionCorridor);
 
   // Total capital-area cars with BL (for display in scenario/table)
   var carsYrBL = Math.round(carsYr * (1 - modalPct/100));
@@ -1074,8 +1072,6 @@ function calcPeak() {
   var rows = [
     ['Bílar á svæðinu (heild)', fmt(cars2025), fmt(carsYr), fmt(carsYrBL),
       '<span class="green">&minus;' + fmt(carsYr - carsYrBL) + '</span>'],
-    ['&Aacute;DU á leiðinni', fmt(corridorADT), fmt(adtYr), fmt(adtYrBL),
-      '<span class="green">&minus;' + fmt(adtYr - adtYrBL) + '</span>'],
     ['Bílar/klst á annatíma (lykilleiðir)', fmt(peakVol25), fmt(peakVolYr), fmt(peakVolBL),
       '<span class="green">&minus;' + fmt(peakVolYr - peakVolBL) + '</span>'],
     ['V/C hlutfall (annatími)', vc25.toFixed(2), vcYr.toFixed(2), vcBL.toFixed(2),
@@ -1396,7 +1392,7 @@ var D3_CONFIGS = [
   {id:'pkModalShift', min:0,     max:20},
   {id:'schoolFactor', min:0,     max:20},
   {id:'numLanes',     min:1,     max:3},
-  {id:'corridorADT',  min:10000, max:100000},
+  {id:'peakHrVol',    min:500,   max:5000},
   {id:'freeFlowMin',  min:5,     max:40},
   {id:'carsNow',      min:650,   max:850},
   {id:'carGrowth',    min:-15,   max:15},
@@ -1419,7 +1415,7 @@ function d3RefreshAll() {
 
 // ── SHARE / URL STATE ──
 var SHARE_SLIDERS = ['peakYear','pkCarsNow','pkModalShift','schoolFactor','numLanes',
-  'corridorADT','freeFlowMin','carsNow','carGrowth','modalShift','blYear',
+  'peakHrVol','freeFlowMin','carsNow','carGrowth','modalShift','blYear',
   'artunnLoadPct'];
 
 function getActiveTab() {
