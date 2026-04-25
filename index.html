@@ -477,7 +477,7 @@
       <p><code style="background:#0f172a;padding:4px 10px;border-radius:4px;font-size:13px;display:inline-block;margin:4px 0;">t = t&#8320; &times; (1 + 0,15 &times; (V/C)&#8308;)</code></p>
       <p><strong>V</strong> er fjöldi bíla á klukkustund. <strong>C</strong> er þakmark leiðarinnar. <strong>t&#8320;</strong> er ferðatíminn þegar umferð er engin.</p>
       <p>Lykilatriðið er veldisvísirinn — þegar umferð nálgast þakmark eykst tafinn ekki línulega heldur skyndilega. Við 80% þakmark er tafinn lítill. Við 95% er hann margfaldur.</p>
-      <p>Þakmark á þéttbýlisgötu er um <strong>900 bílar á akrein á klukkustund</strong> (Highway Capacity Manual). Annatímar standa fyrir um 7,3% af daglegri umferð (ein átt) á hverja klukkustund (Vegagerðin, lykilteljarar á höfuðborgarsvæðinu, stöð 49-01, 2024).</p>
+      <p>Þakmark á þéttbýlisgötu er um <strong>900 bílar á akrein á klukkustund</strong> (Highway Capacity Manual). Annatímar standa fyrir um 7,3% af heildarÁDU (báðar áttir) á hverja klukkustund á virkum dögum (Vegagerðin, lykilteljarar á höfuðborgarsvæðinu, stöð 49-01, 2024).</p>
       <p>Grunnferðatíminn (t&#8320;) og aðrar forsendur eru stillanlegar í reiknivélinni.</p>
     </div>
   </details>
@@ -529,11 +529,11 @@
         <div class="d3-header">
           <div class="d3-label-wrap">
             <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><path d="M1 5h1.5l1.5-3 2 6 1.5-3H9"/></svg></div>
-            <span class="d3-label">Dagleg umferð (ÁDU, ein átt)</span>
+            <span class="d3-label">Dagleg umferð (ÁDU, báðar áttir)</span>
           </div>
-          <div class="d3-badge" id="corridorADTBadge"><span id="corridorADTVal">43.000</span></div>
+          <div class="d3-badge" id="corridorADTBadge"><span id="corridorADTVal">64.700</span></div>
         </div>
-        <div class="d3-range-wrap"><input type="range" class="d3-range" id="corridorADT" min="10000" max="100000" value="43000" step="1000" oninput="calcPeak()"></div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="corridorADT" min="10000" max="100000" value="64700" step="1000" oninput="calcPeak()"></div>
         <div class="d3-scale"><span>10k</span><span>100k</span></div>
       </div>
       <div class="d3-row">
@@ -987,8 +987,8 @@ function calcPeak() {
   var growthFactor = carsYr / cars2025;
 
   // ── 2025 BASELINE ──
-  // ÁDU input is one-directional; peak hour = ADT × 7.3% (Vegagerðin, stöð 49-01, 2024)
-  var peakVol25 = Math.round(corridorADT * PEAK_SHARE);        // one direction, all lanes
+  // ÁDU input is bidirectional (standard); /2 gives one direction; × 7.3% peak share (Vegagerðin, stöð 49-01, 2024)
+  var peakVol25 = Math.round(corridorADT * PEAK_SHARE / 2);   // one direction, all lanes
   var peakVolPerLane25 = Math.round(peakVol25 / lanes);
   var vc25 = peakVol25 / (lanes * LANE_CAPACITY);
   var delay25 = bprDelay(peakVolPerLane25, LANE_CAPACITY, FREE_FLOW_DYN);
@@ -999,7 +999,7 @@ function calcPeak() {
 
   // ── FUTURE: no BL ──
   var adtYr = Math.round(corridorADT * growthFactor);
-  var peakVolYr = Math.round(adtYr * PEAK_SHARE);
+  var peakVolYr = Math.round(adtYr * PEAK_SHARE / 2);
   var peakVolPerLaneYr = Math.round(peakVolYr / lanes);
   var vcYr = peakVolYr / (lanes * LANE_CAPACITY);
   var delayYr = bprDelay(peakVolPerLaneYr, LANE_CAPACITY, FREE_FLOW_DYN);
@@ -1012,7 +1012,7 @@ function calcPeak() {
   // BL removes modal-shift share from the corridor, amplified at peak (1.3x)
   var modalFractionCorridor = (modalPct / 100) * 1.3;
   var adtYrBL = Math.round(adtYr * (1 - modalFractionCorridor));
-  var peakVolBL = Math.round(adtYrBL * PEAK_SHARE);
+  var peakVolBL = Math.round(adtYrBL * PEAK_SHARE / 2);
   var peakVolPerLaneBL = Math.round(peakVolBL / lanes);
   var vcBL = peakVolBL / (lanes * LANE_CAPACITY);
   var delayBL = bprDelay(peakVolPerLaneBL, LANE_CAPACITY, FREE_FLOW_DYN);
@@ -1020,7 +1020,7 @@ function calcPeak() {
   var peakVolSchoolBL = Math.round(peakVolBL * (1 + schoolPct/100));
   var vcSchoolBL = peakVolSchoolBL / (lanes * LANE_CAPACITY);
   var delaySchoolBL = bprDelay(Math.round(peakVolSchoolBL/lanes), LANE_CAPACITY, FREE_FLOW_DYN);
-  var carsRemovedPeak = Math.round(adtYr * modalFractionCorridor * PEAK_SHARE);
+  var carsRemovedPeak = Math.round(adtYr * modalFractionCorridor * PEAK_SHARE / 2);
 
   // Total capital-area cars with BL (for display in scenario/table)
   var carsYrBL = Math.round(carsYr * (1 - modalPct/100));
