@@ -304,6 +304,201 @@
     z-index: 100;
   }
   #shareToast.show { opacity: 1; }
+
+  /* ═══════════════════════════════════════════════════════════════
+     YFIR DAGINN flipi — design from Claude Design handoff
+     Scoped under #panel-yfirdaginn to prevent collisions with
+     existing .card, .legend, .stat-* rules.
+     ═══════════════════════════════════════════════════════════════ */
+  #panel-yfirdaginn {
+    --yd-bg:        #080e1a;
+    --yd-card:      #1e293b;
+    --yd-border:    #334155;
+    --yd-accent:    #6366f1;
+    --yd-success:   #34d399;
+    --yd-warning:   #fbbf24;
+    --yd-danger:    #f87171;
+    --yd-text:      #e2e8f0;
+    --yd-muted:     #94a3b8;
+    --yd-faint:     #475569;
+    --yd-font-mono: 'JetBrains Mono', monospace;
+  }
+  #panel-yfirdaginn.panel-yfirdaginn {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  #panel-yfirdaginn .panel-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    flex-wrap: wrap; gap: 8px;
+  }
+  #panel-yfirdaginn .panel-title {
+    font-size: 1.25rem; font-weight: 600; letter-spacing: -0.01em;
+  }
+  #panel-yfirdaginn .panel-subtitle {
+    font-size: 0.8125rem; color: var(--yd-muted);
+  }
+  #panel-yfirdaginn .yd-card {
+    background: var(--yd-card);
+    border: 1px solid var(--yd-border);
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+  #panel-yfirdaginn .chart-wrap { position: relative; width: 100%; }
+  #panel-yfirdaginn .chart-wrap svg {
+    width: 100%; height: auto; display: block; overflow: visible;
+  }
+  #panel-yfirdaginn .slider-row {
+    display: flex; align-items: center; gap: 16px; padding: 0 4px;
+  }
+  #panel-yfirdaginn .slider-label {
+    font-size: 0.8125rem; color: var(--yd-muted); white-space: nowrap;
+    font-family: var(--yd-font-mono); min-width: 46px; text-align: right;
+  }
+  #panel-yfirdaginn .slider-label.right { text-align: left; }
+  #panel-yfirdaginn input[type=range].time-slider {
+    -webkit-appearance: none; appearance: none;
+    flex: 1; height: 4px;
+    background: var(--yd-border); border-radius: 2px;
+    outline: none; cursor: pointer;
+  }
+  #panel-yfirdaginn input[type=range].time-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--yd-accent);
+    border: 2px solid #0f172a;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.25);
+    cursor: grab;
+  }
+  #panel-yfirdaginn input[type=range].time-slider:active::-webkit-slider-thumb { cursor: grabbing; }
+  #panel-yfirdaginn input[type=range].time-slider::-moz-range-thumb {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--yd-accent); border: 2px solid #0f172a;
+  }
+  #panel-yfirdaginn .stats-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;
+  }
+  #panel-yfirdaginn .stat-cell {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  #panel-yfirdaginn .stat-label {
+    font-size: 0.6875rem; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.07em;
+    color: var(--yd-muted);
+  }
+  #panel-yfirdaginn .stat-value {
+    font-family: var(--yd-font-mono); font-size: 1.5rem;
+    font-weight: 600; line-height: 1; color: var(--yd-text);
+  }
+  #panel-yfirdaginn .stat-value.sm { font-size: 1.125rem; }
+  #panel-yfirdaginn .los-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 8px;
+    font-family: var(--yd-font-mono); font-size: 1.25rem;
+    font-weight: 700; line-height: 1;
+  }
+  #panel-yfirdaginn .info-card {
+    background: #111827; border: 1px solid var(--yd-border);
+    border-radius: 10px; padding: 14px 18px;
+    font-size: 0.875rem; line-height: 1.6; color: var(--yd-muted);
+  }
+  #panel-yfirdaginn .info-card strong { color: var(--yd-text); }
+  #panel-yfirdaginn .info-tag {
+    display: inline-block; font-size: 0.6875rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 2px 7px; border-radius: 4px;
+    margin-right: 8px; vertical-align: middle;
+    font-family: var(--yd-font-mono);
+  }
+  #panel-yfirdaginn .mini-chart-wrap { padding-top: 4px; }
+  #panel-yfirdaginn .mini-label {
+    font-size: 0.6875rem; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.07em;
+    color: var(--yd-muted); margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  #panel-yfirdaginn .mini-label-estimate {
+    font-size: 0.625rem; color: var(--yd-faint);
+    font-style: italic; text-transform: none; letter-spacing: 0;
+  }
+  #panel-yfirdaginn .yd-legend {
+    display: flex; gap: 20px; flex-wrap: wrap; margin-top: 12px;
+  }
+  #panel-yfirdaginn .yd-legend-item {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 0.75rem; color: var(--yd-muted);
+  }
+  #panel-yfirdaginn .yd-legend-line { width: 20px; height: 2.5px; border-radius: 2px; }
+  #panel-yfirdaginn .yd-legend-dash { width: 20px; height: 0; border-top: 2px dashed; }
+  #panel-yfirdaginn .local-control {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  #panel-yfirdaginn .local-control-label {
+    font-size: 0.8125rem; color: var(--yd-muted); white-space: nowrap;
+  }
+  #panel-yfirdaginn .local-control-val {
+    font-family: var(--yd-font-mono); font-size: 0.875rem;
+    font-weight: 600; color: var(--yd-success); min-width: 38px;
+  }
+  #panel-yfirdaginn input[type=range].util-slider {
+    -webkit-appearance: none; appearance: none;
+    width: 160px; flex: none; height: 4px;
+    background: var(--yd-border); border-radius: 2px;
+    outline: none; cursor: pointer;
+  }
+  #panel-yfirdaginn input[type=range].util-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--yd-success); border: 2px solid #0f172a; cursor: grab;
+  }
+  #panel-yfirdaginn input[type=range].util-slider::-moz-range-thumb {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--yd-success); border: 2px solid #0f172a;
+  }
+  #panel-yfirdaginn .section-row {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 10px; margin-bottom: 16px;
+  }
+  #panel-yfirdaginn .section-title {
+    font-size: 0.8125rem; font-weight: 600; color: var(--yd-muted);
+    text-transform: uppercase; letter-spacing: 0.07em;
+  }
+  #panel-yfirdaginn .stats-cols {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  }
+  #panel-yfirdaginn .stats-col {
+    display: flex; flex-direction: column; gap: 12px; padding: 0 8px;
+  }
+  #panel-yfirdaginn .stats-col:first-child {
+    padding-left: 0; border-right: 1px solid var(--yd-border); padding-right: 20px;
+  }
+  #panel-yfirdaginn .stats-col:last-child {
+    padding-left: 20px; padding-right: 0;
+  }
+  #panel-yfirdaginn .col-header {
+    font-size: 0.6875rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 4px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  #panel-yfirdaginn .col-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  @media (max-width: 480px) {
+    #panel-yfirdaginn .stats-cols { grid-template-columns: 1fr; gap: 16px; }
+    #panel-yfirdaginn .stats-col:first-child { border-right: none; border-bottom: 1px solid var(--yd-border); padding: 0 0 16px; }
+    #panel-yfirdaginn .stats-col:last-child { padding-left: 0; }
+  }
+  #panel-yfirdaginn .yd-time-display {
+    font-family: var(--yd-font-mono); font-size: 2rem; font-weight: 700;
+    letter-spacing: -0.02em; color: var(--yd-text); line-height: 1;
+  }
+  #panel-yfirdaginn .yd-time-period {
+    font-size: 0.75rem; color: var(--yd-muted); margin-top: 4px;
+  }
+  #panel-yfirdaginn .yd-stats-info-row {
+    display: grid; grid-template-columns: 1fr 320px; gap: 16px; align-items: start;
+  }
+  @media (max-width: 768px) {
+    #panel-yfirdaginn .yd-stats-info-row { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -333,6 +528,7 @@
   <nav class="header-nav">
     <button class="tab active" onclick="showTab('home')">Yfirlit</button>
     <button class="tab" onclick="showTab('peak')">Annatímar &amp; tafar</button>
+    <button class="tab" onclick="showTab('yfirdaginn')">Yfir daginn</button>
     <button class="tab" onclick="showTab('calc')">Reiknivél</button>
     <button class="tab" onclick="showTab('straeto')">Strætó grunnlína</button>
     <button class="tab" onclick="showTab('roads')">Háannatími <span style="font-size:9px;background:#7c3aed;color:#fff;border-radius:4px;padding:1px 5px;vertical-align:middle;font-weight:600;letter-spacing:.3px;">Vinna í gangi</span></button>
@@ -348,6 +544,7 @@
     <div class="mob-tab-picker" id="tabPicker">
       <div class="mob-tab-picker-item active" onclick="showTab('home');closeTabPicker()"><svg id="chk-home" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6l3 3 5-5"/></svg>Yfirlit</div>
       <div class="mob-tab-picker-item" onclick="showTab('peak');closeTabPicker()"><svg id="chk-peak" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Annatímar &amp; tafar</div>
+      <div class="mob-tab-picker-item" onclick="showTab('yfirdaginn');closeTabPicker()"><svg id="chk-yfirdaginn" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Yfir daginn</div>
       <div class="mob-tab-picker-item" onclick="showTab('calc');closeTabPicker()"><svg id="chk-calc" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Reiknivél</div>
       <div class="mob-tab-picker-item" onclick="showTab('straeto');closeTabPicker()"><svg id="chk-straeto" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Strætó grunnlína</div>
       <div class="mob-tab-picker-item" onclick="showTab('roads');closeTabPicker()"><svg id="chk-roads" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Háannatími <span style="font-size:9px;background:#7c3aed;color:#fff;border-radius:4px;padding:1px 5px;font-weight:600;">Vinna í gangi</span></div>
@@ -604,6 +801,194 @@
   <div class="info-box" id="peakNote"></div>
   </div><!-- /split-right -->
   </div><!-- /split-layout -->
+</div>
+
+<!-- ═══ YFIR DAGINN — time-of-day flow on Miklabraut ═══ -->
+<div class="panel panel-yfirdaginn" id="panel-yfirdaginn">
+
+  <!-- Header -->
+  <div class="panel-header">
+    <span class="panel-title">Umferð yfir daginn — Miklabraut</span>
+    <span class="panel-subtitle">Vegagerðin talnagagn 2024 · Stöð 49-01 · Virkir dagar</span>
+  </div>
+
+  <!-- Main chart card -->
+  <div class="yd-card">
+    <div class="section-row">
+      <span class="section-title">Bílar á klukkustund · ein átt</span>
+      <div class="local-control">
+        <span class="local-control-label">Hámarks vagnnýting:</span>
+        <input type="range" class="util-slider" id="utilSlider" min="50" max="100" step="5" value="95" aria-label="Hámarks vagnnýting Borgarlínu">
+        <span class="local-control-val" id="utilVal">95%</span>
+      </div>
+    </div>
+
+    <!-- SVG chart -->
+    <div class="chart-wrap" id="chartWrap">
+      <svg id="mainChart" viewBox="0 0 900 340" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Línurit af umferð yfir daginn með og án Borgarlínu">
+        <defs>
+          <linearGradient id="blFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#34d399" stop-opacity="0.22"/>
+            <stop offset="100%" stop-color="#34d399" stop-opacity="0.04"/>
+          </linearGradient>
+          <linearGradient id="losFGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f87171" stop-opacity="0.08"/>
+            <stop offset="100%" stop-color="#f87171" stop-opacity="0.01"/>
+          </linearGradient>
+          <clipPath id="chartClip">
+            <rect x="64" y="16" width="812" height="268"/>
+          </clipPath>
+        </defs>
+      </svg>
+    </div>
+
+    <!-- Legend -->
+    <div class="yd-legend">
+      <div class="yd-legend-item">
+        <div class="yd-legend-line" style="background:#f87171"></div>
+        <span>Án Borgarlínu</span>
+      </div>
+      <div class="yd-legend-item">
+        <div class="yd-legend-line" style="background:#34d399"></div>
+        <span>Með Borgarlínu</span>
+      </div>
+      <div class="yd-legend-item">
+        <div class="yd-legend-dash" style="border-color:#fbbf24; opacity:0.7"></div>
+        <span>LOS D/E mörk (V/C 0.93)</span>
+      </div>
+      <div class="yd-legend-item">
+        <div class="yd-legend-dash" style="border-color:#f87171; opacity:0.7"></div>
+        <span>LOS F mörk (V/C 1.00)</span>
+      </div>
+    </div>
+
+    <!-- Time slider -->
+    <div style="margin-top: 20px;">
+      <div class="slider-row">
+        <span class="slider-label">06:00</span>
+        <input type="range" class="time-slider" id="timeSlider"
+               min="0" max="13" step="1" value="2"
+               aria-label="Veldu klukkustund dagsins">
+        <span class="slider-label right">20:00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats + info row -->
+  <div class="yd-stats-info-row">
+
+    <!-- Stats card -->
+    <div class="yd-card">
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <div class="yd-time-display" id="dispTime">08:00</div>
+          <div class="yd-time-period" id="dispPeriod">Morgunálagstími</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="stat-label">Afkastageta</div>
+          <div style="font-family:var(--yd-font-mono); font-size:0.875rem; color:var(--yd-muted);">2.700 bílar/klst</div>
+          <div style="font-size:0.6875rem; color:var(--yd-faint);">3 akreinar × 900</div>
+        </div>
+      </div>
+
+      <div class="stats-cols">
+        <!-- Without BL -->
+        <div class="stats-col">
+          <div class="col-header">
+            <span class="col-dot" style="background:#f87171"></span>
+            <span style="color:#f87171">Án Borgarlínu</span>
+          </div>
+          <div class="stats-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="stat-cell">
+              <div class="stat-label">Bílar/klst</div>
+              <div class="stat-value" id="dispCarsNo" style="color:#f87171">2.362</div>
+            </div>
+            <div class="stat-cell">
+              <div class="stat-label">V/C hlutfall</div>
+              <div class="stat-value sm" id="dispVCNo">0.88</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="stat-cell">
+              <div class="stat-label">LOS</div>
+              <div class="los-badge" id="dispLOSNoB">D</div>
+            </div>
+            <div class="stat-cell">
+              <div class="stat-label">Ferðatími</div>
+              <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600;" id="dispTravelNo">24 mín</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- With BL -->
+        <div class="stats-col">
+          <div class="col-header">
+            <span class="col-dot" style="background:#34d399"></span>
+            <span style="color:#34d399">Með Borgarlínu</span>
+          </div>
+          <div class="stats-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="stat-cell">
+              <div class="stat-label">Bílar/klst</div>
+              <div class="stat-value" id="dispCarsWith" style="color:#34d399">1.633</div>
+            </div>
+            <div class="stat-cell">
+              <div class="stat-label">V/C hlutfall</div>
+              <div class="stat-value sm" id="dispVCWith">0.61</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="stat-cell">
+              <div class="stat-label">LOS</div>
+              <div class="los-badge" id="dispLOSWithB">C</div>
+            </div>
+            <div class="stat-cell">
+              <div class="stat-label">Ferðatími</div>
+              <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600;" id="dispTravelWith">21 mín</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BL impact strip -->
+      <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--yd-border); display:flex; gap: 24px; flex-wrap: wrap;">
+        <div class="stat-cell">
+          <div class="stat-label">BL farþegar þessa klst</div>
+          <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-accent);" id="dispPax">875</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-label">Bílar fjarlægðir</div>
+          <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-accent);" id="dispRemoved">729</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-label">Vagnnýting</div>
+          <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-accent);" id="dispUtil">100%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info card column -->
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div class="info-card" id="infoCard"></div>
+
+      <!-- Mini chart card -->
+      <div class="yd-card" style="padding: 16px 20px;">
+        <div class="mini-label">
+          Vagnnýting Borgarlínu
+          <span class="mini-label-estimate">mat</span>
+        </div>
+        <div class="mini-chart-wrap">
+          <svg id="miniChart" viewBox="0 0 280 90" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block;" role="img" aria-label="Vagnnýting rúta yfir daginn">
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data note -->
+  <div style="font-size: 0.6875rem; color: var(--yd-faint); line-height: 1.5; padding: 0 4px;">
+    Heimildir: Vegagerðin teljaragögn 2024, stöð 49-01 (Vesturlandsvegur ofan Ártúnsbrekku) · Borgarlínan Frumdragaskýrsla 2021 · HCM 6 þjónustustig · BPR seinkuareikniformúla (α=0.15, β=4) · Vagnnýtingarferillinn er mat byggt á alþjóðlegum BRT rannsóknum.
+  </div>
+
 </div>
 
 <!-- ═══ CALC (full day) ═══ -->
@@ -1304,7 +1689,7 @@ function calcRoads() {
 // Tabs that have sliders (FAB shown on mobile only for these)
 var TABS_WITH_SLIDERS = { peak: true, calc: true };
 var TAB_LABELS = {
-  home: 'Yfirlit', peak: 'Annatímar & tafar', calc: 'Reiknivél',
+  home: 'Yfirlit', peak: 'Annatímar & tafar', yfirdaginn: 'Yfir daginn', calc: 'Reiknivél',
   straeto: 'Strætó grunnlína', roads: 'Háannatími', munis: 'Sveitarfélögin 7'
 };
 
@@ -1321,7 +1706,7 @@ function showTab(name) {
   // Mobile: update dropdown label + checkmarks
   var lbl = document.getElementById('mobTabLabel');
   if (lbl) lbl.textContent = TAB_LABELS[name] || name;
-  ['home','peak','calc','straeto','roads','munis'].forEach(function(t) {
+  ['home','peak','yfirdaginn','calc','straeto','roads','munis'].forEach(function(t) {
     var chk = document.getElementById('chk-' + t);
     if (!chk) return;
     chk.style.visibility = (t === name) ? 'visible' : 'hidden';
@@ -1527,6 +1912,246 @@ window.addEventListener('DOMContentLoaded', function() {
     if (fab) fab.style.display = 'none';
   }
 });
+
+// ═══════════════════════════════════════════════════════════════
+// YFIR DAGINN flipi — IIFE-scoped to avoid global namespace collision
+// (existing getLOS, render, etc. live in outer scope)
+// ═══════════════════════════════════════════════════════════════
+(function() {
+  const CAPACITY = 2700;
+  const T0 = 20;
+  const BUSES_PER_HR = 7;
+  const PAX_PER_BUS = 125;
+  const OCCUPANCY = 1.2;
+
+  const HOURS = [6,7,8,9,10,11,12,13,14,15,16,17,18,19];
+  const HOUR_LABELS = ['06','07','08','09','10','11','12','13','14','15','16','17','18','19','20'];
+  const CARS_NO_BL = [647,2038,2362,1909,1456,1456,1618,1618,1779,2588,3073,2750,1941,1294];
+  const UTIL_BASE  = [0.30,0.90,1.00,0.75,0.50,0.50,0.50,0.50,0.50,0.80,0.95,0.85,0.50,0.35];
+
+  function ydGetLOS(vc) {
+    if (vc <= 0.35) return 'A';
+    if (vc <= 0.54) return 'B';
+    if (vc <= 0.77) return 'C';
+    if (vc <= 0.93) return 'D';
+    if (vc <= 1.00) return 'E';
+    return 'F';
+  }
+  const LOS_COLORS = { A:'#34d399', B:'#34d399', C:'#6366f1', D:'#fbbf24', E:'#f97316', F:'#f87171' };
+  const LOS_BG     = { A:'#064e3b', B:'#064e3b', C:'#1e1b4b', D:'#451a03', E:'#431407', F:'#450a0a' };
+
+  function bprTime(vc) { return T0 * (1 + 0.15 * Math.pow(vc, 4)); }
+  function carsRemoved(i, peakScale) {
+    const util = Math.min(1.0, UTIL_BASE[i] * (peakScale / 0.95));
+    return Math.round(BUSES_PER_HR * PAX_PER_BUS * util / OCCUPANCY);
+  }
+  function paxCarried(i, peakScale) {
+    const util = Math.min(1.0, UTIL_BASE[i] * (peakScale / 0.95));
+    return Math.round(BUSES_PER_HR * PAX_PER_BUS * util);
+  }
+  function utilPct(i, peakScale) {
+    return Math.min(100, Math.round(UTIL_BASE[i] * (peakScale / 0.95) * 100));
+  }
+
+  let currentIdx = 2;
+  let peakScale  = 0.95;
+
+  const VB_W = 900, VB_H = 340;
+  const MARGIN = { top: 20, right: 32, bottom: 48, left: 64 };
+  const CW = VB_W - MARGIN.left - MARGIN.right;
+  const CH = VB_H - MARGIN.top - MARGIN.bottom;
+  const Y_MAX = 3600;
+
+  function xPos(i) { return MARGIN.left + (i / (HOURS.length - 1)) * CW; }
+  function yPos(cars) { return MARGIN.top + CH - (cars / Y_MAX) * CH; }
+
+  function buildPolyline(arr) {
+    return arr.map((v,i) => `${xPos(i).toFixed(1)},${yPos(v).toFixed(1)}`).join(' ');
+  }
+  function buildFillPath(arrTop, arrBottom) {
+    const top = arrTop.map((v,i) => `${xPos(i).toFixed(1)},${yPos(v).toFixed(1)}`).join(' L ');
+    const bot = [...arrBottom].reverse().map((v,i) => {
+      const ri = arrBottom.length - 1 - i;
+      return `${xPos(ri).toFixed(1)},${yPos(v).toFixed(1)}`;
+    }).join(' L ');
+    return `M ${top} L ${bot} Z`;
+  }
+
+  function renderMainChart() {
+    const svg = document.getElementById('mainChart');
+    if (!svg) return;
+    const withBL = HOURS.map((_,i) => Math.max(0, CARS_NO_BL[i] - carsRemoved(i, peakScale)));
+    const yTicks = [0, 900, 1800, 2700, 3600];
+    const yTickLabels = ['0','900','1.800','2.700','3.600'];
+    let html = '';
+    const yCapacity = yPos(CAPACITY);
+    html += `<rect x="${MARGIN.left}" y="${MARGIN.top}" width="${CW}" height="${(yCapacity - MARGIN.top).toFixed(1)}" fill="url(#losFGrad)" clip-path="url(#chartClip)"/>`;
+    yTicks.forEach((v,i) => {
+      const y = yPos(v).toFixed(1);
+      html += `<line x1="${MARGIN.left}" y1="${y}" x2="${MARGIN.left + CW}" y2="${y}" stroke="#1e293b" stroke-width="1"/>`;
+      if (v > 0) {
+        html += `<text x="${(MARGIN.left - 8).toFixed(1)}" y="${y}" dy="0.35em" font-family="JetBrains Mono, monospace" font-size="11" fill="#475569" text-anchor="end">${yTickLabels[i]}</text>`;
+      }
+    });
+    [
+      { v: CAPACITY * 0.93, color:'#fbbf24', label:'LOS E' },
+      { v: CAPACITY * 1.00, color:'#f87171', label:'LOS F' }
+    ].forEach(({v, color, label}) => {
+      const y = yPos(v).toFixed(1);
+      html += `<line x1="${MARGIN.left}" y1="${y}" x2="${MARGIN.left + CW}" y2="${y}" stroke="${color}" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.6" clip-path="url(#chartClip)"/>`;
+      html += `<text x="${(MARGIN.left + CW + 5).toFixed(1)}" y="${y}" dy="0.35em" font-family="JetBrains Mono, monospace" font-size="9.5" fill="${color}" opacity="0.8">${label}</text>`;
+    });
+    html += `<path d="${buildFillPath(CARS_NO_BL, withBL)}" fill="url(#blFill)" clip-path="url(#chartClip)"/>`;
+    html += `<polyline points="${buildPolyline(CARS_NO_BL)}" fill="none" stroke="#f87171" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" clip-path="url(#chartClip)"/>`;
+    html += `<polyline points="${buildPolyline(withBL)}" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" clip-path="url(#chartClip)"/>`;
+    HOUR_LABELS.forEach((lbl, i) => {
+      const px = (i === HOURS.length) ? MARGIN.left + CW : xPos(i);
+      const y = MARGIN.top + CH + 20;
+      html += `<text x="${px.toFixed(1)}" y="${y}" font-family="JetBrains Mono, monospace" font-size="11" fill="#475569" text-anchor="middle">${lbl}</text>`;
+    });
+    html += `<line x1="${MARGIN.left}" y1="${MARGIN.top + CH}" x2="${MARGIN.left + CW}" y2="${MARGIN.top + CH}" stroke="#334155" stroke-width="1"/>`;
+    html += `<text x="14" y="${(MARGIN.top + CH/2).toFixed(1)}" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#475569" transform="rotate(-90, 14, ${(MARGIN.top + CH/2).toFixed(1)})">bílar / klst</text>`;
+    const ix = xPos(currentIdx).toFixed(1);
+    html += `<g id="indicator">
+      <line x1="${ix}" y1="${MARGIN.top}" x2="${ix}" y2="${MARGIN.top + CH}" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.9"/>
+      <circle cx="${ix}" cy="${yPos(CARS_NO_BL[currentIdx]).toFixed(1)}" r="5" fill="#f87171" stroke="#080e1a" stroke-width="2"/>
+      <circle cx="${ix}" cy="${yPos(withBL[currentIdx]).toFixed(1)}" r="5" fill="#34d399" stroke="#080e1a" stroke-width="2"/>
+      <rect x="${(parseFloat(ix) - 22).toFixed(1)}" y="${(MARGIN.top + CH + 30).toFixed(1)}" width="44" height="14" rx="3" fill="#6366f1" opacity="0.85"/>
+      <text x="${ix}" y="${(MARGIN.top + CH + 40).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="white" font-weight="600">${String(HOURS[currentIdx]).padStart(2,'0')}:00</text>
+    </g>`;
+    svg.innerHTML = html;
+  }
+
+  function renderMiniChart() {
+    const svg = document.getElementById('miniChart');
+    if (!svg) return;
+    const mW = 280, mH = 90;
+    const mML = 4, mMR = 4, mMT = 4, mMB = 22;
+    const mCW = mW - mML - mMR;
+    const mCH = mH - mMT - mMB;
+    const n = HOURS.length;
+    const barW = (mCW / n) * 0.72;
+    let html = '';
+    HOURS.forEach((_, i) => {
+      const util = Math.min(1.0, UTIL_BASE[i] * (peakScale / 0.95));
+      const barH = (util * mCH).toFixed(1);
+      const x = (mML + i * (mCW / n)).toFixed(1);
+      const y = (mMT + mCH - parseFloat(barH)).toFixed(1);
+      const isCurrent = (i === currentIdx);
+      const color = isCurrent ? '#6366f1' : (util >= 0.9 ? '#f87171' : util >= 0.7 ? '#fbbf24' : '#34d399');
+      const opacity = isCurrent ? '1' : '0.55';
+      html += `<rect x="${x}" y="${y}" width="${barW.toFixed(1)}" height="${barH}" rx="2" fill="${color}" opacity="${opacity}"/>`;
+    });
+    HOURS.forEach((h, i) => {
+      if (i % 2 !== 0) return;
+      const x = (mML + i * (mCW / n) + barW/2).toFixed(1);
+      html += `<text x="${x}" y="${mH - 6}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#475569">${String(h).padStart(2,'0')}</text>`;
+    });
+    const y100 = (mMT).toFixed(1);
+    html += `<line x1="${mML}" y1="${y100}" x2="${mW - mMR}" y2="${y100}" stroke="#334155" stroke-width="1" stroke-dasharray="2 2"/>`;
+    html += `<text x="${mML}" y="${(parseFloat(y100) - 2).toFixed(1)}" font-family="JetBrains Mono, monospace" font-size="8" fill="#475569">100%</text>`;
+    svg.innerHTML = html;
+  }
+
+  const PERIOD_LABELS = [
+    'Snemma morguns','Morgunálagstími hefst','Morgunálagstími','Álagstími líður',
+    'Miðmorgunn','Miðmorgunn','Hádegi','Eftir hádegi',
+    'Snemma síðdegis','Síðdegisálagstími hefst','Síðdegisálagstími','Síðdegisálagstími',
+    'Kvöld','Síðkvöld'
+  ];
+
+  function infoText(i, vcNo, vcWith, losNo, losWith, removed, pax) {
+    const hour = String(HOURS[i]).padStart(2,'0') + ':00';
+    const losChanged = losNo !== losWith;
+    if (vcNo >= 1.0 && vcWith >= 1.0) {
+      return { tag: 'Ofhleðsla', tagColor:'#f87171', tagBg:'#450a0a',
+        text: `<strong>${hour} — Án BL: LOS ${losNo} (V/C ${vcNo.toFixed(2)}). Með BL: LOS ${losWith} (V/C ${vcWith.toFixed(2)}).</strong> Borgarlínan fjarlægir <strong>${removed.toLocaleString('is-IS')}</strong> bíla og flytur <strong>${pax.toLocaleString('is-IS')}</strong> farþega — en þjónustuþrep er enn LOS F.` };
+    }
+    if (vcNo >= 1.0 && vcWith < 1.0) {
+      return { tag: 'Borgarlínan skiptir máli', tagColor:'#34d399', tagBg:'#064e3b',
+        text: `<strong>${hour} — Án BL: LOS ${losNo} (V/C ${vcNo.toFixed(2)}). Með BL: LOS ${losWith} (V/C ${vcWith.toFixed(2)}).</strong> Borgarlínan hjálpar til við að koma þjónustuþrepi undir LOS F — flytur <strong>${pax.toLocaleString('is-IS')}</strong> farþega og fjarlægir <strong>${removed.toLocaleString('is-IS')}</strong> bíla.` };
+    }
+    if (vcNo >= 0.77) {
+      const improvement = losChanged ? `bætist þjónustuþrep úr LOS ${losNo} í LOS ${losWith}` : `LOS ${losWith} í báðum tilfellum`;
+      return { tag: vcNo >= 0.93 ? 'Þung umferð' : 'Meðalálag',
+        tagColor: vcNo >= 0.93 ? '#fbbf24' : '#f97316',
+        tagBg:    vcNo >= 0.93 ? '#451a03' : '#431407',
+        text: `<strong>${hour} — Án BL: LOS ${losNo} (V/C ${vcNo.toFixed(2)}).</strong> Með BL: ${improvement} (V/C ${vcWith.toFixed(2)}). Borgarlínan flytur <strong>${pax.toLocaleString('is-IS')}</strong> farþega og fjarlægir <strong>${removed.toLocaleString('is-IS')}</strong> bíla.` };
+    }
+    return { tag: 'Létt umferð', tagColor:'#6366f1', tagBg:'#1e1b4b',
+      text: `<strong>${hour} — LOS ${losNo} án BL, LOS ${losWith} með BL.</strong> Vegur er vel undir afkastagetu. Verðmæti Borgarlínu birtist á háannatíma — flytur <strong>${pax.toLocaleString('is-IS')}</strong> farþega þessa stund.` };
+  }
+
+  function updateStats() {
+    const i = currentIdx;
+    const removed = carsRemoved(i, peakScale);
+    const pax = paxCarried(i, peakScale);
+    const util = utilPct(i, peakScale);
+    const carsNo = CARS_NO_BL[i];
+    const carsWith = Math.max(0, carsNo - removed);
+    const vcNo = carsNo / CAPACITY;
+    const vcWith = carsWith / CAPACITY;
+    const losNo = ydGetLOS(vcNo);
+    const losWith = ydGetLOS(vcWith);
+    const tNo = bprTime(vcNo);
+    const tWith = bprTime(vcWith);
+
+    document.getElementById('dispTime').textContent = String(HOURS[i]).padStart(2,'0') + ':00';
+    document.getElementById('dispPeriod').textContent = PERIOD_LABELS[i];
+    document.getElementById('dispCarsNo').textContent = carsNo.toLocaleString('is-IS');
+    document.getElementById('dispCarsWith').textContent = carsWith.toLocaleString('is-IS');
+    document.getElementById('dispVCNo').textContent = vcNo.toFixed(2);
+    document.getElementById('dispVCWith').textContent = vcWith.toFixed(2);
+
+    function setLOS(elId, los) {
+      const el = document.getElementById(elId);
+      el.textContent = los;
+      el.style.background = LOS_BG[los];
+      el.style.color = LOS_COLORS[los];
+      el.style.border = `1.5px solid ${LOS_COLORS[los]}44`;
+    }
+    setLOS('dispLOSNoB', losNo);
+    setLOS('dispLOSWithB', losWith);
+    document.getElementById('dispTravelNo').textContent = Math.round(tNo) + ' mín';
+    document.getElementById('dispTravelWith').textContent = Math.round(tWith) + ' mín';
+    document.getElementById('dispPax').textContent = pax.toLocaleString('is-IS');
+    document.getElementById('dispRemoved').textContent = removed.toLocaleString('is-IS');
+    document.getElementById('dispUtil').textContent = util + '%';
+
+    const info = infoText(i, vcNo, vcWith, losNo, losWith, removed, pax);
+    document.getElementById('infoCard').innerHTML =
+      `<span class="info-tag" style="color:${info.tagColor};background:${info.tagBg};">${info.tag}</span>${info.text}`;
+  }
+
+  function renderYfirDaginn() {
+    renderMainChart();
+    renderMiniChart();
+    updateStats();
+  }
+
+  // Wire up sliders once DOM is ready
+  function initYfirDaginn() {
+    const ts = document.getElementById('timeSlider');
+    const us = document.getElementById('utilSlider');
+    if (!ts || !us) return;
+    ts.addEventListener('input', function() {
+      currentIdx = parseInt(this.value);
+      renderYfirDaginn();
+    });
+    us.addEventListener('input', function() {
+      peakScale = parseInt(this.value) / 100;
+      document.getElementById('utilVal').textContent = this.value + '%';
+      renderYfirDaginn();
+    });
+    renderYfirDaginn();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initYfirDaginn);
+  } else {
+    initYfirDaginn();
+  }
+})();
 </script>
 </div><!-- /page-wrap -->
 
