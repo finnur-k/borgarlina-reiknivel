@@ -498,17 +498,28 @@
   #panel-yfirdaginn .yd-time-period {
     font-size: 0.75rem; color: var(--yd-muted); margin-top: 4px;
   }
+  /* Fixed grid-row height locks the entire stats+info row at 380px.
+     Stats card on left (~340px natural content) fits with a small buffer.
+     Right column (info-card + mini-chart) is also locked to 380px and
+     its info-card flexes to fill remaining space — so info text never
+     causes the row to resize as the user drags the time slider. */
   #panel-yfirdaginn .yd-stats-info-row {
-    display: grid; grid-template-columns: 1fr 320px; gap: 16px; align-items: stretch;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    grid-template-rows: 380px;
+    gap: 16px;
   }
-  /* Force the left stats card to fill the row height (= match right column) */
-  #panel-yfirdaginn .yd-stats-info-row > .yd-card { height: 100%; }
-  /* Right column flex container — fills row height, stacks info-card + mini-chart */
+  #panel-yfirdaginn .yd-stats-info-row > .yd-card { height: 100%; overflow: hidden; }
   #panel-yfirdaginn .yd-info-col {
     display: flex; flex-direction: column; gap: 12px; height: 100%;
   }
-  /* Anchor info-card height so it doesn't resize as time-slider text changes */
-  #panel-yfirdaginn .info-card { min-height: 150px; }
+  /* Info-card grows to fill space above mini-chart; min-height: 0 lets it shrink
+     if needed; overflow: auto handles unusually long text without breaking layout. */
+  #panel-yfirdaginn .info-card {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+  }
   /* Slider that aligns horizontally with the chart's X-axis.
      Chart viewBox: x=64 → x=868 of 900 width (= 7.11% left, 3.56% right). */
   #panel-yfirdaginn .yd-time-slider-aligned {
@@ -520,9 +531,19 @@
     flex: none;
   }
   @media (max-width: 768px) {
-    #panel-yfirdaginn .yd-stats-info-row { grid-template-columns: 1fr; }
-    #panel-yfirdaginn .info-card { min-height: 0; }
-    #panel-yfirdaginn .yd-stats-info-row > .yd-card { height: auto; }
+    /* On phones: let the layout flow naturally, no fixed heights */
+    #panel-yfirdaginn .yd-stats-info-row {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+    }
+    #panel-yfirdaginn .yd-stats-info-row > .yd-card,
+    #panel-yfirdaginn .yd-info-col {
+      height: auto;
+    }
+    #panel-yfirdaginn .info-card {
+      flex: none;
+      overflow: visible;
+    }
   }
 </style>
 </head>
