@@ -735,14 +735,14 @@
 
   <!-- 4-col hero -->
   <div class="art-hero-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">
-    <div class="box" style="border-top:2px solid #f97316;padding:16px 18px;">
+    <div class="box" style="border-top:2px solid #fbbf24;padding:16px 18px;">
       <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;">V/C — Án BL</div>
       <div style="display:flex;align-items:baseline;gap:8px;">
-        <div style="font-size:34px;font-weight:800;color:#f97316;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;">0.91</div>
-        <div style="font-size:14px;font-weight:700;color:#f97316;">LOS E</div>
+        <div style="font-size:34px;font-weight:800;color:#fbbf24;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;">0.91</div>
+        <div style="font-size:14px;font-weight:700;color:#fbbf24;">LOS D</div>
       </div>
-      <div style="margin-top:10px;height:4px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden;"><div style="height:100%;width:91%;background:#f97316;border-radius:2px;opacity:.7;"></div></div>
-      <div style="font-size:11px;color:#64748b;margin-top:6px;">Við þolmörk</div>
+      <div style="margin-top:10px;height:4px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden;"><div style="height:100%;width:91%;background:#fbbf24;border-radius:2px;opacity:.7;"></div></div>
+      <div style="font-size:11px;color:#64748b;margin-top:6px;">Nálægt óstöðugleika</div>
     </div>
     <div class="box" style="border-top:2px solid #34d399;padding:16px 18px;" id="artVCCard">
       <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;">V/C — Með BL</div>
@@ -789,8 +789,8 @@
         <div style="display:flex;justify-content:space-between;font-size:10px;color:#475569;margin-bottom:2px;"><span>Akrein 3</span><span>~657/900</span></div>
         <div style="height:8px;border-radius:2px;background:rgba(255,255,255,.04);overflow:hidden;"><div style="height:100%;width:73%;background:#f97316;opacity:.5;border-radius:2px;"></div></div>
       </div>
-      <div style="font-size:12px;color:#f97316;font-weight:600;">Óstöðugt flæði (LOS E)</div>
-      <div style="font-size:10px;color:#475569;margin-top:2px;">~2.460 bílar/klst · 2.700 geta</div>
+      <div style="font-size:12px;color:#fbbf24;font-weight:600;">Nálægt óstöðugleika (LOS D)</div>
+      <div style="font-size:10px;color:#475569;margin-top:2px;">~2.457 bílar/klst · 2.700 geta</div>
     </div>
     <div class="artun-arrow">
       <svg width="20" height="40" viewBox="0 0 20 40" fill="none"><path d="M10 4 L10 36 M10 36 L4 26 M10 36 L16 26" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -897,19 +897,21 @@ var popSchedule = {
   2035:276000, 2040:283000
 };
 
+// Sveitarf\u00e9l\u00f6g 2025 \u2014 uppf\u00e6rt skv. Hagstofu (1. jan. 2025)
+// Heimild: https://hagstofa.is/utgafur/frettasafn/mannfjoldi/mannfjoldinn-1-januar-2025/
 var municipalities = [
-  {name:"Reykjav\u00edkurborg",          pop2025:136894, g:1.5, note:"~55% af sv\u00e6\u00f0inu"},
-  {name:"K\u00f3pavgsb\u00e6r",           pop2025:38200,  g:1.5, note:"N\u00e6st st\u00e6rst"},
-  {name:"Hafnarfjar\u00f0arkaupsta\u00f0ur",pop2025:31500, g:1.8, note:"Vaxandi"},
-  {name:"Gar\u00f0ab\u00e6r",             pop2025:16800,  g:2.1, note:"Hra\u00f0vaxandi"},
-  {name:"Mosfellsb\u00e6r",              pop2025:12400,  g:2.3, note:"Hra\u00f0vaxandi"},
-  {name:"Seltjarnarnesb\u00e6r",         pop2025:4600,   g:0.8, note:"L\u00edtil fj\u00f6lgun"},
-  {name:"Kj\u00f3sarhreppur",            pop2025:166,    g:1.0, note:"F\u00e1mennt"}
+  {name:"Reykjav\u00edkurborg",          pop2025:138772, g:1.4, note:"~56% af sv\u00e6\u00f0inu"},
+  {name:"K\u00f3pavogsb\u00e6r",          pop2025:40040,  g:1.5, note:"N\u00e6st st\u00e6rst"},
+  {name:"Hafnarfjar\u00f0arkaupsta\u00f0ur",pop2025:31525, g:1.8, note:"Vaxandi"},
+  {name:"Gar\u00f0ab\u00e6r",             pop2025:20116,  g:5.4, note:"Hra\u00f0vaxandi (5,4% 2024\u20132025)"},
+  {name:"Mosfellsb\u00e6r",              pop2025:13715,  g:2.3, note:"Hra\u00f0vaxandi"},
+  {name:"Seltjarnarnesb\u00e6r",         pop2025:4585,   g:0.8, note:"L\u00edtil fj\u00f6lgun"},
+  {name:"Kj\u00f3sarhreppur",            pop2025:301,    g:1.0, note:"F\u00e1mennt"}
 ];
 
 // Road params (Suðurlandsbraut, T.ark/mbl.is 2026)
 var LANE_CAPACITY = 900;   // bílar/akrein/klst
-var FREE_FLOW_MIN = 8;     // mínútur frjálsakstur á lykilleiðum (~6km við 50km/h)
+var FREE_FLOW_MIN = 8;     // mínútur frjálsakstur á lykilleiðum (~6,7 km við 50 km/h)
 var PEAK_SHARE = 0.073;    // 7.3% of daily traffic in peak hour (Vegagerðin, lykilteljarar HBS, stöð 49-01, 2024)
 var DAILY_TRIPS_PER_CAR = 1.8; // ferðir á dag á bíl
 
@@ -1206,7 +1208,8 @@ function artLOS(vc) {
 
 function calcRoads() {
   var pct   = parseInt(document.getElementById('artunnLoadPct').value) || 90;
-  var paxHr = Math.round(ART_BUS_HR * ART_PAX * pct / 100);
+  // Engin millirúnnun á paxHr (787.5 við 90%); rúnnað aðeins á lokastigi → 656 við 90%
+  var paxHr = ART_BUS_HR * ART_PAX * pct / 100;
   var carsHr= Math.round(paxHr / ART_OCC);
   var load  = Math.max(0, ART_BASE_MID - carsHr);
   var vc    = load / ART_CAP;
