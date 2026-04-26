@@ -575,7 +575,7 @@
     <!-- Annatímar tab kommentað út 26-04-2026 — má virkja aftur ef við viljum nota.
     <button class="tab" onclick="showTab('peak')">Annatímar &amp; tafar</button>
     -->
-    <button class="tab" onclick="showTab('yfirdaginn')">Yfir daginn</button>
+    <button class="tab" onclick="showTab('yfirdaginn')">Áhrif Borgarlínu</button>
     <button class="tab" onclick="showTab('calc')">Reiknivél</button>
     <button class="tab" onclick="showTab('straeto')">Strætó grunnlína</button>
     <button class="tab" onclick="showTab('roads')">Háannatími <span style="font-size:9px;background:#7c3aed;color:#fff;border-radius:4px;padding:1px 5px;vertical-align:middle;font-weight:600;letter-spacing:.3px;">Vinna í gangi</span></button>
@@ -593,7 +593,7 @@
       <!-- Annatímar mobile picker kommentað út 26-04-2026 — sjá samsvarandi tab-button hér að ofan.
       <div class="mob-tab-picker-item" onclick="showTab('peak');closeTabPicker()"><svg id="chk-peak" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Annatímar &amp; tafar</div>
       -->
-      <div class="mob-tab-picker-item" onclick="showTab('yfirdaginn');closeTabPicker()"><svg id="chk-yfirdaginn" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Yfir daginn</div>
+      <div class="mob-tab-picker-item" onclick="showTab('yfirdaginn');closeTabPicker()"><svg id="chk-yfirdaginn" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Áhrif Borgarlínu</div>
       <div class="mob-tab-picker-item" onclick="showTab('calc');closeTabPicker()"><svg id="chk-calc" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Reiknivél</div>
       <div class="mob-tab-picker-item" onclick="showTab('straeto');closeTabPicker()"><svg id="chk-straeto" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Strætó grunnlína</div>
       <div class="mob-tab-picker-item" onclick="showTab('roads');closeTabPicker()"><svg id="chk-roads" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Háannatími <span style="font-size:9px;background:#7c3aed;color:#fff;border-radius:4px;padding:1px 5px;font-weight:600;">Vinna í gangi</span></div>
@@ -668,6 +668,18 @@
       <div style="margin-top:10px;font-size:11px;color:#6366f1;font-weight:600;">Opna &#8594;</div>
     </div>
     -->
+
+    <div onclick="showTab('yfirdaginn')" style="background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:18px 20px;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='rgba(99,102,241,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)'">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="font-size:20px;">&#128205;</span>
+        <span style="font-size:13px;font-weight:700;color:#f8fafc;">Áhrif Borgarlínu</span>
+        <span style="margin-left:auto;font-size:10px;color:#6366f1;font-weight:600;background:#1e1b4b;padding:2px 8px;border-radius:99px;">Aðal</span>
+      </div>
+      <div style="font-size:11px;color:#64748b;line-height:1.6;">
+        Umferð á Miklabraut yfir daginn (06&ndash;20) með og án BL. Sjá hvenær BL hefur áhrif og hvenær lítil &mdash; og hversu mikil áhrif eftir vagnnýtingu.
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:#6366f1;font-weight:600;">Opna &#8594;</div>
+    </div>
 
     <div onclick="showTab('calc')" style="background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:18px 20px;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='rgba(99,102,241,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)'">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
@@ -1772,7 +1784,7 @@ function calcRoads() {
 // Tabs that have sliders (FAB shown on mobile only for these)
 var TABS_WITH_SLIDERS = { peak: true, calc: true };
 var TAB_LABELS = {
-  home: 'Yfirlit', peak: 'Annatímar & tafar', yfirdaginn: 'Yfir daginn', calc: 'Reiknivél',
+  home: 'Yfirlit', peak: 'Annatímar & tafar', yfirdaginn: 'Áhrif Borgarlínu', calc: 'Reiknivél',
   straeto: 'Strætó grunnlína', roads: 'Háannatími', munis: 'Sveitarfélögin 7'
 };
 
