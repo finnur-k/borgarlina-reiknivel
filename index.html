@@ -486,11 +486,8 @@
     display: flex; align-items: center; gap: 6px;
   }
   #panel-yfirdaginn .col-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-  @media (max-width: 480px) {
-    #panel-yfirdaginn .stats-cols { grid-template-columns: 1fr; gap: 16px; }
-    #panel-yfirdaginn .stats-col:first-child { border-right: none; border-bottom: 1px solid var(--yd-border); padding: 0 0 16px; }
-    #panel-yfirdaginn .stats-col:last-child { padding-left: 0; }
-  }
+  /* Note: mobile-specific overrides below at ≤640px supersede the
+     480px-only stats-cols stacking that was here previously. */
   #panel-yfirdaginn .yd-time-display {
     font-family: var(--yd-font-mono); font-size: 2rem; font-weight: 700;
     letter-spacing: -0.02em; color: var(--yd-text); line-height: 1;
@@ -529,20 +526,110 @@
     width: 100%;
     flex: none;
   }
-  @media (max-width: 768px) {
-    /* On phones: let the layout flow naturally, no fixed heights */
+  /* ───────────────────────────────────────────────────────────────
+     MOBILE LAYOUT (≤640px) — single-column with reordered sections:
+     chart card → info card → stats card → mini chart card.
+     Reorder achieved with display: contents on .yd-info-col so its
+     children (info-card + mini-chart) lift up to flex level, then
+     CSS order positions them around the stats card.
+     ─────────────────────────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    /* Convert grid → flex column so order: works across siblings */
     #panel-yfirdaginn .yd-stats-info-row {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      grid-template-columns: none;
+      grid-template-rows: none;
     }
-    #panel-yfirdaginn .yd-stats-info-row > .yd-card,
-    #panel-yfirdaginn .yd-info-col {
+    /* Stats card moves between info-card (above) and mini-chart (below) */
+    #panel-yfirdaginn .yd-stats-info-row > .yd-card {
+      order: 2;
       height: auto;
     }
-    #panel-yfirdaginn .info-card {
-      flex: none;
-      overflow: visible;
+    /* Lift .yd-info-col children to flex children of the row */
+    #panel-yfirdaginn .yd-info-col {
+      display: contents;
     }
+    #panel-yfirdaginn .info-card {
+      order: 1;
+      flex: none;
+      min-height: 0;
+      overflow: visible;
+      font-size: 0.8125rem;
+      padding: 12px 14px;
+    }
+    /* Mini-chart card last */
+    #panel-yfirdaginn .yd-info-col > .yd-card {
+      order: 3;
+    }
+
+    /* Stats sub-cols become standalone sub-cards on mobile (instead of
+       desktop split with vertical divider) */
+    #panel-yfirdaginn .stats-cols {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    #panel-yfirdaginn .stats-col,
+    #panel-yfirdaginn .stats-col:first-child,
+    #panel-yfirdaginn .stats-col:last-child {
+      background: #111827;
+      border: 1px solid #2d3d52;
+      border-right: none;
+      border-bottom: none;
+      border-radius: 10px;
+      padding: 12px;
+      gap: 10px;
+    }
+    /* Tighten typography in stat sub-cards on phones */
+    #panel-yfirdaginn .stat-value { font-size: 1.25rem; }
+    #panel-yfirdaginn .stat-value.sm { font-size: 0.9375rem; }
+    #panel-yfirdaginn .los-badge { width: 30px; height: 30px; font-size: 1rem; border-radius: 7px; }
+
+    /* Stack Bílar/klst and V/C hlutfall vertically inside sub-cards
+       (not side-by-side) — matches mobile design and prevents cramped fit */
+    #panel-yfirdaginn .stats-col .stats-grid {
+      grid-template-columns: 1fr !important;
+      gap: 8px;
+    }
+
+    /* Thicker chart strokes on mobile so lines remain visually clear despite
+       the chart's wide viewBox (900) being shrunk into a narrow card */
+    #panel-yfirdaginn #mainChart polyline {
+      stroke-width: 5 !important;
+    }
+    #panel-yfirdaginn #mainChart line[stroke-dasharray] {
+      stroke-width: 2.5 !important;
+    }
+    #panel-yfirdaginn #mainChart circle {
+      r: 8 !important;
+      stroke-width: 4 !important;
+    }
+
+    /* Impact strip: 3 equal columns with vertical dividers (per design) */
+    #panel-yfirdaginn .yd-impact-strip {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0 !important;
+      flex-wrap: nowrap !important;
+      margin-top: 14px !important;
+      padding-top: 12px !important;
+    }
+    #panel-yfirdaginn .yd-impact-strip > .stat-cell {
+      padding: 0 8px;
+      gap: 3px;
+    }
+    #panel-yfirdaginn .yd-impact-strip > .stat-cell:first-child { padding-left: 0; }
+    #panel-yfirdaginn .yd-impact-strip > .stat-cell + .stat-cell {
+      border-left: 1px solid var(--yd-border);
+    }
+    #panel-yfirdaginn .yd-impact-strip .stat-label { font-size: 0.5625rem; line-height: 1.3; }
+    #panel-yfirdaginn .yd-impact-strip > .stat-cell > div:last-child {
+      font-size: 0.9375rem !important;
+    }
+
+    /* Time hero on mobile is more compact */
+    #panel-yfirdaginn .yd-time-display { font-size: 1.75rem; }
   }
 </style>
 </head>
@@ -1045,7 +1132,7 @@
       </div>
 
       <!-- BL impact strip -->
-      <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--yd-border); display:flex; gap: 24px; flex-wrap: wrap;">
+      <div class="yd-impact-strip" style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--yd-border); display:flex; gap: 24px; flex-wrap: wrap;">
         <div class="stat-cell">
           <div class="stat-label">BL farþegar þessa klst</div>
           <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-accent);" id="dispPax">875</div>
