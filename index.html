@@ -966,27 +966,40 @@
   <details class="info-box">
     <summary>&#128270; Hvernig er þetta reiknað?</summary>
     <div class="info-body">
-      <p><strong>Útgangspunktur — bílar á klst. án BL:</strong> Lykilteljarar Vegagerðarinnar á stöð 49-01 (Vesturlandsvegur ofan Ártúnsbrekku) gefa ÁDU 64.700 (báðar áttir, 2025). Klukkustundardreifing virkra daga 2024 er notuð til að deila daginn niður (08:00–09:00 = 7,3% af ÁDU, 16:00–17:00 = 9,5%, o.s.frv.). Tölurnar eru deildar með 2 til að fá flæði í eina átt.</p>
+      <h4 style="font-size:13px;font-weight:700;color:#e2e8f0;margin:0 0 6px;">Útgangspunktur — bílar á klst. án Borgarlínu</h4>
+      <p style="margin-bottom:14px;">Byggt á gögnum Vegagerðarinnar frá talningarstöð 49-01 (Vesturlandsvegur ofan Ártúnsbrekku). Áætlaður ÁDU fyrir 2025 er <strong>64.700 bílar</strong>. Klukkustundardreifing virkra daga (2024) er notuð til að reikna umferðarflæði á hverjum tíma (t.d. 08:00–09:00 er 7,3% af ÁDU). Tölunum er deilt með 2 til að fá flæði í eina átt.</p>
 
-      <p><strong>Áhrif Borgarlínu — bílar fjarlægðir á klst:</strong></p>
-      <p><code style="background:#0f172a;padding:4px 10px;border-radius:4px;font-size:13px;display:inline-block;margin:4px 0;">bílar_fjarlægðir = 7 vagnar × 125 farþegar × nýting / 1,2 farþegar/bíl</code></p>
-      <ul style="margin: 6px 0 8px 20px; line-height: 1.6;">
-        <li><strong>7 vagnar/klst</strong> báðar leiðir (Phase 1, ~8 mín. fresti) — Frumdragaskýrsla Borgarlínu 2021</li>
-        <li><strong>125 farþegar/vagn</strong> hámark — Frumdragaskýrsla 2021</li>
-        <li><strong>1,2 farþegar/bíl</strong> meðaltal — Samgöngustofa ferðavenjukönnun</li>
-        <li><strong>Nýting</strong> breytist yfir daginn (sjá graf neðst): topp 95% á annatíma, ~50% á miðdegi, ~30% á jaðartíma. Notandi getur stillt topp-nýtingu með slider.</li>
+      <h4 style="font-size:13px;font-weight:700;color:#e2e8f0;margin:0 0 6px;">Áhrif Borgarlínu — fækkun bíla á klst.</h4>
+      <p style="margin-bottom:6px;">Útreikningur á því hve mörgum bílum hver vagn kemur í staðinn fyrir:</p>
+      <p style="margin-bottom:6px;"><code style="background:#0f172a;padding:6px 12px;border-radius:4px;font-size:13px;display:inline-block;">bílar_fjarlægðir = 7 vagnar × 125 farþegar × nýting / 1,2 farþegar/bíl</code></p>
+      <ul style="margin:6px 0 14px 20px;line-height:1.6;">
+        <li><strong>7 vagnar/klst:</strong> Tíðni á háannatíma (Phase 1, ~8 mín. fresti) skv. Frumdragaskýrslu 2021.</li>
+        <li><strong>125 farþegar/vagn:</strong> Hámarksgeta vagns.</li>
+        <li><strong>1,2 farþegar/bíl:</strong> Meðalfjöldi í fólksbíl skv. ferðavenjukönnun Samgöngustofu.</li>
+        <li><strong>Nýting:</strong> Sveiflast yfir daginn (sjá graf neðst): topp ~95% á annatíma, ~50% á miðdegi, ~30% á jaðartíma. Notandi getur stillt topp-nýtingu með sleða.</li>
       </ul>
 
-      <p><strong>V/C hlutfall og þjónustustig (LOS):</strong> Bílar/klst deilt með afkastagetu (3 akreinar × 900 bílar/akrein = 2.700). LOS-flokkun fylgir HCM 6 (Highway Capacity Manual): A ≤ 0,35 · B ≤ 0,54 · C ≤ 0,77 · D ≤ 0,93 · E ≤ 1,00 · F > 1,00.</p>
+      <h4 style="font-size:13px;font-weight:700;color:#e2e8f0;margin:0 0 6px;">V/C hlutfall og þjónustustig (LOS)</h4>
+      <p style="margin-bottom:6px;">V/C (Volume/Capacity) er fjöldi bíla deilt með afkastagetu vegarins. Miðað er við <strong>3 akreinar með 900 bíla afköst hver (samtals 2.700 bílar/klst)</strong>. LOS-flokkun fylgir HCM 6 staðlinum:</p>
+      <ul style="margin:6px 0 14px 20px;line-height:1.6;">
+        <li><strong>LOS A</strong> (V/C ≤ 0,35): Frjálst flæði.</li>
+        <li><strong>LOS B</strong> (V/C ≤ 0,54): Stöðugt flæði.</li>
+        <li><strong>LOS C</strong> (V/C ≤ 0,77): Gott flæði.</li>
+        <li><strong>LOS D</strong> (V/C ≤ 0,93): Nálægt óstöðugleika.</li>
+        <li><strong>LOS E</strong> (V/C ≤ 1,00): Við þolmörk.</li>
+        <li><strong>LOS F</strong> (V/C > 1,00): Ofkeyrsla og tafir.</li>
+      </ul>
 
-      <p><strong>Ferðatími:</strong> BPR-formúla (Bureau of Public Roads): <code style="background:#0f172a;padding:2px 6px;border-radius:3px;">t = 20 mín × (1 + 0,15 × (V/C)⁴)</code>. Frjálsakstur 20 mín gildir um Miklabraut frá Mosfellsbæ að miðborg við 50 km/klst.</p>
+      <h4 style="font-size:13px;font-weight:700;color:#e2e8f0;margin:0 0 6px;">Ferðatími</h4>
+      <p style="margin-bottom:4px;">Reiknaður með BPR-formúlu (Bureau of Public Roads): <code style="background:#0f172a;padding:4px 8px;border-radius:3px;font-size:13px;">t = 20 mín × (1 + 0,15 × (V/C)⁴)</code></p>
+      <p style="margin-bottom:14px;font-style:italic;color:#94a3b8;font-size:12px;">Frjálst flæði (20 mín) miðast við Miklabraut frá Mosfellsbæ að miðborg á 50 km/klst.</p>
 
-      <p><strong>Forsendur og fyrirvarar:</strong></p>
-      <ul style="margin: 6px 0 0 20px; line-height: 1.6;">
+      <h4 style="font-size:13px;font-weight:700;color:#e2e8f0;margin:0 0 6px;">Forsendur og fyrirvarar</h4>
+      <ul style="margin:6px 0 10px 20px;line-height:1.6;">
         <li>Líkan reiknar <em>aðeins eina átt</em> á Miklabraut — skoðar ekki gagnstæða átt eða aðrar leiðir.</li>
         <li>Vagnnýtingar-ferillinn er <em>mat byggt á alþjóðlegum BRT-rannsóknum</em> — ekki bein íslensk mæling. Notandi getur stillt topp-nýtingu til að skoða bjartsýnar/varfærnar sviðsmyndir.</li>
         <li>Klukkustundardreifing 2024 er notuð beint, óháð valdri spá á öðrum flipa. Líkanið gerir ekki ráð fyrir induced demand eða breytingum á dreifingu yfir tíma.</li>
-        <li>BPR formúlan einfaldar — tekur ekki tillit til umferðarljósa, gatnamóta, né dreifingar bíla milli leiða.</li>
+        <li>BPR-formúlan einfaldar — tekur ekki tillit til umferðarljósa, gatnamóta, né dreifingar bíla milli leiða.</li>
       </ul>
 
       <p style="font-size:11px;color:#64748b;margin-top:10px;">Heimildir: Vegagerðin lykilteljarar HBS 2026 PDF · Frumdragaskýrsla Borgarlínu 2021 · Samgöngustofa · HCM 6 · Bureau of Public Roads (1964).</p>
