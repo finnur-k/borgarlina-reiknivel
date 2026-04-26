@@ -323,9 +323,14 @@
     --yd-faint:     #475569;
     --yd-font-mono: 'JetBrains Mono', monospace;
   }
+  /* Layout (no display rule — base .panel { display:none } controls visibility).
+     When .active is added by tab switcher, the rule below applies display: flex. */
   #panel-yfirdaginn.panel-yfirdaginn {
     max-width: 1100px; margin: 0 auto;
-    display: flex; flex-direction: column; gap: 20px;
+    flex-direction: column; gap: 20px;
+  }
+  #panel-yfirdaginn.panel.active {
+    display: flex;
   }
   #panel-yfirdaginn .panel-header {
     display: flex; align-items: baseline; justify-content: space-between;
@@ -537,7 +542,9 @@
   </div>
   <nav class="header-nav">
     <button class="tab active" onclick="showTab('home')">Yfirlit</button>
+    <!-- Annatímar tab kommentað út 26-04-2026 — má virkja aftur ef við viljum nota.
     <button class="tab" onclick="showTab('peak')">Annatímar &amp; tafar</button>
+    -->
     <button class="tab" onclick="showTab('yfirdaginn')">Yfir daginn</button>
     <button class="tab" onclick="showTab('calc')">Reiknivél</button>
     <button class="tab" onclick="showTab('straeto')">Strætó grunnlína</button>
@@ -553,7 +560,9 @@
     <div class="mob-tab-picker-backdrop" id="tabPickerBackdrop" onclick="closeTabPicker()"></div>
     <div class="mob-tab-picker" id="tabPicker">
       <div class="mob-tab-picker-item active" onclick="showTab('home');closeTabPicker()"><svg id="chk-home" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6l3 3 5-5"/></svg>Yfirlit</div>
+      <!-- Annatímar mobile picker kommentað út 26-04-2026 — sjá samsvarandi tab-button hér að ofan.
       <div class="mob-tab-picker-item" onclick="showTab('peak');closeTabPicker()"><svg id="chk-peak" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Annatímar &amp; tafar</div>
+      -->
       <div class="mob-tab-picker-item" onclick="showTab('yfirdaginn');closeTabPicker()"><svg id="chk-yfirdaginn" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Yfir daginn</div>
       <div class="mob-tab-picker-item" onclick="showTab('calc');closeTabPicker()"><svg id="chk-calc" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Reiknivél</div>
       <div class="mob-tab-picker-item" onclick="showTab('straeto');closeTabPicker()"><svg id="chk-straeto" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="visibility:hidden"><path d="M2 6l3 3 5-5"/></svg>Strætó grunnlína</div>
@@ -616,6 +625,7 @@
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
 
+    <!-- Annatímar Yfirlit-kort kommentað út 26-04-2026 — vísaði í tab sem var líka kommentað út.
     <div onclick="showTab('peak')" style="background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:18px 20px;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='rgba(99,102,241,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)'">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
         <span style="font-size:20px;">&#128680;</span>
@@ -627,6 +637,7 @@
       </div>
       <div style="margin-top:10px;font-size:11px;color:#6366f1;font-weight:600;">Opna &#8594;</div>
     </div>
+    -->
 
     <div onclick="showTab('calc')" style="background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:18px 20px;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='rgba(99,102,241,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)'">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
