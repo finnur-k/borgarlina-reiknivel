@@ -817,8 +817,8 @@
     <div class="section-row">
       <span class="section-title">Bílar á klukkustund · ein átt</span>
       <div class="local-control">
-        <span class="local-control-label">Hámarks vagnnýting:</span>
-        <input type="range" class="util-slider" id="utilSlider" min="50" max="100" step="5" value="95" aria-label="Hámarks vagnnýting Borgarlínu">
+        <span class="local-control-label" title="Topp-nýting Borgarlínunnar á háannatíma. Nýting fellur sjálfkrafa á öðrum tímum dagsins (sjá graf hér að neðan).">Topp-nýting BL á annatíma:</span>
+        <input type="range" class="util-slider" id="utilSlider" min="50" max="100" step="5" value="95" aria-label="Topp-nýting Borgarlínu á annatíma — fellur á öðrum tímum">
         <span class="local-control-val" id="utilVal">95%</span>
       </div>
     </div>
@@ -860,6 +860,11 @@
         <div class="yd-legend-dash" style="border-color:#f87171; opacity:0.7"></div>
         <span>LOS F mörk (V/C 1.00)</span>
       </div>
+    </div>
+
+    <!-- Utilization curve explainer -->
+    <div style="margin-top: 14px; padding: 10px 12px; background: rgba(99,102,241,0.08); border-left: 2px solid var(--yd-accent); border-radius: 4px; font-size: 0.75rem; line-height: 1.5; color: var(--yd-muted);">
+      <strong style="color: var(--yd-text);">Topp-nýting</strong> á við annatíma (kl. 08 og 16). Nýting fellur sjálfkrafa á öðrum tímum: ~50% á miðdegi, ~30% snemma morguns og á kvöldin. Sjá nákvæmt mynstur í <strong style="color: var(--yd-text);">Vagnnýting yfir daginn</strong> grafinu til hliðar.
     </div>
 
     <!-- Time slider -->
@@ -960,7 +965,7 @@
           <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-accent);" id="dispRemoved">729</div>
         </div>
         <div class="stat-cell">
-          <div class="stat-label">Vagnnýting</div>
+          <div class="stat-label">Vagnnýting þessa klst.</div>
           <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-accent);" id="dispUtil">100%</div>
         </div>
       </div>
@@ -973,7 +978,7 @@
       <!-- Mini chart card -->
       <div class="yd-card" style="padding: 16px 20px;">
         <div class="mini-label">
-          Vagnnýting Borgarlínu
+          Vagnnýting yfir daginn
           <span class="mini-label-estimate">mat</span>
         </div>
         <div class="mini-chart-wrap">
