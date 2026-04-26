@@ -370,6 +370,11 @@
     background: var(--yd-border); border-radius: 2px;
     outline: none; cursor: pointer;
   }
+  @keyframes yd-thumb-pulse {
+    0%   { box-shadow: 0 0 0 3px rgba(99,102,241,0.30); }
+    50%  { box-shadow: 0 0 0 11px rgba(99,102,241,0.0); }
+    100% { box-shadow: 0 0 0 3px rgba(99,102,241,0.30); }
+  }
   #panel-yfirdaginn input[type=range].time-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 18px; height: 18px; border-radius: 50%;
@@ -377,6 +382,13 @@
     border: 2px solid #0f172a;
     box-shadow: 0 0 0 3px rgba(99,102,241,0.25);
     cursor: grab;
+    animation: yd-thumb-pulse 0.85s ease-in-out 8;
+    animation-delay: 0.6s;
+    animation-fill-mode: backwards;
+  }
+  /* Cancel pulse immediately on first interaction */
+  #panel-yfirdaginn input[type=range].time-slider.yd-touched::-webkit-slider-thumb {
+    animation: none;
   }
   #panel-yfirdaginn input[type=range].time-slider:active::-webkit-slider-thumb { cursor: grabbing; }
   #panel-yfirdaginn input[type=range].time-slider::-moz-range-thumb {
@@ -2334,6 +2346,10 @@ window.addEventListener('DOMContentLoaded', function() {
     const ts = document.getElementById('timeSlider');
     const us = document.getElementById('utilSlider');
     if (!ts || !us) return;
+    // Cancel the intro pulse animation on first interaction
+    ts.addEventListener('pointerdown', function() {
+      this.classList.add('yd-touched');
+    }, { once: true });
     ts.addEventListener('input', function() {
       currentIdx = parseInt(this.value);
       renderYfirDaginn();
