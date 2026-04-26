@@ -499,8 +499,16 @@
     font-size: 0.75rem; color: var(--yd-muted); margin-top: 4px;
   }
   #panel-yfirdaginn .yd-stats-info-row {
-    display: grid; grid-template-columns: 1fr 320px; gap: 16px; align-items: start;
+    display: grid; grid-template-columns: 1fr 320px; gap: 16px; align-items: stretch;
   }
+  /* Force the left stats card to fill the row height (= match right column) */
+  #panel-yfirdaginn .yd-stats-info-row > .yd-card { height: 100%; }
+  /* Right column flex container — fills row height, stacks info-card + mini-chart */
+  #panel-yfirdaginn .yd-info-col {
+    display: flex; flex-direction: column; gap: 12px; height: 100%;
+  }
+  /* Anchor info-card height so it doesn't resize as time-slider text changes */
+  #panel-yfirdaginn .info-card { min-height: 150px; }
   /* Slider that aligns horizontally with the chart's X-axis.
      Chart viewBox: x=64 → x=868 of 900 width (= 7.11% left, 3.56% right). */
   #panel-yfirdaginn .yd-time-slider-aligned {
@@ -513,6 +521,8 @@
   }
   @media (max-width: 768px) {
     #panel-yfirdaginn .yd-stats-info-row { grid-template-columns: 1fr; }
+    #panel-yfirdaginn .info-card { min-height: 0; }
+    #panel-yfirdaginn .yd-stats-info-row > .yd-card { height: auto; }
   }
 </style>
 </head>
@@ -1020,7 +1030,7 @@
     </div>
 
     <!-- Info card column -->
-    <div style="display: flex; flex-direction: column; gap: 12px;">
+    <div class="yd-info-col">
       <div class="info-card" id="infoCard"></div>
 
       <!-- Mini chart card -->
