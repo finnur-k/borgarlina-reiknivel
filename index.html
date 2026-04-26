@@ -498,18 +498,17 @@
   #panel-yfirdaginn .yd-time-period {
     font-size: 0.75rem; color: var(--yd-muted); margin-top: 4px;
   }
-  /* Fixed grid-row height locks the entire stats+info row at 380px.
-     Stats card on left (~340px natural content) fits with a small buffer.
-     Right column (info-card + mini-chart) is also locked to 380px and
-     its info-card flexes to fill remaining space — so info text never
-     causes the row to resize as the user drags the time slider. */
+  /* Fixed grid-row height — 350px gives:
+     - Stats card on left (~315px natural content) ~35px breathing room
+     - Info-card right of mini-chart (~146px) gets 350-12-146 = ~192px,
+       enough for all info-text variants without triggering a scrollbar */
   #panel-yfirdaginn .yd-stats-info-row {
     display: grid;
     grid-template-columns: 1fr 320px;
-    grid-template-rows: 380px;
+    grid-template-rows: 350px;
     gap: 16px;
   }
-  #panel-yfirdaginn .yd-stats-info-row > .yd-card { height: 100%; overflow: hidden; }
+  #panel-yfirdaginn .yd-stats-info-row > .yd-card { height: 100%; }
   #panel-yfirdaginn .yd-info-col {
     display: flex; flex-direction: column; gap: 12px; height: 100%;
   }
