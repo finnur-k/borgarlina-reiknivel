@@ -743,8 +743,8 @@
         <div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.4;">Bílar sem BL kemur í stað</div>
       </div>
       <div style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:8px;padding:20px 22px;text-align:center;">
-        <div style="font-size:24px;font-weight:900;color:#818cf8;" id="home-peak-cars">~830</div>
-        <div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.4;">Bílar/klst úr annatímaumferð</div>
+        <div style="font-size:24px;font-weight:900;color:#818cf8;" id="home-peak-cars">2.000</div>
+        <div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.4;">Farþegar/klst afkastageta<br>(Leiðir A+B, ein átt)</div>
       </div>
     </div>
   </div>
@@ -1771,6 +1771,7 @@ function calc() {
   if((el=document.getElementById('home-cars-today'))) el.textContent = fmt(baseCars);
   if((el=document.getElementById('home-cars-2031'))) el.textContent = blData ? '+ '+fmt(blData.carsNobl-baseCars) : '+35.000';
   if((el=document.getElementById('home-cars-bl')))   el.textContent = blData ? '− '+fmt(blData.saved) : '−15.000';
+  if((el=document.getElementById('home-peak-cars'))) el.textContent = fmt(blPaxPerHour);
 
   d3RefreshAll();
 }
