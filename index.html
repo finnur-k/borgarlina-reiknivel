@@ -530,6 +530,26 @@
     width: 100%;
     flex: none;
   }
+  @keyframes yd-hint-bounce {
+    0%, 100% { transform: translateX(0);    opacity: 0.7; }
+    30%       { transform: translateX(-5px); opacity: 1;   }
+    70%       { transform: translateX( 5px); opacity: 1;   }
+  }
+  #panel-yfirdaginn .yd-drag-hint {
+    text-align: center;
+    font-family: var(--yd-font-mono);
+    font-size: 0.625rem;
+    color: var(--yd-accent);
+    letter-spacing: 0.08em;
+    margin-top: 6px;
+    animation: yd-hint-bounce 1.4s ease-in-out 6;
+    animation-delay: 0.8s;
+    animation-fill-mode: both;
+    pointer-events: none;
+    user-select: none;
+    transition: opacity 0.4s;
+  }
+  #panel-yfirdaginn .yd-drag-hint.yd-hint-done { opacity: 0; }
   /* ───────────────────────────────────────────────────────────────
      MOBILE LAYOUT (≤640px) — single-column with reordered sections:
      chart card → info card → stats card → mini chart card.
@@ -1071,6 +1091,7 @@
       <input type="range" class="time-slider" id="timeSlider"
              min="0" max="13" step="1" value="2"
              aria-label="Veldu klukkustund dagsins (06:00 til 19:00)">
+      <div class="yd-drag-hint" id="ydDragHint">← Dragðu →</div>
     </div>
   </div>
 
@@ -2338,6 +2359,11 @@ window.addEventListener('DOMContentLoaded', function() {
       currentIdx = parseInt(this.value);
       renderYfirDaginn();
     });
+    // Fade out drag hint on first interaction
+    ts.addEventListener('pointerdown', function() {
+      var hint = document.getElementById('ydDragHint');
+      if (hint) hint.classList.add('yd-hint-done');
+    }, { once: true });
     us.addEventListener('input', function() {
       peakScale = parseInt(this.value) / 100;
       document.getElementById('utilVal').textContent = this.value + '%';
