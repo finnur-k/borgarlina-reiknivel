@@ -348,6 +348,10 @@
     border-radius: 12px;
     padding: 20px 24px;
   }
+  #panel-yfirdaginn .yd-stat-grid {
+    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto;
+    gap: 14px 12px; margin-top: 4px;
+  }
   #panel-yfirdaginn .chart-wrap { position: relative; width: 100%; }
   #panel-yfirdaginn .chart-wrap svg {
     width: 100%; height: auto; display: block; overflow: visible;
@@ -586,11 +590,10 @@
     #panel-yfirdaginn .stat-value.sm { font-size: 0.9375rem; }
     #panel-yfirdaginn .los-badge { width: 30px; height: 30px; font-size: 1rem; border-radius: 7px; }
 
-    /* Stack Bílar/klst and V/C hlutfall vertically inside sub-cards
-       (not side-by-side) — matches mobile design and prevents cramped fit */
-    #panel-yfirdaginn .stats-col .stats-grid {
+    /* Stack the 2×2 stat grid to a single column inside mobile sub-cards */
+    #panel-yfirdaginn .yd-stat-grid {
       grid-template-columns: 1fr !important;
-      gap: 8px;
+      gap: 8px !important;
     }
 
     /* Thicker chart strokes on mobile so lines remain visually clear despite
@@ -606,18 +609,20 @@
       stroke-width: 4 !important;
     }
 
-    /* Impact strip: 3 equal columns with vertical dividers (per design) */
+    /* Impact strip: 3 equal columns on mobile (Afkastageta hidden) */
     #panel-yfirdaginn .yd-impact-strip {
       display: grid !important;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr !important;
       gap: 0 !important;
-      flex-wrap: nowrap !important;
       margin-top: 14px !important;
       padding-top: 12px !important;
     }
+    /* Hide the static Afkastageta cell — not enough room on mobile */
+    #panel-yfirdaginn .yd-impact-strip > .stat-cell:last-child { display: none; }
     #panel-yfirdaginn .yd-impact-strip > .stat-cell {
       padding: 0 8px;
       gap: 3px;
+      border-right: none !important; /* strip inline border-right; use border-left instead */
     }
     #panel-yfirdaginn .yd-impact-strip > .stat-cell:first-child { padding-left: 0; }
     #panel-yfirdaginn .yd-impact-strip > .stat-cell + .stat-cell {
@@ -1074,26 +1079,24 @@
 
     <!-- Stats card -->
     <div class="yd-card">
-      <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
-        <div>
-          <div class="yd-time-display" id="dispTime">08:00</div>
-          <div class="yd-time-period" id="dispPeriod">Morgunálagstími</div>
-        </div>
-        <div style="text-align:right;">
-          <div class="stat-label">Afkastageta</div>
-          <div style="font-family:var(--yd-font-mono); font-size:0.875rem; color:var(--yd-muted);">2.700 bílar/klst</div>
-          <div style="font-size:0.6875rem; color:var(--yd-faint);">3 akreinar × 900</div>
-        </div>
+
+      <!-- Time header row -->
+      <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:18px;">
+        <div class="yd-time-display" id="dispTime">08:00</div>
+        <div class="yd-time-period" id="dispPeriod">Morgunálagstími</div>
       </div>
 
+      <!-- Two columns -->
       <div class="stats-cols">
+
         <!-- Without BL -->
         <div class="stats-col">
           <div class="col-header">
             <span class="col-dot" style="background:#f87171"></span>
             <span style="color:#f87171">Án Borgarlínu</span>
           </div>
-          <div class="stats-grid" style="grid-template-columns: 1fr 1fr;">
+          <!-- Uniform 2×2 grid: cars | V/C  /  LOS | ferðatími -->
+          <div class="yd-stat-grid">
             <div class="stat-cell">
               <div class="stat-label">Bílar/klst</div>
               <div class="stat-value" id="dispCarsNo" style="color:#f87171">2.362</div>
@@ -1102,15 +1105,13 @@
               <div class="stat-label">V/C hlutfall</div>
               <div class="stat-value sm" id="dispVCNo">0.88</div>
             </div>
-          </div>
-          <div style="display: flex; align-items: center; gap: 12px;">
             <div class="stat-cell">
-              <div class="stat-label">LOS</div>
-              <div class="los-badge" id="dispLOSNoB">D</div>
+              <div class="stat-label">Þjónustuþrep</div>
+              <div class="los-badge" id="dispLOSNoB" style="margin-top:2px;">D</div>
             </div>
             <div class="stat-cell">
               <div class="stat-label">Ferðatími</div>
-              <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600;" id="dispTravelNo">24 mín</div>
+              <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-text); margin-top:2px;" id="dispTravelNo">24 mín</div>
             </div>
           </div>
         </div>
@@ -1121,7 +1122,7 @@
             <span class="col-dot" style="background:#34d399"></span>
             <span style="color:#34d399">Með Borgarlínu</span>
           </div>
-          <div class="stats-grid" style="grid-template-columns: 1fr 1fr;">
+          <div class="yd-stat-grid">
             <div class="stat-cell">
               <div class="stat-label">Bílar/klst</div>
               <div class="stat-value" id="dispCarsWith" style="color:#34d399">1.633</div>
@@ -1130,33 +1131,37 @@
               <div class="stat-label">V/C hlutfall</div>
               <div class="stat-value sm" id="dispVCWith">0.61</div>
             </div>
-          </div>
-          <div style="display: flex; align-items: center; gap: 12px;">
             <div class="stat-cell">
-              <div class="stat-label">LOS</div>
-              <div class="los-badge" id="dispLOSWithB">C</div>
+              <div class="stat-label">Þjónustuþrep</div>
+              <div class="los-badge" id="dispLOSWithB" style="margin-top:2px;">C</div>
             </div>
             <div class="stat-cell">
               <div class="stat-label">Ferðatími</div>
-              <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600;" id="dispTravelWith">21 mín</div>
+              <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-text); margin-top:2px;" id="dispTravelWith">21 mín</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- BL impact strip -->
-      <div class="yd-impact-strip" style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--yd-border); display:flex; gap: 24px; flex-wrap: wrap;">
-        <div class="stat-cell">
-          <div class="stat-label">BL farþegar þessa klst</div>
-          <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-accent);" id="dispPax">875</div>
+      <!-- BL impact strip — 4-column grid -->
+      <div class="yd-impact-strip" style="margin-top:20px; padding-top:16px; border-top:1px solid var(--yd-border);
+                  display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:0;">
+        <div class="stat-cell" style="padding-right:16px; border-right:1px solid var(--yd-border);">
+          <div class="stat-label">BL farþegar</div>
+          <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-accent); margin-top:3px;" id="dispPax">875</div>
         </div>
-        <div class="stat-cell">
+        <div class="stat-cell" style="padding:0 16px; border-right:1px solid var(--yd-border);">
           <div class="stat-label">Bílar fjarlægðir</div>
-          <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-accent);" id="dispRemoved">729</div>
+          <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-accent); margin-top:3px;" id="dispRemoved">729</div>
         </div>
-        <div class="stat-cell">
-          <div class="stat-label">Vagnnýting þessa klst.</div>
-          <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-accent);" id="dispUtil">100%</div>
+        <div class="stat-cell" style="padding:0 16px; border-right:1px solid var(--yd-border);">
+          <div class="stat-label">Vagnnýting</div>
+          <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-accent); margin-top:3px;" id="dispUtil">100%</div>
+        </div>
+        <div class="stat-cell" style="padding-left:16px;">
+          <div class="stat-label">Afkastageta</div>
+          <div style="font-family:var(--yd-font-mono); font-size:0.875rem; font-weight:500; color:var(--yd-muted); margin-top:3px;">2.700 / klst</div>
+          <div style="font-size:0.625rem; color:var(--yd-faint); margin-top:2px;">3 akreinar × 900</div>
         </div>
       </div>
     </div>
