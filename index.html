@@ -269,7 +269,7 @@
   .d3-badge.low { background:rgba(100,116,139,0.15); color:#64748b; border-color:rgba(100,116,139,0.2); }
   .d3-badge.high { background:rgba(99,102,241,0.25); color:#c7d2fe; border-color:rgba(99,102,241,0.4); }
   .d3-range-wrap { position:relative; height:14px; display:flex; align-items:center; }
-  .d3-range { -webkit-appearance:none; appearance:none; width:100%; height:2px; border-radius:1px; outline:none; cursor:pointer; }
+  .d3-range { -webkit-appearance:none; appearance:none; width:100%; height:2px; border-radius:1px; outline:none; cursor:pointer; touch-action:none; }
   .d3-range::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:#0b1120; border:2px solid #6366f1; cursor:pointer; box-shadow:0 0 6px rgba(99,102,241,0.4); transition:border-color 0.1s, box-shadow 0.1s; }
   .d3-range:hover::-webkit-slider-thumb { border-color:#a5b4fc; box-shadow:0 0 10px rgba(99,102,241,0.6); }
   .d3-range::-moz-range-thumb { width:14px; height:14px; border-radius:50%; background:#0b1120; border:2px solid #6366f1; cursor:pointer; }
@@ -1525,10 +1525,16 @@ var DAILY_TRIPS_PER_CAR = 1.8; // ferðir á dag á bíl
 var BL_BUS_CAPACITY = 125;
 var BL_HEADWAY_MIN  = 7;
 var BL_ROUTES       = 2;   // Route A + Route B in Phase 1 corridor
+var blPaxPerHour    = 0;   // set by calcPeak(), read by calc()
 
 function fmt(n)    { return Math.round(n).toLocaleString('is-IS'); }
 function fmtM(n)   { return n.toFixed(1); }
 function fmtT(m)   { return Math.round(m) + ' mín'; }
+// Updates ALL elements with a given id (page panel + drawer clone) to avoid
+// Samsung Android getElementById skipping display:none elements.
+function updateBadge(id, text) {
+  document.querySelectorAll('#' + id).forEach(function(el) { el.textContent = text; });
+}
 
 function getPop(yr) {
   if (popSchedule[yr]) return popSchedule[yr];
@@ -1568,11 +1574,11 @@ function calcPeak() {
   var schoolPct  = parseInt(document.getElementById('schoolFactor').value);
   var lanes      = parseInt(document.getElementById('numLanes').value);
 
-  document.getElementById('peakYearVal').textContent    = yr;
-  document.getElementById('pkCarsNowVal').textContent   = carsNow;
-  document.getElementById('pkModalShiftVal').textContent= modalPct + '%';
-  document.getElementById('schoolFactorVal').textContent= '+' + schoolPct + '%';
-  document.getElementById('numLanesVal').textContent    = lanes;
+  updateBadge('peakYearVal',    yr);
+  updateBadge('pkCarsNowVal',   carsNow);
+  updateBadge('pkModalShiftVal',modalPct + '%');
+  updateBadge('schoolFactorVal','+' + schoolPct + '%');
+  updateBadge('numLanesVal',    lanes);
 
   document.getElementById('thYearGroup').textContent = 'Spá ' + yr;
   document.getElementById('thYear').textContent   = '\u00c1n BL';
@@ -1583,8 +1589,8 @@ function calcPeak() {
 
   var peakHrVol = parseInt(document.getElementById('peakHrVol').value);
   var FREE_FLOW_DYN = parseInt(document.getElementById('freeFlowMin').value);
-  document.getElementById('freeFlowMinVal').textContent = FREE_FLOW_DYN + ' mín';
-  document.getElementById('peakHrVolVal').textContent = peakHrVol.toLocaleString('is-IS');
+  updateBadge('freeFlowMinVal', FREE_FLOW_DYN + ' mín');
+  updateBadge('peakHrVolVal',   peakHrVol.toLocaleString('is-IS'));
 
   // Growth factor: peak hour volume grows proportionally with total car fleet
   var pop2025 = 249560;
@@ -1638,7 +1644,7 @@ function calcPeak() {
 
   // BL peak capacity (buses per hour each direction * passengers / avg occupancy converts to car-equivalents)
   var blBusesPerHour = Math.floor(60 / BL_HEADWAY_MIN) * BL_ROUTES;
-  var blPaxPerHour   = blBusesPerHour * BL_BUS_CAPACITY;
+  blPaxPerHour   = blBusesPerHour * BL_BUS_CAPACITY;
   var blCarEquiv     = Math.round(blPaxPerHour / 1.2); // avg 1.2 people/car
 
   // ── RENDER SCENARIO CARDS ──
@@ -1720,10 +1726,10 @@ function calc() {
   var modalShift = parseInt(document.getElementById('modalShift').value)/100;
   var blYear     = parseInt(document.getElementById('blYear').value);
 
-  document.getElementById('carsNowVal').textContent    = carsNow;
-  document.getElementById('carGrowthVal').textContent  = (carGrowth>=0?'+':'')+carGrowth+'/\u00e1ri';
-  document.getElementById('modalShiftVal').textContent = Math.round(modalShift*100)+'%';
-  document.getElementById('blYearVal').textContent     = blYear;
+  updateBadge('carsNowVal',    carsNow);
+  updateBadge('carGrowthVal',  (carGrowth>=0?'+':'')+carGrowth+'/\u00e1ri');
+  updateBadge('modalShiftVal', Math.round(modalShift*100)+'%');
+  updateBadge('blYearVal',     blYear);
 
   var basePop  = 249560;
   var baseCars = Math.round(basePop*carsNow/1000);
@@ -1958,7 +1964,7 @@ function showTab(name) {
         el.removeAttribute('oninput');
         el.addEventListener('input', function() {
           if (srcId) { var orig = document.getElementById(srcId); if (orig) orig.value = el.value; }
-          eval(fn);
+          try { eval(fn); } catch(e) { console.warn('Slider calc error:', e); }
           syncDrawerBadges();
         });
       });
@@ -2023,8 +2029,8 @@ function d3RefreshAll() {
     var val = +el.value;
     var pct = (val - c.min) / (c.max - c.min);
     el.style.background = 'linear-gradient(90deg,rgba(99,102,241,0.35) ' + (pct*100).toFixed(1) + '%,rgba(255,255,255,0.07) 0%)';
-    var badge = document.getElementById(c.id + 'Badge');
-    if (badge) badge.className = 'd3-badge' + (pct < 0.25 ? ' low' : pct > 0.75 ? ' high' : '');
+    var cls = 'd3-badge' + (pct < 0.25 ? ' low' : pct > 0.75 ? ' high' : '');
+    document.querySelectorAll('#' + c.id + 'Badge').forEach(function(b) { b.className = cls; });
   });
 }
 
@@ -2107,14 +2113,8 @@ function renderMunis() {
 function syncDrawerBadges() {
   var ds = document.getElementById('mob-drawer-sliders');
   if (!ds) return;
-  ds.querySelectorAll('span[id]').forEach(function(el) {
-    var orig = document.getElementById(el.id);
-    if (orig && orig !== el) el.textContent = orig.textContent;
-  });
-  ds.querySelectorAll('.d3-badge[id]').forEach(function(el) {
-    var orig = document.getElementById(el.id);
-    if (orig && orig !== el) el.className = orig.className;
-  });
+  // Badge text + classes are updated in all instances by updateBadge() and d3RefreshAll().
+  // Only track-fill backgrounds need syncing (set via inline style on the original slider).
   ds.querySelectorAll('input[type=range][data-src]').forEach(function(el) {
     var orig = document.getElementById(el.getAttribute('data-src'));
     if (orig) el.style.background = orig.style.background;
@@ -2124,14 +2124,14 @@ function syncDrawerBadges() {
 // ── INIT ──
 window.addEventListener('DOMContentLoaded', function() {
   if (!loadFromURL()) {
+    // Hide FAB first — default tab is 'home' which has no sliders
+    var fab = document.getElementById('fabForsendur');
+    if (fab) fab.style.display = 'none';
     calcPeak();
     calc();
     calcRoads();
     renderMunis();
     d3RefreshAll();
-    // Default tab is 'home' which has no sliders — hide FAB
-    var fab = document.getElementById('fabForsendur');
-    if (fab) fab.style.display = 'none';
   }
 });
 
