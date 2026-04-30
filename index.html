@@ -1927,6 +1927,17 @@ var TAB_LABELS = {
   home: 'Yfirlit', peak: 'Annatímar & tafar', yfirdaginn: 'Áhrif Borgarlínu', calc: 'Reiknivél',
   straeto: 'Strætó grunnlína', roads: 'Háannatími', munis: 'Sveitarfélögin 7'
 };
+var TAB_PATHS = {
+  home:       '/',
+  peak:       '/annatimar',
+  yfirdaginn: '/yfirdaginn',
+  calc:       '/reiknivel',
+  straeto:    '/straeto',
+  roads:      '/haannatimi',
+  munis:      '/sveitarfelogin'
+};
+var PATH_TO_TAB = {};
+Object.keys(TAB_PATHS).forEach(function(k) { PATH_TO_TAB[TAB_PATHS[k]] = k; });
 
 // ── TAB SWITCHER ──
 function showTab(name) {
@@ -2056,23 +2067,27 @@ function getActiveTab() {
 }
 
 function updateHash() {
+  var tabName = getActiveTab();
+  var path = TAB_PATHS[tabName] || '/';
   var params = new URLSearchParams();
   SHARE_SLIDERS.forEach(function(id) {
     var el = document.getElementById(id);
-    if (el) params.set(id, el.value);
+    if (el && el.value !== el.defaultValue) params.set(id, el.value);
   });
-  params.set('tab', getActiveTab());
-  history.replaceState(null, '', '?' + params.toString());
+  var qs = params.toString();
+  history.replaceState(null, '', path + (qs ? '?' + qs : ''));
 }
 
 function getShareURL() {
+  var tabName = getActiveTab();
+  var path = TAB_PATHS[tabName] || '/';
   var params = new URLSearchParams();
   SHARE_SLIDERS.forEach(function(id) {
     var el = document.getElementById(id);
-    if (el) params.set(id, el.value);
+    if (el && el.value !== el.defaultValue) params.set(id, el.value);
   });
-  params.set('tab', getActiveTab());
-  return window.location.origin + window.location.pathname + '?' + params.toString();
+  var qs = params.toString();
+  return window.location.origin + path + (qs ? '?' + qs : '');
 }
 
 function shareLink() {
@@ -2086,16 +2101,19 @@ function shareLink() {
 }
 
 function loadFromURL() {
+  var path = window.location.pathname;
   var params = new URLSearchParams(window.location.search);
-  if (!params.has('tab') && !params.has('carsNow')) return false;
+  var tabFromPath = PATH_TO_TAB[path];
+  var tabFromParam = params.get('tab');
+  // Nothing to restore if no path match and no legacy ?tab= or slider params
+  if (!tabFromPath && !tabFromParam && !params.has('carsNow') && !params.has('pkCarsNow')) return false;
   SHARE_SLIDERS.forEach(function(id) {
     if (params.has(id)) {
       var el = document.getElementById(id);
       if (el) el.value = params.get(id);
     }
   });
-  var tab = params.get('tab') || 'home';
-  showTab(tab);
+  showTab(tabFromPath || tabFromParam || 'home');
   return true;
 }
 
