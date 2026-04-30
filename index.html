@@ -550,6 +550,23 @@
     transition: opacity 0.4s;
   }
   #panel-yfirdaginn .yd-drag-hint.yd-hint-done { opacity: 0; }
+  #panel-yfirdaginn .yd-yr-btn {
+    font-family: var(--yd-font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--yd-border);
+    background: transparent;
+    color: var(--yd-muted);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  #panel-yfirdaginn .yd-yr-btn.active {
+    background: var(--yd-accent);
+    color: #fff;
+    border-color: var(--yd-accent);
+  }
   /* ───────────────────────────────────────────────────────────────
      MOBILE LAYOUT (≤640px) — single-column with reordered sections:
      chart card → info card → stats card → mini chart card.
@@ -1040,6 +1057,17 @@
       </div>
     </div>
 
+    <!-- Year toggle -->
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
+      <span style="font-size:0.6875rem; color:var(--yd-faint); text-transform:uppercase; letter-spacing:0.08em;">Án Borgarlínu — Ártúnsbrekka</span>
+      <div style="display:flex; gap:4px;" id="ydYearToggle">
+        <button class="yd-yr-btn active" data-yr="0">Í dag</button>
+        <button class="yd-yr-btn" data-yr="2026">2026</button>
+        <button class="yd-yr-btn" data-yr="2031">2031</button>
+        <button class="yd-yr-btn" data-yr="2040">2040</button>
+      </div>
+    </div>
+
     <!-- SVG chart -->
     <div class="chart-wrap" id="chartWrap">
       <svg id="mainChart" viewBox="0 0 900 340" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Línurit af umferð yfir daginn með og án Borgarlínu">
@@ -1063,7 +1091,7 @@
     <div class="yd-legend">
       <div class="yd-legend-item">
         <div class="yd-legend-line" style="background:#f87171"></div>
-        <span>Án Borgarlínu</span>
+        <span id="ydNoBlLabel">Án Borgarlínu</span>
       </div>
       <div class="yd-legend-item">
         <div class="yd-legend-line" style="background:#34d399"></div>
@@ -1209,7 +1237,7 @@
 
   <!-- Data note -->
   <div style="font-size: 0.6875rem; color: var(--yd-faint); line-height: 1.5; padding: 0 4px;">
-    Heimildir: Vegagerðin teljaragögn 2024, stöð 49-01 (Vesturlandsvegur ofan Ártúnsbrekku) · Borgarlínan Frumdragaskýrsla 2021 · HCM 7 þjónustustig · Ferðatímaáhrif byggð á INRIX/HERE raunumferðargögnum og Transportation Research Board rannsóknum — BPR formúla vanmetur tafir við LOS E/F verulega · Vagnnýtingarferillinn er mat byggt á alþjóðlegum BRT rannsóknum.
+    Heimildir: Vegagerðin teljaragögn 2024, stöð 49-01 (Vesturlandsvegur ofan Ártúnsbrekku) · Borgarlínan Frumdragaskýrsla 2021 · HCM 7 þjónustustig · Ferðatímaáhrif byggð á INRIX/HERE raunumferðargögnum og Transportation Research Board rannsóknum — BPR formúla vanmetur tafir við LOS E/F verulega · Vagnnýtingarferillinn er mat byggt á alþjóðlegum BRT rannsóknum · Ársspár: Hagstofuspá íbúafjölda höfuðborgarsvæðisins, óbreytt hlutfall 648 bíla/1.000 íbúar (Samgöngustofa 2024) — 2040 er miðspá.
   </div>
 
 </div>
@@ -2184,6 +2212,18 @@ window.addEventListener('DOMContentLoaded', function() {
     0.30,0.30,0.30,0.30, 0.30,0.30,0.30,0.30,  // 18:00-19:45
     0.30,0.30,0.30,0.30                          // 20:00-20:45
   ];
+  // Population-based traffic projections — Hagstofuspá, same 648 cars/1000 people
+  const YEAR_SCENARIOS = {
+    0:    { label: 'Í dag', pop: 249560 },
+    2026: { label: '2026',  pop: 254500 },
+    2031: { label: '2031',  pop: 270000 },
+    2040: { label: '2040',  pop: 295000 }
+  };
+  const CARS_BY_YEAR = {};
+  Object.keys(YEAR_SCENARIOS).forEach(function(yr) {
+    var factor = YEAR_SCENARIOS[yr].pop / 249560;
+    CARS_BY_YEAR[yr] = CARS_NO_BL.map(function(v) { return Math.round(v * factor); });
+  });
   function idxToTime(i) {
     var m = 360 + i * 15;
     return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
@@ -2225,6 +2265,8 @@ window.addEventListener('DOMContentLoaded', function() {
 
   let currentIdx = 8; // index 8 = 08:00
   let peakScale  = 0.95;
+  var ydYear = 0; // 0 = "Í dag" (2024 baseline), or 2026/2031/2040
+  function carsForYear(i) { return CARS_BY_YEAR[ydYear][i]; }
 
   const VB_W = 900, VB_H = 340;
   const MARGIN = { top: 20, right: 32, bottom: 48, left: 64 };
@@ -2250,7 +2292,8 @@ window.addEventListener('DOMContentLoaded', function() {
   function renderMainChart() {
     const svg = document.getElementById('mainChart');
     if (!svg) return;
-    const withBL = CARS_NO_BL.map((_,i) => Math.max(0, CARS_NO_BL[i] - carsRemoved(i, peakScale)));
+    const noBL = CARS_NO_BL.map((_,i) => carsForYear(i));
+    const withBL = noBL.map((v,i) => Math.max(0, v - carsRemoved(i, peakScale)));
     const yTicks = [0, 1000, 2000, 3000, 4000];
     const yTickLabels = ['0','1.000','2.000','3.000','4.000'];
     let html = '';
@@ -2271,8 +2314,8 @@ window.addEventListener('DOMContentLoaded', function() {
       html += `<line x1="${MARGIN.left}" y1="${y}" x2="${MARGIN.left + CW}" y2="${y}" stroke="${color}" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.6" clip-path="url(#chartClip)"/>`;
       html += `<text x="${(MARGIN.left + CW + 5).toFixed(1)}" y="${y}" dy="0.35em" font-family="JetBrains Mono, monospace" font-size="9.5" fill="${color}" opacity="0.8">${label}</text>`;
     });
-    html += `<path d="${buildFillPath(CARS_NO_BL, withBL)}" fill="url(#blFill)" clip-path="url(#chartClip)"/>`;
-    html += `<polyline points="${buildPolyline(CARS_NO_BL)}" fill="none" stroke="#f87171" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" clip-path="url(#chartClip)"/>`;
+    html += `<path d="${buildFillPath(noBL, withBL)}" fill="url(#blFill)" clip-path="url(#chartClip)"/>`;
+    html += `<polyline points="${buildPolyline(noBL)}" fill="none" stroke="#f87171" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" clip-path="url(#chartClip)"/>`;
     html += `<polyline points="${buildPolyline(withBL)}" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" clip-path="url(#chartClip)"/>`;
     HOUR_LABELS.forEach((lbl, j) => {
       const i = j * 4; // each hour = 4 fifteen-min intervals
@@ -2285,12 +2328,19 @@ window.addEventListener('DOMContentLoaded', function() {
     const ix = xPos(currentIdx).toFixed(1);
     html += `<g id="indicator">
       <line x1="${ix}" y1="${MARGIN.top}" x2="${ix}" y2="${MARGIN.top + CH}" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.9"/>
-      <circle cx="${ix}" cy="${yPos(CARS_NO_BL[currentIdx]).toFixed(1)}" r="5" fill="#f87171" stroke="#080e1a" stroke-width="2"/>
+      <circle cx="${ix}" cy="${yPos(noBL[currentIdx]).toFixed(1)}" r="5" fill="#f87171" stroke="#080e1a" stroke-width="2"/>
       <circle cx="${ix}" cy="${yPos(withBL[currentIdx]).toFixed(1)}" r="5" fill="#34d399" stroke="#080e1a" stroke-width="2"/>
       <rect x="${(parseFloat(ix) - 22).toFixed(1)}" y="${(MARGIN.top + CH + 30).toFixed(1)}" width="44" height="14" rx="3" fill="#6366f1" opacity="0.85"/>
       <text x="${ix}" y="${(MARGIN.top + CH + 40).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="white" font-weight="600">${idxToTime(currentIdx)}</text>
     </g>`;
     svg.innerHTML = html;
+    // Update legend label to reflect active year
+    const noBlLabel = document.getElementById('ydNoBlLabel');
+    if (noBlLabel) {
+      noBlLabel.textContent = ydYear > 0
+        ? ('Án BL — ' + YEAR_SCENARIOS[ydYear].label + ' (spá)')
+        : 'Án Borgarlínu';
+    }
   }
 
   function renderMiniChart() {
@@ -2370,7 +2420,7 @@ window.addEventListener('DOMContentLoaded', function() {
     const removed = carsRemoved(i, peakScale);
     const pax = paxCarried(i, peakScale);
     const util = utilPct(i, peakScale);
-    const carsNo = CARS_NO_BL[i];
+    const carsNo = carsForYear(i);
     const carsWith = Math.max(0, carsNo - removed);
     const vcNo = carsNo / CAPACITY;
     const vcWith = carsWith / CAPACITY;
@@ -2432,6 +2482,18 @@ window.addEventListener('DOMContentLoaded', function() {
       document.getElementById('utilVal').textContent = this.value + '%';
       renderYfirDaginn();
     });
+    var ytoggle = document.getElementById('ydYearToggle');
+    if (ytoggle) {
+      ytoggle.addEventListener('click', function(e) {
+        var btn = e.target.closest('.yd-yr-btn');
+        if (!btn) return;
+        ydYear = parseInt(btn.dataset.yr, 10) || 0;
+        document.querySelectorAll('.yd-yr-btn').forEach(function(b) {
+          b.classList.toggle('active', b === btn);
+        });
+        renderYfirDaginn();
+      });
+    }
     renderYfirDaginn();
   }
 
