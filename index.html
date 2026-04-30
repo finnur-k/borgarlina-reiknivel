@@ -1133,10 +1133,10 @@
               <div class="los-badge" id="dispLOSNoB" style="margin-top:2px;">D</div>
             </div>
             <div class="stat-cell">
-              <div class="stat-label">Ferðatímaáhrif
-                <span style="display:block;font-size:0.5rem;color:var(--yd-faint);font-weight:400;text-transform:none;letter-spacing:0;margin-top:1px;">frá frjálsri umferð</span>
+              <div class="stat-label">Ferðatími (mat)
+                <span style="display:block;font-size:0.5rem;color:var(--yd-faint);font-weight:400;text-transform:none;letter-spacing:0;margin-top:1px;">20 mín grunnur · við þjónustuþrep</span>
               </div>
-              <div style="font-family:var(--yd-font-mono);font-size:1.0rem;font-weight:600;margin-top:2px;" id="dispDelayNo">1.4–1.7×</div>
+              <div style="font-family:var(--yd-font-mono);font-size:0.875rem;font-weight:600;margin-top:2px;" id="dispDelayNo">20 → 28–34 mín</div>
             </div>
           </div>
         </div>
@@ -1161,8 +1161,8 @@
               <div class="los-badge" id="dispLOSWithB" style="margin-top:2px;">C</div>
             </div>
             <div class="stat-cell">
-              <div class="stat-label">Ferðatímaáhrif
-                <span style="display:block;font-size:0.5rem;color:var(--yd-faint);font-weight:400;text-transform:none;letter-spacing:0;margin-top:1px;">frá frjálsri umferð</span>
+              <div class="stat-label">Ferðatími (mat)
+                <span style="display:block;font-size:0.5rem;color:var(--yd-faint);font-weight:400;text-transform:none;letter-spacing:0;margin-top:1px;">20 mín grunnur · við þjónustuþrep</span>
               </div>
               <div style="font-family:var(--yd-font-mono);font-size:1.0rem;font-weight:600;margin-top:2px;" id="dispDelayWith">1.2–1.4×</div>
             </div>
@@ -2190,15 +2190,15 @@ window.addEventListener('DOMContentLoaded', function() {
   }
   const LOS_COLORS = { A:'#34d399', B:'#34d399', C:'#6366f1', D:'#fbbf24', E:'#f97316', F:'#f87171' };
   const LOS_BG     = { A:'#064e3b', B:'#064e3b', C:'#1e1b4b', D:'#451a03', E:'#431407', F:'#450a0a' };
-  // Empirical delay multiplier bands per LOS — INRIX/HERE real-world data + TRB studies.
-  // Far more realistic than BPR extrapolation at E/F (BPR was calibrated for V/C ≤ 1).
+  // Empirical delay bands per LOS — INRIX/HERE real-world data + TRB studies.
+  // Shown as "20 → lo–hi mín" (T0=20 mín free-flow base).
   const DELAY_BANDS = {
-    A: { range: '1.0–1.1×', color: '#34d399' },
-    B: { range: '1.1–1.2×', color: '#34d399' },
-    C: { range: '1.2–1.4×', color: '#6366f1' },
-    D: { range: '1.4–1.7×', color: '#fbbf24' },
-    E: { range: '1.7–2.5×', color: '#f97316' },
-    F: { range: '2.0–4.0×', color: '#f87171' }
+    A: { range: '20–22 mín', color: '#34d399' },
+    B: { range: '22–24 mín', color: '#34d399' },
+    C: { range: '24–28 mín', color: '#6366f1' },
+    D: { range: '28–34 mín', color: '#fbbf24' },
+    E: { range: '34–50 mín', color: '#f97316' },
+    F: { range: '40–60 mín', color: '#f87171' }
   };
 
   function bprTime(vc) { return T0 * (1 + 0.15 * Math.pow(vc, 4)); }
@@ -2385,9 +2385,9 @@ window.addEventListener('DOMContentLoaded', function() {
     setLOS('dispLOSWithB', losWith);
     const dNo = document.getElementById('dispDelayNo');
     const dWith = document.getElementById('dispDelayWith');
-    dNo.textContent  = DELAY_BANDS[losNo].range;
+    dNo.textContent  = '20 → ' + DELAY_BANDS[losNo].range;
     dNo.style.color  = DELAY_BANDS[losNo].color;
-    dWith.textContent = DELAY_BANDS[losWith].range;
+    dWith.textContent = '20 → ' + DELAY_BANDS[losWith].range;
     dWith.style.color = DELAY_BANDS[losWith].color;
     document.getElementById('dispPax').textContent = pax.toLocaleString('is-IS');
     document.getElementById('dispRemoved').textContent = removed.toLocaleString('is-IS');
