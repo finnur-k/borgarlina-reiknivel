@@ -1133,10 +1133,10 @@
               <div class="los-badge" id="dispLOSNoB" style="margin-top:2px;">D</div>
             </div>
             <div class="stat-cell">
-              <div class="stat-label">Ferðatími
-                <span style="display:block;font-size:0.5rem;color:var(--yd-faint);font-weight:400;text-transform:none;letter-spacing:0;margin-top:1px;">Mosfellsbær → miðborg</span>
+              <div class="stat-label">Ferðatímaáhrif
+                <span style="display:block;font-size:0.5rem;color:var(--yd-faint);font-weight:400;text-transform:none;letter-spacing:0;margin-top:1px;">frá frjálsri umferð</span>
               </div>
-              <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-text); margin-top:2px;" id="dispTravelNo">24 mín</div>
+              <div style="font-family:var(--yd-font-mono);font-size:1.0rem;font-weight:600;margin-top:2px;" id="dispDelayNo">1.4–1.7×</div>
             </div>
           </div>
         </div>
@@ -1161,10 +1161,10 @@
               <div class="los-badge" id="dispLOSWithB" style="margin-top:2px;">C</div>
             </div>
             <div class="stat-cell">
-              <div class="stat-label">Ferðatími
-                <span style="display:block;font-size:0.5rem;color:var(--yd-faint);font-weight:400;text-transform:none;letter-spacing:0;margin-top:1px;">Mosfellsbær → miðborg</span>
+              <div class="stat-label">Ferðatímaáhrif
+                <span style="display:block;font-size:0.5rem;color:var(--yd-faint);font-weight:400;text-transform:none;letter-spacing:0;margin-top:1px;">frá frjálsri umferð</span>
               </div>
-              <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-text); margin-top:2px;" id="dispTravelWith">21 mín</div>
+              <div style="font-family:var(--yd-font-mono);font-size:1.0rem;font-weight:600;margin-top:2px;" id="dispDelayWith">1.2–1.4×</div>
             </div>
           </div>
         </div>
@@ -1213,7 +1213,7 @@
 
   <!-- Data note -->
   <div style="font-size: 0.6875rem; color: var(--yd-faint); line-height: 1.5; padding: 0 4px;">
-    Heimildir: Vegagerðin teljaragögn 2024, stöð 49-01 (Vesturlandsvegur ofan Ártúnsbrekku) · Borgarlínan Frumdragaskýrsla 2021 · HCM 6 þjónustustig · BPR seinkuareikniformúla (α=0.15, β=4) · Vagnnýtingarferillinn er mat byggt á alþjóðlegum BRT rannsóknum.
+    Heimildir: Vegagerðin teljaragögn 2024, stöð 49-01 (Vesturlandsvegur ofan Ártúnsbrekku) · Borgarlínan Frumdragaskýrsla 2021 · HCM 6 þjónustustig · Ferðatímaáhrif byggð á INRIX/HERE raunumferðargögnum og Transportation Research Board rannsóknum — BPR formúla vanmetur tafir við LOS E/F verulega · Vagnnýtingarferillinn er mat byggt á alþjóðlegum BRT rannsóknum.
   </div>
 
 </div>
@@ -2190,6 +2190,16 @@ window.addEventListener('DOMContentLoaded', function() {
   }
   const LOS_COLORS = { A:'#34d399', B:'#34d399', C:'#6366f1', D:'#fbbf24', E:'#f97316', F:'#f87171' };
   const LOS_BG     = { A:'#064e3b', B:'#064e3b', C:'#1e1b4b', D:'#451a03', E:'#431407', F:'#450a0a' };
+  // Empirical delay multiplier bands per LOS — INRIX/HERE real-world data + TRB studies.
+  // Far more realistic than BPR extrapolation at E/F (BPR was calibrated for V/C ≤ 1).
+  const DELAY_BANDS = {
+    A: { range: '1.0–1.1×', color: '#34d399' },
+    B: { range: '1.1–1.2×', color: '#34d399' },
+    C: { range: '1.2–1.4×', color: '#6366f1' },
+    D: { range: '1.4–1.7×', color: '#fbbf24' },
+    E: { range: '1.7–2.5×', color: '#f97316' },
+    F: { range: '2.0–4.0×', color: '#f87171' }
+  };
 
   function bprTime(vc) { return T0 * (1 + 0.15 * Math.pow(vc, 4)); }
   function carsRemoved(i, peakScale) {
@@ -2357,9 +2367,6 @@ window.addEventListener('DOMContentLoaded', function() {
     const vcWith = carsWith / CAPACITY;
     const losNo = ydGetLOS(vcNo);
     const losWith = ydGetLOS(vcWith);
-    const tNo = bprTime(vcNo);
-    const tWith = bprTime(vcWith);
-
     document.getElementById('dispTime').textContent = idxToTime(i);
     document.getElementById('dispPeriod').textContent = PERIOD_LABELS[i];
     document.getElementById('dispCarsNo').textContent = carsNo.toLocaleString('is-IS');
@@ -2376,8 +2383,12 @@ window.addEventListener('DOMContentLoaded', function() {
     }
     setLOS('dispLOSNoB', losNo);
     setLOS('dispLOSWithB', losWith);
-    document.getElementById('dispTravelNo').textContent = Math.round(tNo) + ' mín';
-    document.getElementById('dispTravelWith').textContent = Math.round(tWith) + ' mín';
+    const dNo = document.getElementById('dispDelayNo');
+    const dWith = document.getElementById('dispDelayWith');
+    dNo.textContent  = DELAY_BANDS[losNo].range;
+    dNo.style.color  = DELAY_BANDS[losNo].color;
+    dWith.textContent = DELAY_BANDS[losWith].range;
+    dWith.style.color = DELAY_BANDS[losWith].color;
     document.getElementById('dispPax').textContent = pax.toLocaleString('is-IS');
     document.getElementById('dispRemoved').textContent = removed.toLocaleString('is-IS');
     document.getElementById('dispUtil').textContent = util + '%';
