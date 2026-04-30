@@ -1779,12 +1779,7 @@ function calc() {
     +'Modal shift: mat byggt &aacute; samanb&uacute;r&eth;i vi&eth; BRT-kerfi &iacute; &ouml;&eth;rum borgum.';
   if(document.getElementById('panel-straeto').classList.contains('active')) renderRidershipCalc();
 
-  // Update hero stat cards on Yfirlit
-  var el;
-  if((el=document.getElementById('home-cars-today'))) el.textContent = fmt(baseCars);
-  if((el=document.getElementById('home-cars-2031'))) el.textContent = blData ? '+ '+fmt(blData.carsNobl-baseCars) : '+35.000';
-  if((el=document.getElementById('home-cars-bl')))   el.textContent = blData ? '− '+fmt(blData.saved) : '−15.000';
-  if((el=document.getElementById('home-peak-cars'))) el.textContent = fmt(blPaxPerHour);
+  // Hero stat cards on Yfirlit are intentionally static (set in HTML)
 
   d3RefreshAll();
 }
