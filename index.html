@@ -912,7 +912,9 @@
         <div class="d3-header">
           <div class="d3-label-wrap">
             <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><circle cx="5" cy="5" r="3.5"/><path d="M5 3v2l1.5 1.5"/></svg></div>
-            <span class="d3-label">Grunnferðatími (mín)</span>
+            <span class="d3-label">Grunnferðatími (mín)
+              <span style="display:block;font-size:0.6rem;color:#475569;font-weight:400;margin-top:1px;">Miklabraut: Mosfellsbær → miðborg (~20 km, 50 km/klst)</span>
+            </span>
           </div>
           <div class="d3-badge" id="freeFlowMinBadge"><span id="freeFlowMinVal">20 mín</span></div>
         </div>
@@ -1131,7 +1133,9 @@
               <div class="los-badge" id="dispLOSNoB" style="margin-top:2px;">D</div>
             </div>
             <div class="stat-cell">
-              <div class="stat-label">Ferðatími</div>
+              <div class="stat-label">Ferðatími
+                <span style="display:block;font-size:0.5rem;color:var(--yd-faint);font-weight:400;text-transform:none;letter-spacing:0;margin-top:1px;">Mosfellsbær → miðborg</span>
+              </div>
               <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-text); margin-top:2px;" id="dispTravelNo">24 mín</div>
             </div>
           </div>
@@ -1157,7 +1161,9 @@
               <div class="los-badge" id="dispLOSWithB" style="margin-top:2px;">C</div>
             </div>
             <div class="stat-cell">
-              <div class="stat-label">Ferðatími</div>
+              <div class="stat-label">Ferðatími
+                <span style="display:block;font-size:0.5rem;color:var(--yd-faint);font-weight:400;text-transform:none;letter-spacing:0;margin-top:1px;">Mosfellsbær → miðborg</span>
+              </div>
               <div style="font-family:var(--yd-font-mono); font-size:1.125rem; font-weight:600; color:var(--yd-text); margin-top:2px;" id="dispTravelWith">21 mín</div>
             </div>
           </div>
@@ -1237,9 +1243,9 @@
             <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><path d="M1 7.5l3-3 2 2 3-4"/></svg></div>
             <span class="d3-label">Breyting bíla/ári</span>
           </div>
-          <div class="d3-badge" id="carGrowthBadge"><span id="carGrowthVal">+3/ári</span></div>
+          <div class="d3-badge" id="carGrowthBadge"><span id="carGrowthVal">0/ári</span></div>
         </div>
-        <div class="d3-range-wrap"><input type="range" class="d3-range" id="carGrowth" min="-15" max="15" value="3" step="1" oninput="calc()"></div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="carGrowth" min="-15" max="15" value="0" step="1" oninput="calc()"></div>
         <div class="d3-scale"><span>−15</span><span>+15</span></div>
       </div>
     </div>
@@ -1252,9 +1258,9 @@
             <div class="d3-icon"><svg viewBox="0 0 10 10" fill="none" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"><path d="M1 8l8-6"/><circle cx="3" cy="3.5" r="1.2"/><circle cx="7" cy="6.5" r="1.2"/></svg></div>
             <span class="d3-label">Modal shift (%)</span>
           </div>
-          <div class="d3-badge" id="modalShiftBadge"><span id="modalShiftVal">8%</span></div>
+          <div class="d3-badge" id="modalShiftBadge"><span id="modalShiftVal">10%</span></div>
         </div>
-        <div class="d3-range-wrap"><input type="range" class="d3-range" id="modalShift" min="0" max="20" value="4" step="1" oninput="calc()"></div>
+        <div class="d3-range-wrap"><input type="range" class="d3-range" id="modalShift" min="0" max="20" value="5" step="1" oninput="calc()"></div>
         <div class="d3-scale"><span>0</span><span>20</span></div>
       </div>
       <div class="d3-row">
@@ -1596,7 +1602,8 @@ function calcPeak() {
   var pop2025 = 249560;
   var cars2025 = Math.round(pop2025 * carsNow / 1000);
   var popYr = getPop(yr);
-  var carsPerK = carsNow + 3 * (yr - 2025);
+  var carGrowthRate = parseInt(document.getElementById('carGrowth').value);
+  var carsPerK = Math.min(700, carsNow + carGrowthRate * (yr - 2025)); // cap at ~700/1000 (driving licence saturation)
   var carsYr = Math.round(popYr * carsPerK / 1000);
   var growthFactor = carsYr / cars2025;
 
@@ -1738,7 +1745,7 @@ function calc() {
 
   for(var i=0;i<years.length;i++){
     var yr=years[i], pop=popSchedule[yr];
-    var cpk=carsNow+carGrowth*(yr-2025);
+    var cpk=Math.min(700,carsNow+carGrowth*(yr-2025)); // cap at 700/1000 (driving licence saturation)
     var cNobl=Math.round(pop*cpk/1000);
     var hasBL=yr>=blYear;
     var cBL=hasBL?Math.round(cNobl*(1-modalShift)):null;
