@@ -3386,7 +3386,12 @@ function renderPayback(annualOverride) {
     fill="#34d399" opacity="0.03"/>`;
 
   // ── Y grid lines
-  [-50,-25,0,25,50,75,100,125,150,175,200].forEach(v => {
+  // Dynamic Y grid: step size based on range
+  const yRange = YMAX - YMIN;
+  const yStep = yRange <= 280 ? 25 : yRange <= 560 ? 50 : 100;
+  const yTicks = [];
+  for (let v = Math.ceil(YMIN / yStep) * yStep; v <= YMAX; v += yStep) yTicks.push(v);
+  yTicks.forEach(v => {
     const y = yp(v).toFixed(1);
     html += `<line x1="${ML}" y1="${y}" x2="${ML+CW}" y2="${y}"
       stroke="${v===0?'#475569':'#1a2740'}" stroke-width="${v===0?1.5:1}"/>`;
