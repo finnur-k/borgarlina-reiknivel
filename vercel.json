@@ -1,1 +1,9 @@
-{"rewrites":[{"source":"/(.*)","destination":"/index.html"}]}
+{
+  "rewrites": [
+    { "source": "/yfirdaginn", "destination": "/index.html" },
+    { "source": "/reiknivel", "destination": "/index.html" },
+    { "source": "/straeto", "destination": "/index.html" },
+    { "source": "/haannatimi", "destination": "/index.html" },
+    { "source": "/sveitarfelogin", "destination": "/index.html" }
+  ]
+}
