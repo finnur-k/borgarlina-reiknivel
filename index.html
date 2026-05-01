@@ -1062,7 +1062,7 @@
 
 /* ── ASSUMPTIONS ── */
 #panel-gildi details.assumptions {
-  background: #111827;
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
@@ -1076,32 +1076,40 @@
   user-select: none;
   list-style: none;
   font-size: 0.875rem;
-  color: var(--muted);
+  color: var(--text);
   font-weight: 500;
   -webkit-tap-highlight-color: transparent;
+  border-bottom: 1px solid var(--border);
 }
-details.assumptions summary::-webkit-details-marker { display: none; }
+#panel-gildi details.assumptions summary::-webkit-details-marker { display: none; }
 #panel-gildi details.assumptions summary::after {
   content: '+';
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   color: var(--accent);
-  font-weight: 400;
-  transition: transform 0.2s;
+  font-weight: 300;
+  line-height: 1;
 }
-details[open].assumptions summary::after { content: '−'; }
+#panel-gildi details[open].assumptions summary::after { content: '−'; }
+#panel-gildi details:not([open]).assumptions summary { border-bottom: none; }
 
-.assumptions-
+#panel-gildi .assumptions-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 40px;
+  padding: 4px 20px 20px;
+}
 #panel-gildi .assump-row {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  padding: 8px 0;
-  border-bottom: 1px solid #1a2740;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
   gap: 12px;
 }
-.assump-row:last-child, .assump-row:nth-last-child(2):nth-child(odd) { border-bottom: none; }
-.assump-label { font-size: 0.8125rem; color: var(--muted); }
-.assump-val   { font-family: var(--mono); font-size: 0.8125rem; color: var(--text); font-weight: 500; text-align: right; white-space: nowrap; }
+#panel-gildi .assump-row:last-child,
+#panel-gildi .assump-row:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+#panel-gildi .assump-label { font-size: 0.8125rem; color: var(--muted); }
+#panel-gildi .assump-val   { font-family: var(--mono); font-size: 0.8125rem; color: var(--text); font-weight: 600; text-align: right; white-space: nowrap; }
 
 /* ── FOOTNOTE ── */
 #panel-gildi .footnote-gildi {
@@ -3161,7 +3169,7 @@ window.addEventListener('DOMContentLoaded', function() {
       <span class="section-title">Forsendur og aðferðafræði</span>
     </div>
 
-    <details class="assumptions">
+    <details class="assumptions" open>
       <summary>Sýna forsendur útreiknings</summary>
       <div class="assumptions-body">
         <div class="assump-row"><span class="assump-label">Tímagildi</span><span class="assump-val">3.500 kr./klst</span></div>
