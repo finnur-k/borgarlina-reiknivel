@@ -1060,6 +1060,47 @@
 .cmp-bad  .cmp-verdict { background: #2a1212; color: #fca5a5; }
 .cmp-good .cmp-verdict { background: #0f2d22; color: #6ee7b7; }
 
+/* ── MODAL SHIFT CALCULATOR ── */
+#panel-gildi .gildi-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px; gap: 12px; flex-wrap: wrap;
+}
+#panel-gildi .gildi-modal-eyebrow {
+  font-size: 9px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--accent); margin-bottom: 4px;
+}
+#panel-gildi .gildi-modal-pct {
+  font-family: var(--mono); font-size: 2.75rem; font-weight: 700;
+  color: var(--text); letter-spacing: -0.02em; line-height: 1;
+}
+#panel-gildi .gildi-modal-slider {
+  width: 100%; margin-bottom: 8px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+#panel-gildi .gildi-modal-ticks {
+  display: flex; justify-content: space-between;
+  font-size: 0.625rem; color: var(--faint);
+  margin-bottom: 24px; padding: 0 2px;
+}
+#panel-gildi .gildi-tick-base { color: var(--accent); font-weight: 600; }
+#panel-gildi .gildi-modal-stats {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  margin-bottom: 4px;
+}
+#panel-gildi .gildi-ms-cell {
+  padding: 16px 16px 14px;
+}
+#panel-gildi .stat-label-g {
+  font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.07em;
+  color: var(--muted); margin-bottom: 6px;
+}
+#panel-gildi .stat-val-g {
+  font-family: var(--mono); font-size: 1.25rem; font-weight: 700;
+  color: var(--text); line-height: 1;
+}
+
 /* ── ASSUMPTIONS ── */
 #panel-gildi details.assumptions {
   background: var(--card);
@@ -3093,71 +3134,56 @@ window.addEventListener('DOMContentLoaded', function() {
   <div class="section">
     <div class="section-head">
       <span class="section-num">04</span>
-      <span class="section-title">Samanburður við aðra fjárfestingu</span>
+      <span class="section-title">Sviðsmyndagreining <em>— modal shift</em></span>
     </div>
 
-    <div class="comparison-grid">
-      <div class="cmp-card cmp-bad">
-        <div class="cmp-header">
-          <span class="cmp-badge">Samanburður</span>
-          <span class="cmp-title">Sundabraut</span>
+    <div class="card" style="padding:28px 28px 24px;">
+      <!-- Slider row -->
+      <div class="gildi-modal-header">
+        <div>
+          <div class="gildi-modal-eyebrow">Modal shift</div>
+          <div style="font-size:0.8125rem; color:var(--muted); margin-top:2px;">Hlutfall bílferða sem færast yfir á Borgarlínu</div>
         </div>
-        <div class="cmp-rows">
-          <div class="cmp-row">
-            <span class="cmp-row-label">Áætlaður kostnaður</span>
-            <span class="cmp-row-val">60–80 ma. kr.</span>
-          </div>
-          <div class="cmp-row">
-            <span class="cmp-row-label">Þjóðhagslegur ábati/ár</span>
-            <span class="cmp-row-val" style="color:var(--faint); font-size:0.9375rem;">—</span>
-            <span class="cmp-row-sub">Umferð flyst á aðrar leiðir — sparast ekki</span>
-          </div>
-          <div class="cmp-row">
-            <span class="cmp-row-label">Endurgreiðslutími</span>
-            <span class="cmp-row-val" style="color:var(--faint); font-size:0.9375rem;">Aldrei</span>
-            <span class="cmp-row-sub">Enginn sparnaður á rekstrarkostnaði eða tímagildi</span>
-          </div>
-          <div class="cmp-row">
-            <span class="cmp-row-label">Modal shift</span>
-            <span class="cmp-row-val" style="color:var(--faint); font-size:0.9375rem;">0%</span>
-            <span class="cmp-row-sub">Fjölgar bílum á vegum til lengri tíma</span>
-          </div>
+        <div class="gildi-modal-pct" id="gildiModalPct">5%</div>
+      </div>
+
+      <input type="range" id="gildiModalSlider" class="gildi-modal-slider"
+             min="1" max="20" step="1" value="5"
+             aria-label="Modal shift hlutfall">
+
+      <!-- Reference ticks -->
+      <div class="gildi-modal-ticks">
+        <span>1%</span>
+        <span class="gildi-tick-base">▲ 5% — varfærin forsenda</span>
+        <span>10% — BRT meðaltal</span>
+        <span>20%</span>
+      </div>
+
+      <!-- Output stats -->
+      <div class="gildi-modal-stats" id="gildiModalStats">
+        <div class="gildi-ms-cell" style="border-right:1px solid var(--border);">
+          <div class="stat-label-g">Þjóðhagslegur ábati/ár</div>
+          <div class="stat-val-g" id="gmTotal" style="color:var(--success);">13,4 ma.</div>
         </div>
-        <div class="cmp-verdict">
-          Eykur umferðargetu tímabundið. Leysir ekki vandann — flytur hann.
+        <div class="gildi-ms-cell" style="border-right:1px solid var(--border);">
+          <div class="stat-label-g">Tímasparnaður</div>
+          <div class="stat-val-g" id="gmTimi" style="color:var(--accent);">9,7 ma.</div>
+        </div>
+        <div class="gildi-ms-cell" style="border-right:1px solid var(--border);">
+          <div class="stat-label-g">Endurgreiðslutími</div>
+          <div class="stat-val-g" id="gmPayback">~4 ár</div>
+        </div>
+        <div class="gildi-ms-cell">
+          <div class="stat-label-g">Bílar fjarlægðir/ár</div>
+          <div class="stat-val-g" id="gmCars">~9.450</div>
         </div>
       </div>
 
-      <div class="cmp-card cmp-good">
-        <div class="cmp-header">
-          <span class="cmp-badge">Tillagan</span>
-          <span class="cmp-title">Borgarlínan</span>
-        </div>
-        <div class="cmp-rows">
-          <div class="cmp-row">
-            <span class="cmp-row-label">Áætlaður kostnaður</span>
-            <span class="cmp-row-val">50,6 ma. kr.</span>
-            <span class="cmp-row-sub">Lota 1 — Ártún að Hamraborg (Betri samgöngur, okt. 2024)</span>
-          </div>
-          <div class="cmp-row">
-            <span class="cmp-row-label">Þjóðhagslegur ábati/ár</span>
-            <span class="cmp-row-val">13,4 ma. kr.</span>
-            <span class="cmp-row-sub">Tímasparnaður + bílakostnaður + losun</span>
-          </div>
-          <div class="cmp-row">
-            <span class="cmp-row-label">Endurgreiðslutími</span>
-            <span class="cmp-row-val">~4 ár</span>
-            <span class="cmp-row-sub">Í tímagildi einu saman</span>
-          </div>
-          <div class="cmp-row">
-            <span class="cmp-row-label">Modal shift</span>
-            <span class="cmp-row-val">5%</span>
-            <span class="cmp-row-sub">~9.450 bílar hverfa af vegum</span>
-          </div>
-        </div>
-        <div class="cmp-verdict">
-          Á 20 árum: ~220 ma. kr. í uppsöfnuðum þjóðhagslegum ábata.
-        </div>
+      <!-- 20yr callout -->
+      <div id="gmVerdikt" style="margin-top:16px; padding:12px 16px; background:rgba(16,185,129,0.07); border:1px solid rgba(16,185,129,0.20); border-radius:8px; font-size:0.8125rem; color:var(--muted);">
+        Á <strong style="color:var(--text);">20 árum</strong>: uppsafnaður nettóábati
+        <strong style="color:var(--success);" id="gmNet">~217 ma. kr.</strong>
+        — eftir að hafa greitt upp 50,6 ma. kr. byggingarkostnað.
       </div>
     </div>
   </div>
@@ -3518,6 +3544,39 @@ const observer = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.5 });
 if (heroNum) observer.observe(heroNum);
+
+// ─────────────────────────────────────────────────────────────────
+// MODAL SHIFT CALCULATOR
+// ─────────────────────────────────────────────────────────────────
+const BASE_MS   = 5;      // % — varfærin forsenda
+const BASE_TOT  = 13.4;   // ma. kr. total benefit @ 5%
+const BASE_TIMI = 9.7;    // ma. kr. tímasparnaður @ 5%
+const BUILD_COST = 50.6;  // ma. kr. Lota 1
+const BASE_CARS  = 9450;  // bílar fjarlægðir/ár @ 5%
+
+function updateGildiModal(pct) {
+  const f = pct / BASE_MS;
+  const total  = BASE_TOT  * f;
+  const timi   = BASE_TIMI * f;
+  const cars   = Math.round(BASE_CARS * f / 50) * 50;
+  const payback = BUILD_COST / total;
+  const net20  = Math.round(total * 20 - BUILD_COST);
+
+  document.getElementById('gildiModalPct').textContent  = pct + '%';
+  document.getElementById('gmTotal').textContent   = total.toFixed(1).replace('.', ',') + ' ma.';
+  document.getElementById('gmTimi').textContent    = timi.toFixed(1).replace('.', ',') + ' ma.';
+  document.getElementById('gmPayback').textContent = '~' + Math.ceil(payback) + ' ár';
+  document.getElementById('gmCars').textContent    = '~' + cars.toLocaleString('is-IS');
+  document.getElementById('gmNet').textContent     = '~' + Math.round(net20) + ' ma. kr.';
+}
+
+const gildiSlider = document.getElementById('gildiModalSlider');
+if (gildiSlider) {
+  gildiSlider.addEventListener('input', function() {
+    updateGildiModal(parseInt(this.value));
+  });
+  updateGildiModal(5);
+}
 
 // ─────────────────────────────────────────────────────────────────
 // INIT
