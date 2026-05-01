@@ -3361,17 +3361,15 @@ function renderCarCost() {
 // ─────────────────────────────────────────────────────────────────
 // PAYBACK TIMELINE SVG
 // ─────────────────────────────────────────────────────────────────
-function renderPayback() {
+function renderPayback(annualOverride) {
   const svg = document.getElementById('paybackChart');
   const VW = 900, VH = 310;
   const ML = 70, MR = 20, MT = 30, MB = 70;
   const CW = VW - ML - MR, CH = VH - MT - MB;
   const YEARS = 20;
-  const ANNUAL = 13.4;  // ma./yr
+  const ANNUAL = annualOverride || 13.4;
   const BUILD  = 50.6;  // ma. — Lota 1 áætlun (Betri samgöngur, okt. 2024)
-  // Cumulative net: year 0 = -50, year N = -50 + N*13.4
-  // Y axis: -60 to +220
-  const YMIN = -60, YMAX = 220;
+  const YMIN = -60, YMAX = Math.max(220, Math.ceil((ANNUAL * YEARS - BUILD) / 50) * 50 + 20);
 
   function xp(yr) { return ML + (yr / YEARS) * CW; }
   function yp(v)  { return MT + CH - ((v - YMIN) / (YMAX - YMIN)) * CH; }
@@ -3463,7 +3461,7 @@ function renderPayback() {
   html += `<rect x="${(annX - 22).toFixed(1)}" y="${(annYt - 14).toFixed(1)}" width="44" height="18" rx="4"
     fill="#1a1200" stroke="#fbbf24" stroke-width="1" opacity="0.9"/>`;
   html += `<text x="${annX.toFixed(1)}" y="${(annYt + 3).toFixed(1)}" text-anchor="middle"
-    font-family="JetBrains Mono,monospace" font-size="10.5" fill="#fbbf24" font-weight="700">~4 ár</text>`;
+    font-family="JetBrains Mono,monospace" font-size="10.5" fill="#fbbf24" font-weight="700">~${Math.ceil(BUILD/ANNUAL)} ár</text>`;
 
   // Year 0 annotation
   html += `<text x="${(xp(0)+6).toFixed(1)}" y="${(yp(-BUILD)-8).toFixed(1)}"
@@ -3481,8 +3479,8 @@ function renderPayback() {
   const LY = MT + CH + 42;
   const legendItems = [
     { type:'line',   color:'#6366f1', label:'Uppsafnaður nettóábati' },
-    { type:'rect',   color:'#34d399', label:'Árlegur ábati (13,4 ma. kr.)' },
-    { type:'circle', color:'#fbbf24', label:'Jafngildispunktur (~4 ár)' },
+    { type:'rect',   color:'#34d399', label:'Árlegur ábati (' + ANNUAL.toFixed(1).replace('.',',') + ' ma. kr.)' },
+    { type:'circle', color:'#fbbf24', label:'Jafngildispunktur (~' + Math.ceil(BUILD/ANNUAL) + ' ár)' },
   ];
   let lx = ML + 8;
   legendItems.forEach(item => {
@@ -3568,6 +3566,7 @@ function updateGildiModal(pct) {
   document.getElementById('gmPayback').textContent = '~' + Math.ceil(payback) + ' ár';
   document.getElementById('gmCars').textContent    = '~' + cars.toLocaleString('is-IS');
   document.getElementById('gmNet').textContent     = '~' + Math.round(net20) + ' ma. kr.';
+  renderPayback(parseFloat(total.toFixed(1)));
 }
 
 const gildiSlider = document.getElementById('gildiModalSlider');
