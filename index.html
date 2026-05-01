@@ -973,6 +973,15 @@
 .cc-track { height: 8px; background: #111827; border-radius: 4px; overflow: hidden; }
 .cc-fill { height: 100%; border-radius: 4px; background: var(--success); opacity: 0.8; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
 .cc-amount { font-family: var(--mono); font-size: 0.8125rem; color: var(--muted); text-align: right; }
+#panel-gildi .cc-input {
+  font-family: var(--mono); font-size: 0.8125rem; color: var(--text);
+  background: transparent; border: none; border-bottom: 1px solid var(--border);
+  text-align: right; width: 80px; padding: 2px 4px;
+  outline: none; -moz-appearance: textfield;
+}
+#panel-gildi .cc-input::-webkit-outer-spin-button,
+#panel-gildi .cc-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+#panel-gildi .cc-input:focus { border-bottom-color: var(--accent); color: var(--text); }
 #panel-gildi .cc-total-row {
   display: flex; align-items: baseline; gap: 10px;
   padding-top: 12px; border-top: 1px solid var(--border); margin-top: 4px;
@@ -1173,6 +1182,14 @@
   #panel-gildi .comparison-grid { grid-template-columns: 1fr; }
   #panel-gildi .benefit-row { grid-template-columns: 130px 1fr 80px; gap: 10px; }
   #panel-gildi .cc-row { grid-template-columns: 100px 1fr 70px; }
+  #panel-gildi .gildi-modal-stats { grid-template-columns: 1fr 1fr; }
+  #panel-gildi .gildi-ms-cell:nth-child(2) { border-right: none !important; }
+  #panel-gildi .gildi-ms-cell:nth-child(3) { border-top: 1px solid var(--border); }
+  #panel-gildi .gildi-ms-cell:nth-child(4) { border-top: 1px solid var(--border); border-right: none !important; }
+  #panel-gildi .gildi-modal-header { gap: 8px; }
+  #panel-gildi .gildi-modal-pct { font-size: 2rem; }
+  #panel-gildi .gildi-modal-ticks span:last-child,
+  #panel-gildi .gildi-modal-ticks span:first-child { display: none; }
 }
 @media (max-width: 500px) {
   #panel-gildi .benefit-row { grid-template-columns: 1fr; gap: 5px; }
@@ -3085,7 +3102,7 @@ window.addEventListener('DOMContentLoaded', function() {
   <div class="section">
     <div class="section-head">
       <span class="section-num">02</span>
-      <span class="section-title">Hvað kostar að eiga bíl? <em>— 1.227.000 kr. á ári</em></span>
+      <span class="section-title" id="ccSectionTitle">Hvað kostar að eiga bíl? <em>— 1.259.000 kr. á ári</em></span>
     </div>
 
     <div class="card">
@@ -3155,7 +3172,7 @@ window.addEventListener('DOMContentLoaded', function() {
       <div class="gildi-modal-ticks">
         <span>1%</span>
         <span class="gildi-tick-base">▲ 5% — varfærin forsenda</span>
-        <span style="color:#34d399; font-weight:600;">10% — BRT meðaltal</span>
+        <span style="color:#34d399; font-weight:600;">▲ 10% — BRT meðaltal</span>
         <span>20%</span>
       </div>
 
@@ -3264,14 +3281,15 @@ const BENEFIT_CATS = [
   { key:'fuel', label:'Eldsneyti + losun + slys', sub:'Umhverfis- og öryggisábati', color:'#fbbf24' },
 ];
 const CAR_COSTS = [
-  { label:'Afskrift',        amount:500000 },
-  { label:'Eldsneyti',       amount:262000 },
-  { label:'Tryggingar',      amount:180000 },
-  { label:'Viðhald',         amount:150000 },
-  { label:'Bifreiðagjald',   amount:75000  },
-  { label:'Bílastæði',       amount:60000  },
+  { id:'cc0', label:'Afskrift',        amount:500000 },
+  { id:'cc1', label:'Eldsneyti',       amount:262000 },
+  { id:'cc2', label:'Eldsneytisgjald', amount:32000  },
+  { id:'cc3', label:'Tryggingar',      amount:180000 },
+  { id:'cc4', label:'Viðhald',         amount:150000 },
+  { id:'cc5', label:'Bifreiðagjald',   amount:75000  },
+  { id:'cc6', label:'Bílastæði',       amount:60000  },
 ];
-const CC_TOTAL = 1227000;
+let CC_TOTAL = CAR_COSTS.reduce((s,i) => s + i.amount, 0);
 
 let currentScenario = 'mid';
 
@@ -3335,27 +3353,51 @@ function renderBenefitChart(scenario) {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// CAR COST BARS
+// CAR COST BARS (interactive)
 // ─────────────────────────────────────────────────────────────────
+function updateCarCostBars() {
+  CC_TOTAL = CAR_COSTS.reduce((s, i) => s + i.amount, 0);
+  const max = Math.max(...CAR_COSTS.map(i => i.amount));
+  CAR_COSTS.forEach(item => {
+    const pct = (item.amount / max * 100).toFixed(1);
+    const fill = document.getElementById('ccfill-' + item.id);
+    if (fill) fill.style.width = pct + '%';
+    const amt = document.getElementById('ccamt-' + item.id);
+    if (amt) amt.value = item.amount;
+  });
+  const totalEl = document.getElementById('ccTotalVal');
+  if (totalEl) totalEl.textContent = CC_TOTAL.toLocaleString('is-IS') + ' kr.';
+  const titleEl = document.getElementById('ccSectionTitle');
+  if (titleEl) titleEl.innerHTML = 'Hvað kostar að eiga bíl? <em>— ' + CC_TOTAL.toLocaleString('is-IS') + ' kr. á ári</em>';
+}
+
 function renderCarCost() {
   const container = document.getElementById('carCostBars');
+  const max = Math.max(...CAR_COSTS.map(i => i.amount));
   let html = '';
   CAR_COSTS.forEach(item => {
-    const pct = (item.amount / CC_TOTAL * 100).toFixed(1);
-    const fmt = item.amount.toLocaleString('is-IS');
+    const pct = (item.amount / max * 100).toFixed(1);
     html += `
       <div class="cc-row">
         <div class="cc-label">${item.label}</div>
-        <div class="cc-track"><div class="cc-fill" style="width:${pct}%;"></div></div>
-        <div class="cc-amount">${fmt}</div>
+        <div class="cc-track"><div class="cc-fill" id="ccfill-${item.id}" style="width:${pct}%;"></div></div>
+        <input class="cc-input" id="ccamt-${item.id}" type="number" value="${item.amount}"
+               min="0" max="2000000" step="1000" data-id="${item.id}">
       </div>`;
   });
   html += `
     <div class="cc-total-row">
       <span class="cc-total-label">Samtals</span>
-      <span class="cc-total-val">${CC_TOTAL.toLocaleString('is-IS')} kr.</span>
+      <span class="cc-total-val" id="ccTotalVal">${CC_TOTAL.toLocaleString('is-IS')} kr.</span>
     </div>`;
   container.innerHTML = html;
+  container.addEventListener('input', function(e) {
+    const inp = e.target.closest('.cc-input');
+    if (!inp) return;
+    const id = inp.dataset.id;
+    const item = CAR_COSTS.find(i => i.id === id);
+    if (item) { item.amount = parseInt(inp.value) || 0; updateCarCostBars(); }
+  });
 }
 
 // ─────────────────────────────────────────────────────────────────
