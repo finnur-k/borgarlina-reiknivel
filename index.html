@@ -3552,15 +3552,22 @@ if (heroNum) observer.observe(heroNum);
 // MODAL SHIFT CALCULATOR
 // ─────────────────────────────────────────────────────────────────
 const BASE_MS   = 5;      // % — varfærin forsenda
-const BASE_TOT  = 13.4;   // ma. kr. total benefit @ 5%
 const BASE_TIMI = 9.7;    // ma. kr. tímasparnaður @ 5%
+const BASE_BIL  = 3.2;    // ma. kr. bílakostnaður @ 5%
+const BASE_FUEL = 0.5;    // ma. kr. eldsneyti/losun @ 5%
 const BUILD_COST = 50.6;  // ma. kr. Lota 1
 const BASE_CARS  = 9450;  // bílar fjarlægðir/ár @ 5%
+// Scaling logic per category:
+//   timi: 100% línulegt — fleiri á BL = fleiri spara tíma
+//   bil:  40% viðkvæmt — bílaeign er seig, margir halda bíl þó þeir taki BL
+//   fuel: 100% línulegt — beint hlutfall af bílum af vegum
 
 function updateGildiModal(pct) {
-  const f = pct / BASE_MS;
-  const total  = BASE_TOT  * f;
-  const timi   = BASE_TIMI * f;
+  const f    = pct / BASE_MS;
+  const timi = BASE_TIMI * f;                      // 100% línulegt
+  const bil  = BASE_BIL  * (0.6 + 0.4 * f);       // 40% viðkvæmt, 60% fast
+  const fuel = BASE_FUEL * f;                      // 100% línulegt
+  const total = timi + bil + fuel;
   const cars   = Math.round(BASE_CARS * f / 50) * 50;
   const payback = BUILD_COST / total;
   const net20  = Math.round(total * 20 - BUILD_COST);
