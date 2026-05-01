@@ -3046,21 +3046,21 @@ window.addEventListener('DOMContentLoaded', function() {
   <div class="hero">
     <div class="hero-eyebrow">Þjóðhagsleg greining · Borgarlínan</div>
     <div class="hero-number">
-      <span class="count-up" data-target="13.4" data-suffix="">13,4</span><span class="unit">ma. kr. á ári</span>
+      <span class="count-up" id="gildiHeroNum" data-target="13.4" data-suffix="">13,4</span><span class="unit">ma. kr. á ári</span>
     </div>
     <p class="hero-headline">
       Metin þjóðhagsleg áhrif Borgarlínunnar á höfuðborgarsvæðinu.<br>
-      Áætlaður endurgreiðslutími stofnkostnaðar er um <strong>4 ár</strong> — eftir það skilar fjárfestingin hreinum hagnaði.
+      Áætlaður endurgreiðslutími stofnkostnaðar er um <strong id="gildiHeroPaybackText">4 ár</strong> — eftir það skilar fjárfestingin hreinum hagnaði.
     </p>
 
     <div class="hero-cards">
       <div class="hero-card green">
-        <div class="hero-card-num">~54.000 kr.</div>
+        <div class="hero-card-num" id="gildiHeroPerCapita">~54.000 kr.</div>
         <div class="hero-card-label">Sparnaður per íbúa á ári</div>
         <div class="hero-card-sub">249.560 íbúar á höfuðborgarsvæðinu</div>
       </div>
       <div class="hero-card indigo">
-        <div class="hero-card-num">~4 ár</div>
+        <div class="hero-card-num" id="gildiHeroPayback">~4 ár</div>
         <div class="hero-card-label">Endurgreiðslutími fjárfestingar</div>
         <div class="hero-card-sub">50,6 ma. kr. — Lota 1 (Ártún–Hamraborg)</div>
       </div>
@@ -3559,6 +3559,28 @@ document.querySelectorAll('.scenario-btn').forEach(btn => {
     this.classList.add('active');
     currentScenario = this.dataset.scenario;
     renderBenefitChart(currentScenario);
+
+    // Sync hero section with selected scenario
+    const d = BENEFITS[currentScenario];
+
+    // Animate big hero number
+    const heroEl = document.getElementById('gildiHeroNum');
+    if (heroEl) animateCounter(heroEl, d.total, '', 500);
+
+    // Per-capita (~54.000 kr.) — round to nearest 1.000
+    const perCapita = Math.round(d.total * 1e9 / 249560 / 1000) * 1000;
+    const pcEl = document.getElementById('gildiHeroPerCapita');
+    if (pcEl) pcEl.textContent = '~' + perCapita.toLocaleString('is-IS') + ' kr.';
+
+    // Payback years
+    const paybackYrs = Math.ceil(BUILD_COST / d.total);
+    const pbEl = document.getElementById('gildiHeroPayback');
+    if (pbEl) pbEl.textContent = '~' + paybackYrs + ' ár';
+    const pbTxt = document.getElementById('gildiHeroPaybackText');
+    if (pbTxt) pbTxt.textContent = paybackYrs + ' ár';
+
+    // Payback chart
+    renderPayback(d.total);
   });
 });
 
@@ -3584,7 +3606,7 @@ const observer = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting && !heroAnimated) {
       heroAnimated = true;
-      animateCounter(e.target, 13.4, '', 1200);
+      animateCounter(e.target, BENEFITS[currentScenario].total, '', 1200);
     }
   });
 }, { threshold: 0.5 });
