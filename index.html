@@ -1620,6 +1620,11 @@ function bprDelay(volumePerLane, capacityPerLane, freeFlowMin) {
   return freeFlowMin * (1 + 0.15 * Math.pow(vc, 4));
 }
 
+function carsPerThousandForYear(baseCarsPerK, annualChange, year) {
+  if (year === 2025) return baseCarsPerK;
+  return Math.max(0, baseCarsPerK + annualChange * (year - 2025));
+}
+
 // Level of Service based on V/C
 function getLOS(vc) {
   if (vc < 0.6)  return {los:'A', col:'#34d399', label:'Frjáls umferð'};
@@ -1661,7 +1666,7 @@ function calcPeak() {
   var cars2025 = Math.round(pop2025 * carsNow / 1000);
   var popYr = getPop(yr);
   var carGrowthRate = parseInt(document.getElementById('carGrowth').value);
-  var carsPerK = yr===2025 ? carsNow : Math.min(700, carsNow + carGrowthRate * (yr - 2025)); // cap future growth; baseline yr uses slider directly
+  var carsPerK = carsPerThousandForYear(carsNow, carGrowthRate, yr);
   var carsYr = Math.round(popYr * carsPerK / 1000);
   var growthFactor = carsYr / cars2025;
 
@@ -1803,7 +1808,7 @@ function calc() {
 
   for(var i=0;i<years.length;i++){
     var yr=years[i], pop=popSchedule[yr];
-    var cpk=yr===2025?carsNow:Math.min(700,carsNow+carGrowth*(yr-2025)); // cap future growth at 700/1000; baseline yr uses slider directly
+    var cpk = carsPerThousandForYear(carsNow, carGrowth, yr);
     var cNobl=Math.round(pop*cpk/1000);
     var hasBL=yr>=blYear;
     var cBL=hasBL?Math.round(cNobl*(1-modalShift)):null;
@@ -1848,7 +1853,8 @@ function renderRidershipCalc() {
   var cN=parseInt(document.getElementById('carsNow').value)||648;
   var blYr=parseInt(document.getElementById('blYear').value)||2031;
   var pop=getPop(blYr);
-  var cpk=cN+3*(blYr-2025);
+  var carGrowth=parseInt(document.getElementById('carGrowth').value)||0;
+  var cpk=carsPerThousandForYear(cN, carGrowth, blYr);
   var total=Math.round(pop*cpk/1000);
   var repl=Math.round(total*pct/100);
   var dTrips=Math.round(repl*1.8);
