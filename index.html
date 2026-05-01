@@ -673,6 +673,450 @@
     /* Time hero on mobile is more compact */
     #panel-yfirdaginn .yd-time-display { font-size: 1.75rem; }
   }
+
+
+  /* ═══════════════════════════════════════
+     ÞJÓÐHAGSLEGT GILDI flipi
+     ═══════════════════════════════════════ */
+
+
+
+
+
+
+/* ── PANEL WRAPPER ── */
+#panel-gildi {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── HERO ── */
+#panel-gildi .hero {
+  padding: 56px 0 48px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 56px;
+}
+#panel-gildi .hero-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#panel-gildi .hero-eyebrow::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  max-width: 120px;
+}
+#panel-gildi .hero-number {
+  font-family: var(--mono);
+  font-size: clamp(3.5rem, 8vw, 6.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+#panel-gildi .hero-number span.unit {
+  font-size: 0.38em;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: -0.01em;
+  vertical-align: baseline;
+  margin-left: 4px;
+}
+#panel-gildi .hero-headline {
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  font-weight: 400;
+  color: var(--muted);
+  max-width: 640px;
+  line-height: 1.45;
+  margin-bottom: 40px;
+}
+.hero-headline strong { color: var(--text); font-weight: 600; }
+
+/* ── HERO STAT CARDS ── */
+#panel-gildi .hero-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+#panel-gildi .hero-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 24px 20px;
+  position: relative;
+  overflow: hidden;
+}
+#panel-gildi .hero-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 14px 14px 0 0;
+}
+.hero-card.green::before  { background: var(--success); }
+.hero-card.indigo::before { background: var(--accent); }
+.hero-card.amber::before  { background: var(--warning); }
+
+#panel-gildi .hero-card-num {
+  font-family: var(--mono);
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+.green  .hero-card-num { color: var(--success); }
+.indigo .hero-card-num { color: var(--accent); }
+.amber  .hero-card-num { color: var(--warning); }
+
+#panel-gildi .hero-card-label {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+#panel-gildi .hero-card-sub {
+  font-size: 0.6875rem;
+  color: var(--faint);
+  margin-top: 4px;
+}
+
+/* ── SECTION WRAPPER ── */
+#panel-gildi .section {
+  margin-bottom: 56px;
+}
+#panel-gildi .section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+#panel-gildi .section-num {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--faint);
+  flex-shrink: 0;
+}
+#panel-gildi .section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+#panel-gildi .section-title em {
+  font-style: normal;
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 0.9em;
+}
+
+/* ── CARD ── */
+#panel-gildi .card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+/* ── BENEFIT BAR CHART ── */
+#panel-gildi .benefit-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+#panel-gildi .benefit-scenario-toggle {
+  display: flex;
+  gap: 0;
+  background: #111827;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 3px;
+  width: fit-content;
+  margin-bottom: 8px;
+}
+#panel-gildi .scenario-btn {
+  padding: 5px 16px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted);
+  background: none;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--ui);
+  transition: all 0.15s;
+}
+#panel-gildi .scenario-btn.active {
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.benefit-bar-chart { width: 100%; }
+#panel-gildi .benefit-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 100px;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid #1a2740;
+}
+.benefit-row:last-child { border-bottom: none; }
+#panel-gildi .benefit-row.total {
+  border-top: 1px solid var(--border);
+  border-bottom: none;
+  padding-top: 16px;
+  margin-top: 4px;
+}
+#panel-gildi .benefit-cat {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+.benefit-row.total .benefit-cat { color: var(--text); font-weight: 600; }
+#panel-gildi .benefit-bar-track {
+  height: 10px;
+  background: #111827;
+  border-radius: 5px;
+  overflow: hidden;
+}
+#panel-gildi .benefit-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+.benefit-row.total .benefit-bar-track { height: 14px; }
+#panel-gildi .benefit-amount {
+  font-family: var(--mono);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: right;
+  white-space: nowrap;
+}
+.benefit-row.total .benefit-amount { font-size: 1.0625rem; }
+
+/* ── RANGE INDICATOR ── */
+#panel-gildi .range-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 100px;
+  align-items: center;
+  gap: 16px;
+  padding: 5px 0 0;
+}
+#panel-gildi .range-track {
+  position: relative;
+  height: 4px;
+}
+#panel-gildi .range-dot {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+}
+#panel-gildi .range-line {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 2px;
+  border-radius: 1px;
+  opacity: 0.35;
+}
+#panel-gildi .range-label {
+  font-size: 0.625rem;
+  color: var(--faint);
+  font-family: var(--mono);
+  text-align: right;
+}
+
+/* ── CAR COST ── */
+#panel-gildi .car-cost-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.car-cost-bars { display: flex; flex-direction: column; gap: 10px; }
+.cc-row { display: grid; grid-template-columns: 120px 1fr 80px; align-items: center; gap: 12px; }
+.cc-label { font-size: 0.8125rem; color: var(--muted); }
+.cc-track { height: 8px; background: #111827; border-radius: 4px; overflow: hidden; }
+.cc-fill { height: 100%; border-radius: 4px; background: var(--success); opacity: 0.8; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+.cc-amount { font-family: var(--mono); font-size: 0.8125rem; color: var(--muted); text-align: right; }
+#panel-gildi .cc-total-row {
+  display: flex; align-items: baseline; gap: 10px;
+  padding-top: 12px; border-top: 1px solid var(--border); margin-top: 4px;
+}
+.cc-total-label { font-size: 0.8125rem; color: var(--muted); }
+.cc-total-val { font-family: var(--mono); font-size: 1.25rem; font-weight: 700; color: var(--text); }
+
+#panel-gildi .car-cost-callout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+#panel-gildi .callout-box {
+  background: #111827;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+#panel-gildi .callout-num {
+  font-family: var(--mono);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.callout-label { font-size: 0.8125rem; color: var(--muted); line-height: 1.45; }
+.callout-sub { font-size: 0.6875rem; color: var(--faint); margin-top: 6px; }
+
+/* ── PAYBACK TIMELINE ── */
+.payback-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.payback-wrap svg { min-width: 600px; }
+
+/* ── COMPARISON ── */
+#panel-gildi .comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+#panel-gildi .cmp-card {
+  border-radius: 14px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.cmp-bad  { background: #1a0f0f; border: 1px solid #4a1a1a; }
+.cmp-good { background: #0a1f18; border: 1px solid #1a4a35; }
+
+#panel-gildi .cmp-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#panel-gildi .cmp-badge {
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-family: var(--mono);
+}
+.cmp-bad  .cmp-badge { background: #4a1a1a; color: #f87171; }
+.cmp-good .cmp-badge { background: #1a4a35; color: #34d399; }
+
+.cmp-title { font-size: 1.125rem; font-weight: 700; letter-spacing: -0.01em; }
+.cmp-bad  .cmp-title { color: #fca5a5; }
+.cmp-good .cmp-title { color: #6ee7b7; }
+
+.cmp-rows { display: flex; flex-direction: column; gap: 12px; }
+.cmp-row { display: flex; flex-direction: column; gap: 3px; }
+.cmp-row-label { font-size: 0.6875rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--faint); }
+.cmp-row-val { font-family: var(--mono); font-size: 1.125rem; font-weight: 600; }
+.cmp-bad  .cmp-row-val { color: #f87171; }
+.cmp-good .cmp-row-val { color: #34d399; }
+.cmp-row-sub { font-size: 0.75rem; color: var(--faint); line-height: 1.4; }
+
+#panel-gildi .cmp-verdict {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+.cmp-bad  .cmp-verdict { background: #2a1212; color: #fca5a5; }
+.cmp-good .cmp-verdict { background: #0f2d22; color: #6ee7b7; }
+
+/* ── ASSUMPTIONS ── */
+#panel-gildi details.assumptions {
+  background: #111827;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+#panel-gildi details.assumptions summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  font-size: 0.875rem;
+  color: var(--muted);
+  font-weight: 500;
+  -webkit-tap-highlight-color: transparent;
+}
+details.assumptions summary::-webkit-details-marker { display: none; }
+#panel-gildi details.assumptions summary::after {
+  content: '+';
+  font-size: 1.125rem;
+  color: var(--accent);
+  font-weight: 400;
+  transition: transform 0.2s;
+}
+details[open].assumptions summary::after { content: '−'; }
+
+.assumptions-
+#panel-gildi .assump-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px solid #1a2740;
+  gap: 12px;
+}
+.assump-row:last-child, .assump-row:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+.assump-label { font-size: 0.8125rem; color: var(--muted); }
+.assump-val   { font-family: var(--mono); font-size: 0.8125rem; color: var(--text); font-weight: 500; text-align: right; white-space: nowrap; }
+
+/* ── FOOTNOTE ── */
+#panel-gildi .footnote-gildi {
+  padding-top: 20px;
+  border-top: 1px solid #1a2740;
+  font-size: 0.6875rem;
+  color: var(--faint);
+  line-height: 1.6;
+}
+.footnote-gildi em { font-style: italic; color: #38485e; }
+
+/* ── ANIMATED COUNTER ── */
+.count-up { display: inline; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  .hero-cards { grid-template-columns: 1fr; gap: 8px; }
+  .hero-number { font-size: 3rem; }
+  .car-cost-grid { grid-template-columns: 1fr; }
+  .comparison-grid { grid-template-columns: 1fr; }
+  .benefit-row { grid-template-columns: 130px 1fr 80px; gap: 10px; }
+  .assumptions-
+  .cc-row { grid-template-columns: 100px 1fr 70px; }
+}
+@media (max-width: 500px) {
+  .benefit-row { grid-template-columns: 1fr; gap: 5px; }
+  .benefit-bar-track { display: none; }
+  .range-row { display: none; }
+  .cc-row { grid-template-columns: 1fr 60px; }
+  .cc-label { display: none; }
+}
 </style>
 </head>
 <body>
@@ -709,6 +1153,7 @@
     <button class="tab" onclick="showTab('straeto')">Strætó grunnlína</button>
     <button class="tab" onclick="showTab('roads')">Háannatími</button>
     <button class="tab" onclick="showTab('munis')">Sveitarfélögin 7</button>
+    <button class="tab" onclick="showTab('gildi')">Þjóðhagslegt gildi</button>
   </nav>
   <!-- Mobile tab dropdown -->
   <div style="position:relative; padding-bottom:10px;">
@@ -1944,7 +2389,7 @@ function calcRoads() {
 var TABS_WITH_SLIDERS = { peak: true, calc: true };
 var TAB_LABELS = {
   home: 'Yfirlit', peak: 'Annatímar & tafar', yfirdaginn: 'Áhrif Borgarlínu', calc: 'Reiknivél',
-  straeto: 'Strætó grunnlína', roads: 'Háannatími', munis: 'Sveitarfélögin 7'
+  straeto: 'Strætó grunnlína', roads: 'Háannatími', munis: 'Sveitarfélögin 7', gildi: 'Þjóðhagslegt gildi'
 };
 var TAB_PATHS = {
   home:       '/',
@@ -1952,6 +2397,7 @@ var TAB_PATHS = {
   yfirdaginn: '/yfirdaginn',
   calc:       '/reiknivel',
   straeto:    '/straeto',
+  gildi:      '/thjodhagsleg',
   roads:      '/haannatimi',
   munis:      '/sveitarfelogin'
 };
@@ -1971,7 +2417,7 @@ function showTab(name) {
   // Mobile: update dropdown label + checkmarks
   var lbl = document.getElementById('mobTabLabel');
   if (lbl) lbl.textContent = TAB_LABELS[name] || name;
-  ['home','peak','yfirdaginn','calc','straeto','roads','munis'].forEach(function(t) {
+  ['home','peak','yfirdaginn','calc','straeto','roads','munis','gildi'].forEach(function(t) {
     var chk = document.getElementById('chk-' + t);
     if (!chk) return;
     chk.style.visibility = (t === name) ? 'visible' : 'hidden';
@@ -2015,6 +2461,7 @@ function showTab(name) {
   else if (name === 'straeto') renderRidershipCalc();
   else if (name === 'roads')   calcRoads();
   else if (name === 'munis')   renderMunis();
+  else if (name === 'gildi')  initGildiTab();
   updateHash();
 }
 
@@ -2077,7 +2524,7 @@ var SHARE_SLIDERS = ['peakYear','pkCarsNow','pkModalShift','schoolFactor','numLa
   'artunnLoadPct'];
 
 function getActiveTab() {
-  var names = ['home','peak','yfirdaginn','calc','straeto','roads','munis'];
+  var names = ['home','peak','yfirdaginn','calc','straeto','roads','munis','gildi'];
   for (var i = 0; i < names.length; i++) {
     var p = document.getElementById('panel-' + names[i]);
     if (p && p.classList.contains('active')) return names[i];
@@ -2504,6 +2951,233 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 })();
 </script>
+
+
+<!-- æææ GILDI panel æææ -->
+<!-- ═══════════════════════════════════════════════════════
+     TAB BUTTON
+     <button class="tab" data-tab="gildi">Þjóðhagslegt gildi</button>
+     ═══════════════════════════════════════════════════════ -->
+
+<div class="panel" id="panel-gildi">
+
+  <!-- ─── HERO ─── -->
+  <div class="hero">
+    <div class="hero-eyebrow">Þjóðhagsleg greining · Borgarlínan</div>
+    <div class="hero-number">
+      <span class="count-up" data-target="10.2" data-suffix="">10,2</span><span class="unit">ma. kr. á ári</span>
+    </div>
+    <p class="hero-headline">
+      Metin þjóðhagsleg áhrif Borgarlínunnar á höfuðborgarsvæðinu.<br>
+      Áætlaður endurgreiðslutími stofnkostnaðar er um <strong>5 ár</strong> — eftir það skilar fjárfestingin hreinum hagnaði.
+    </p>
+
+    <div class="hero-cards">
+      <div class="hero-card green">
+        <div class="hero-card-num">~40.000 kr.</div>
+        <div class="hero-card-label">Sparnaður per íbúa á ári</div>
+        <div class="hero-card-sub">249.560 íbúar á höfuðborgarsvæðinu</div>
+      </div>
+      <div class="hero-card indigo">
+        <div class="hero-card-num">~5 ár</div>
+        <div class="hero-card-label">Endurgreiðslutími fjárfestingar</div>
+        <div class="hero-card-sub">50 ma. kr. byggingarkostnaður (BRT)</div>
+      </div>
+      <div class="hero-card amber">
+        <div class="hero-card-num">~1.000.000 kr.</div>
+        <div class="hero-card-label">Sparnaður heimilis sem fer 2→1 bíll</div>
+        <div class="hero-card-sub">Rekstrarkostnaður eins bíls á ári</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 1: BENEFIT BREAKDOWN ─── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <span class="section-title">Árlegar þjóðhagslegar bætur <em>— þrír flokkar</em></span>
+    </div>
+
+    <div class="card">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+        <div style="font-size:0.75rem; color:var(--muted);">
+          Miðmat: <strong style="color:var(--text); font-family:var(--mono);">10,2 ma. kr./ár</strong>
+          &nbsp;·&nbsp; Bil: 8,3 – 13,3 ma. kr.
+        </div>
+        <div class="benefit-scenario-toggle">
+          <button class="scenario-btn" data-scenario="low">Lág</button>
+          <button class="scenario-btn active" data-scenario="mid">Mið</button>
+          <button class="scenario-btn" data-scenario="high">Há</button>
+        </div>
+      </div>
+
+      <div class="benefit-bar-chart" id="benefitChart">
+        <!-- rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 2: CAR COST ─── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <span class="section-title">Hvað kostar að eiga bíl? <em>— 1.227.000 kr. á ári</em></span>
+    </div>
+
+    <div class="card">
+      <div class="car-cost-grid">
+        <div>
+          <div style="font-size:0.6875rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:16px;">Kostnaðarliðir</div>
+          <div class="car-cost-bars" id="carCostBars">
+            <!-- rendered by JS -->
+          </div>
+        </div>
+        <div class="car-cost-callout">
+          <div class="callout-box" style="border-color:#2d4a3a;">
+            <div class="callout-num" style="color:var(--success);">9.450</div>
+            <div class="callout-label">bílar gætu horfið af vegum höfuðborgarsvæðisins</div>
+            <div class="callout-sub">Með 5% skiptingarstuðli (modal shift) — varfærin spá</div>
+          </div>
+          <div class="callout-box">
+            <div class="callout-num" style="color:var(--warning);">648</div>
+            <div class="callout-label">bílar per 1.000 íbúa í dag — ein hæsta tíðni á Norðurlöndum</div>
+            <div class="callout-sub">Meðaltal Norðurlanda: ~400/1.000</div>
+          </div>
+          <div class="callout-box" style="border-color:#2a3a5a;">
+            <div class="callout-num" style="color:var(--accent);">~3.300 kr.</div>
+            <div class="callout-label">sparnaður per íbúa á mánuði</div>
+            <div class="callout-sub">Á grundvelli miðmats 10,2 ma. kr./ár</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 3: PAYBACK TIMELINE ─── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <span class="section-title">Endurgreiðslutími fjárfestingar <em>— 20 ára sjónarhorn</em></span>
+    </div>
+    <div class="card" style="padding:24px 24px 20px;">
+      <div class="payback-wrap">
+        <svg id="paybackChart" viewBox="0 0 900 280" style="width:100%;height:auto;display:block;" role="img" aria-label="Endurgreiðslutímalína"></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 4: COMPARISON ─── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <span class="section-title">Samanburður við aðra fjárfestingu</span>
+    </div>
+
+    <div class="comparison-grid">
+      <div class="cmp-card cmp-bad">
+        <div class="cmp-header">
+          <span class="cmp-badge">Samanburður</span>
+          <span class="cmp-title">Sundabraut</span>
+        </div>
+        <div class="cmp-rows">
+          <div class="cmp-row">
+            <span class="cmp-row-label">Áætlaður kostnaður</span>
+            <span class="cmp-row-val">60–80 ma. kr.</span>
+          </div>
+          <div class="cmp-row">
+            <span class="cmp-row-label">Þjóðhagslegur ábati/ár</span>
+            <span class="cmp-row-val" style="color:var(--faint); font-size:0.9375rem;">—</span>
+            <span class="cmp-row-sub">Umferð flyst á aðrar leiðir — sparast ekki</span>
+          </div>
+          <div class="cmp-row">
+            <span class="cmp-row-label">Endurgreiðslutími</span>
+            <span class="cmp-row-val" style="color:var(--faint); font-size:0.9375rem;">Aldrei</span>
+            <span class="cmp-row-sub">Enginn sparnaður á rekstrarkostnaði eða tímagildi</span>
+          </div>
+          <div class="cmp-row">
+            <span class="cmp-row-label">Modal shift</span>
+            <span class="cmp-row-val" style="color:var(--faint); font-size:0.9375rem;">0%</span>
+            <span class="cmp-row-sub">Fjölgar bílum á vegum til lengri tíma</span>
+          </div>
+        </div>
+        <div class="cmp-verdict">
+          Eykur umferðargetu tímabundið. Leysir ekki vandann — flytur hann.
+        </div>
+      </div>
+
+      <div class="cmp-card cmp-good">
+        <div class="cmp-header">
+          <span class="cmp-badge">Tillagan</span>
+          <span class="cmp-title">Borgarlínan</span>
+        </div>
+        <div class="cmp-rows">
+          <div class="cmp-row">
+            <span class="cmp-row-label">Áætlaður kostnaður</span>
+            <span class="cmp-row-val">~50 ma. kr.</span>
+            <span class="cmp-row-sub">BRT — ekki járnbraut</span>
+          </div>
+          <div class="cmp-row">
+            <span class="cmp-row-label">Þjóðhagslegur ábati/ár</span>
+            <span class="cmp-row-val">10,2 ma. kr.</span>
+            <span class="cmp-row-sub">Tímasparnaður + bílakostnaður + losun</span>
+          </div>
+          <div class="cmp-row">
+            <span class="cmp-row-label">Endurgreiðslutími</span>
+            <span class="cmp-row-val">~5 ár</span>
+            <span class="cmp-row-sub">Í tímagildi einu saman</span>
+          </div>
+          <div class="cmp-row">
+            <span class="cmp-row-label">Modal shift</span>
+            <span class="cmp-row-val">5%</span>
+            <span class="cmp-row-sub">~9.450 bílar hverfa af vegum</span>
+          </div>
+        </div>
+        <div class="cmp-verdict">
+          Á 20 árum: ~150 ma. kr. í uppsöfnuðum þjóðhagslegum ábata.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 5: ASSUMPTIONS ─── -->
+  <div class="section" style="margin-bottom:32px;">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <span class="section-title">Forsendur og aðferðafræði</span>
+    </div>
+
+    <details class="assumptions">
+      <summary>Sýna forsendur útreiknings</summary>
+      <div class="assumptions-body">
+        <div class="assump-row"><span class="assump-label">Tímagildi</span><span class="assump-val">3.500 kr./klst</span></div>
+        <div class="assump-row"><span class="assump-label">Vinnudagar á ári</span><span class="assump-val">250 dagar</span></div>
+        <div class="assump-row"><span class="assump-label">Háannatímar á dag</span><span class="assump-val">3,5 klst</span></div>
+        <div class="assump-row"><span class="assump-label">Modal shift (varfærin)</span><span class="assump-val">5%</span></div>
+        <div class="assump-row"><span class="assump-label">LOS breyting (Ártúnsbrekka)</span><span class="assump-val">F → C/D</span></div>
+        <div class="assump-row"><span class="assump-label">Tímasparnaður per ferð</span><span class="assump-val">15–20 mín</span></div>
+        <div class="assump-row"><span class="assump-label">Meðalbílaeining</span><span class="assump-val">1,2 manns/bíll</span></div>
+        <div class="assump-row"><span class="assump-label">Hlutfall BL-notenda sem skipta</span><span class="assump-val">20% (2→1 bíll)</span></div>
+        <div class="assump-row"><span class="assump-label">Byggingarkostnaður</span><span class="assump-val">50 ma. kr. (BRT)</span></div>
+        <div class="assump-row"><span class="assump-label">Íbúar á höfuðborgarsvæðinu</span><span class="assump-val">249.560</span></div>
+        <div class="assump-row"><span class="assump-label">Heimildir</span><span class="assump-val">Vegagerðin, Hagstofa, Samgöngustofa</span></div>
+        <div class="assump-row"><span class="assump-label">Umferðarlíkan</span><span class="assump-val">borgarlina.app</span></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ─── FOOTNOTE ─── -->
+  <div class="footnote-gildi">
+    Útreikningar byggðir á umferðarlíkani borgarlina.app, tímagildi Samgöngustofu og bifreiðakostnaðargögnum
+    Samkaupa 2024. <em>Þetta er mat — ekki opinber CBA-greining (cost-benefit analysis).</em>
+    Tölur sýna miðmat nema annað sé tekið fram. Bil: lág 8,3 ma. kr. / há 13,3 ma. kr. á ári.
+  </div>
+
+</div>
+<!-- ═══ END PANEL ═══ -->
+
+
+</body>
+
 </div><!-- /page-wrap -->
 
 <!-- Mobile: FAB + drawer — placed AFTER page-wrap so original slider IDs come first in DOM -->
@@ -2520,5 +3194,315 @@ window.addEventListener('DOMContentLoaded', function() {
   </div>
   <div class="drawer-body" id="mob-drawer-sliders"></div>
 </div>
+
+<script>
+// ─── ÞJÓÐHAGSLEGT GILDI ───
+function initGildiTab() {
+  // Only init once
+  if (window._gildiInited) return;
+  window._gildiInited = true;
+// ─────────────────────────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────────────────────────
+const BENEFITS = {
+  low:  { timi: 5.5, bil: 2.5, fuel: 0.3, total: 8.3  },
+  mid:  { timi: 6.5, bil: 3.2, fuel: 0.5, total: 10.2 },
+  high: { timi: 8.0, bil: 4.5, fuel: 0.8, total: 13.3 },
+};
+const BENEFIT_CATS = [
+  { key:'timi', label:'Tímasparnaður', sub:'Umferðarléttun, 2 BL leiðir', color:'#6366f1' },
+  { key:'bil',  label:'Bílakostnaðarsparnaður', sub:'Eignarhald + eldsneyti', color:'#34d399' },
+  { key:'fuel', label:'Eldsneyti + losun + slys', sub:'Umhverfis- og öryggisábati', color:'#fbbf24' },
+];
+const CAR_COSTS = [
+  { label:'Afskrift',        amount:500000 },
+  { label:'Eldsneyti',       amount:262000 },
+  { label:'Tryggingar',      amount:180000 },
+  { label:'Viðhald',         amount:150000 },
+  { label:'Bifreiðagjald',   amount:75000  },
+  { label:'Bílastæði',       amount:60000  },
+];
+const CC_TOTAL = 1227000;
+
+let currentScenario = 'mid';
+
+// ─────────────────────────────────────────────────────────────────
+// BENEFIT BAR CHART
+// ─────────────────────────────────────────────────────────────────
+function fmtISK(v) {
+  return v.toFixed(1).replace('.', ',') + ' ma.';
+}
+
+function renderBenefitChart(scenario) {
+  const d = BENEFITS[scenario];
+  const maxVal = BENEFITS.high.total;
+  const container = document.getElementById('benefitChart');
+
+  let html = '<div class="benefit-wrap">';
+
+  BENEFIT_CATS.forEach(cat => {
+    const val = d[cat.key];
+    const pct = (val / maxVal * 100).toFixed(1);
+    const lowPct  = (BENEFITS.low[cat.key]  / maxVal * 100).toFixed(1);
+    const highPct = (BENEFITS.high[cat.key] / maxVal * 100).toFixed(1);
+    const midPct  = (BENEFITS.mid[cat.key]  / maxVal * 100).toFixed(1);
+
+    html += `
+      <div>
+        <div class="benefit-row">
+          <div class="benefit-cat"><strong style="color:var(--text);font-weight:600;">${cat.label}</strong><br><span style="font-size:0.6875rem;">${cat.sub}</span></div>
+          <div class="benefit-bar-track">
+            <div class="benefit-bar-fill" style="width:${pct}%; background:${cat.color};"></div>
+          </div>
+          <div class="benefit-amount">${fmtISK(val)}</div>
+        </div>
+        <div class="range-row">
+          <div></div>
+          <div class="range-track">
+            <div class="range-line" style="left:${lowPct}%; width:${highPct - lowPct}%; background:${cat.color};"></div>
+            <div class="range-dot" style="left:${lowPct}%;  background:${cat.color};"></div>
+            <div class="range-dot" style="left:${midPct}%;  background:${cat.color};"></div>
+            <div class="range-dot" style="left:${highPct}%; background:${cat.color};"></div>
+          </div>
+          <div class="range-label">${fmtISK(BENEFITS.low[cat.key])} – ${fmtISK(BENEFITS.high[cat.key])}</div>
+        </div>
+      </div>`;
+  });
+
+  // Total row
+  const totalPct = (d.total / maxVal * 100).toFixed(1);
+  html += `
+    <div class="benefit-row total">
+      <div class="benefit-cat">Heildarsparnaður</div>
+      <div class="benefit-bar-track">
+        <div class="benefit-bar-fill" style="width:${totalPct}%;
+          background: linear-gradient(90deg, #6366f1 0%, #34d399 55%, #fbbf24 100%);"></div>
+      </div>
+      <div class="benefit-amount" style="color:var(--text);">${fmtISK(d.total)}</div>
+    </div>`;
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// CAR COST BARS
+// ─────────────────────────────────────────────────────────────────
+function renderCarCost() {
+  const container = document.getElementById('carCostBars');
+  let html = '';
+  CAR_COSTS.forEach(item => {
+    const pct = (item.amount / CC_TOTAL * 100).toFixed(1);
+    const fmt = item.amount.toLocaleString('is-IS');
+    html += `
+      <div class="cc-row">
+        <div class="cc-label">${item.label}</div>
+        <div class="cc-track"><div class="cc-fill" style="width:${pct}%;"></div></div>
+        <div class="cc-amount">${fmt}</div>
+      </div>`;
+  });
+  html += `
+    <div class="cc-total-row">
+      <span class="cc-total-label">Samtals</span>
+      <span class="cc-total-val">${CC_TOTAL.toLocaleString('is-IS')} kr.</span>
+    </div>`;
+  container.innerHTML = html;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// PAYBACK TIMELINE SVG
+// ─────────────────────────────────────────────────────────────────
+function renderPayback() {
+  const svg = document.getElementById('paybackChart');
+  const VW = 900, VH = 310;
+  const ML = 70, MR = 20, MT = 30, MB = 70;
+  const CW = VW - ML - MR, CH = VH - MT - MB;
+  const YEARS = 20;
+  const ANNUAL = 10.2;  // ma./yr
+  const BUILD  = 50;    // ma.
+  // Cumulative net: year 0 = -50, year N = -50 + N*10.2
+  // Y axis: -60 to +160
+  const YMIN = -60, YMAX = 160;
+
+  function xp(yr) { return ML + (yr / YEARS) * CW; }
+  function yp(v)  { return MT + CH - ((v - YMIN) / (YMAX - YMIN)) * CH; }
+
+  let html = '';
+
+  // ── Background zones
+  // Negative zone (below 0)
+  const y0 = yp(0).toFixed(1);
+  html += `<rect x="${ML}" y="${y0}" width="${CW}" height="${(yp(YMIN) - yp(0)).toFixed(1)}"
+    fill="#f87171" opacity="0.04"/>`;
+  // Positive zone
+  html += `<rect x="${ML}" y="${MT}" width="${CW}" height="${(parseFloat(y0) - MT).toFixed(1)}"
+    fill="#34d399" opacity="0.03"/>`;
+
+  // ── Y grid lines
+  [-50,-25,0,25,50,75,100,125,150].forEach(v => {
+    const y = yp(v).toFixed(1);
+    html += `<line x1="${ML}" y1="${y}" x2="${ML+CW}" y2="${y}"
+      stroke="${v===0?'#475569':'#1a2740'}" stroke-width="${v===0?1.5:1}"/>`;
+    html += `<text x="${(ML-8).toFixed(1)}" y="${y}" dy="0.35em"
+      font-family="JetBrains Mono,monospace" font-size="10" fill="${v===0?'#94a3b8':'#475569'}" text-anchor="end">${v}</text>`;
+  });
+
+  // ── X axis labels
+  [0,5,10,15,20].forEach(yr => {
+    const x = xp(yr).toFixed(1);
+    html += `<text x="${x}" y="${(MT+CH+16).toFixed(1)}" text-anchor="middle"
+      font-family="JetBrains Mono,monospace" font-size="10" fill="#475569">Ár ${yr}</text>`;
+    html += `<line x1="${x}" y1="${MT}" x2="${x}" y2="${MT+CH}" stroke="#1a2740" stroke-width="1"/>`;
+  });
+
+  // ── Y axis label
+  html += `<text x="14" y="${(MT + CH/2).toFixed(1)}" text-anchor="middle"
+    font-family="Inter,sans-serif" font-size="10" fill="#475569"
+    transform="rotate(-90,14,${(MT + CH/2).toFixed(1)})">ma. kr. (uppsafnað)</text>`;
+
+  // ── Cumulative benefit line
+  const linePoints = [];
+  for (let yr = 0; yr <= YEARS; yr++) {
+    const cumNet = -BUILD + yr * ANNUAL;
+    linePoints.push(`${xp(yr).toFixed(1)},${yp(cumNet).toFixed(1)}`);
+  }
+
+  // Fill above breakeven (green)
+  const breakEvenYr = BUILD / ANNUAL; // ~4.9
+  const bx = xp(breakEvenYr).toFixed(1);
+  // Fill area
+  const fillPtsAbove = [];
+  for (let yr = Math.ceil(breakEvenYr); yr <= YEARS; yr++) {
+    fillPtsAbove.push(`${xp(yr).toFixed(1)},${yp(-BUILD + yr * ANNUAL).toFixed(1)}`);
+  }
+  if (fillPtsAbove.length > 0) {
+    html += `<path d="M ${bx},${y0} L ${fillPtsAbove.join(' L ')} L ${xp(YEARS).toFixed(1)},${y0} Z"
+      fill="#34d399" opacity="0.12"/>`;
+  }
+  // Fill below 0 (red)
+  const fillPtsBelow = [];
+  for (let yr = 0; yr <= Math.ceil(breakEvenYr); yr++) {
+    fillPtsBelow.push(`${xp(yr).toFixed(1)},${yp(-BUILD + yr * ANNUAL).toFixed(1)}`);
+  }
+  html += `<path d="M ${xp(0).toFixed(1)},${y0} L ${fillPtsBelow.join(' L ')} L ${bx},${y0} Z"
+    fill="#f87171" opacity="0.10"/>`;
+
+  // Main line
+  html += `<polyline points="${linePoints.join(' ')}"
+    fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linejoin="round"/>`;
+
+  // Annual benefit bars (small, stacked visual)
+  for (let yr = 1; yr <= YEARS; yr++) {
+    const x1 = xp(yr - 0.5);
+    const barH = (ANNUAL / (YMAX - YMIN)) * CH;
+    const cumNet = -BUILD + yr * ANNUAL;
+    const y1 = yp(cumNet);
+    const color = cumNet >= 0 ? '#34d399' : '#f87171';
+    html += `<rect x="${(x1 - 14).toFixed(1)}" y="${y1.toFixed(1)}" width="28" height="${barH.toFixed(1)}"
+      fill="${color}" opacity="0.18" rx="2"/>`;
+  }
+
+  // Breakeven marker
+  const beY = yp(0).toFixed(1);
+  html += `<line x1="${bx}" y1="${MT}" x2="${bx}" y2="${MT+CH}" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>`;
+  html += `<circle cx="${bx}" cy="${beY}" r="6" fill="#fbbf24" stroke="#080e1a" stroke-width="2"/>`;
+  // Label above dot, clear of the diagonal line
+  const annX  = parseFloat(bx);
+  const annYt = parseFloat(beY) - 28;
+  html += `<line x1="${bx}" y1="${(parseFloat(beY) - 8).toFixed(1)}" x2="${bx}" y2="${(annYt + 16).toFixed(1)}"
+    stroke="#fbbf24" stroke-width="1" opacity="0.5"/>`;
+  html += `<rect x="${(annX - 22).toFixed(1)}" y="${(annYt - 14).toFixed(1)}" width="44" height="18" rx="4"
+    fill="#1a1200" stroke="#fbbf24" stroke-width="1" opacity="0.9"/>`;
+  html += `<text x="${annX.toFixed(1)}" y="${(annYt + 3).toFixed(1)}" text-anchor="middle"
+    font-family="JetBrains Mono,monospace" font-size="10.5" fill="#fbbf24" font-weight="700">~5 ár</text>`;
+
+  // Year 0 annotation
+  html += `<text x="${(xp(0)+6).toFixed(1)}" y="${(yp(-BUILD)-8).toFixed(1)}"
+    font-family="JetBrains Mono,monospace" font-size="9" fill="#f87171">−50 ma.</text>`;
+
+  // Year 20 annotation
+  const y20 = -BUILD + 20 * ANNUAL;
+  html += `<text x="${(xp(20)-4).toFixed(1)}" y="${(yp(y20)-10).toFixed(1)}" text-anchor="end"
+    font-family="JetBrains Mono,monospace" font-size="9.5" fill="#34d399" font-weight="600">+${y20.toFixed(0)} ma.</text>`;
+
+  // ── X axis baseline
+  html += `<line x1="${ML}" y1="${MT+CH}" x2="${ML+CW}" y2="${MT+CH}" stroke="#334155" stroke-width="1"/>`;
+
+  // ── Legend — sits below the chart with proper spacing
+  const LY = MT + CH + 42;
+  const legendItems = [
+    { type:'line',   color:'#6366f1', label:'Uppsafnaður nettóábati' },
+    { type:'rect',   color:'#34d399', label:'Árlegur ábati (10,2 ma. kr.)' },
+    { type:'circle', color:'#fbbf24', label:'Jafngildispunktur (~5 ár)' },
+  ];
+  let lx = ML + 8;
+  legendItems.forEach(item => {
+    if (item.type === 'line') {
+      html += `<rect x="${lx}" y="${(LY - 1.5).toFixed(1)}" width="20" height="3" rx="1.5" fill="${item.color}"/>`;
+      lx += 26;
+    } else if (item.type === 'rect') {
+      html += `<rect x="${lx}" y="${(LY - 6).toFixed(1)}" width="16" height="12" rx="2" fill="${item.color}" opacity="0.4"/>`;
+      lx += 22;
+    } else {
+      html += `<circle cx="${(lx + 6).toFixed(1)}" cy="${LY}" r="5.5" fill="${item.color}" stroke="#080e1a" stroke-width="1.5"/>`;
+      lx += 16;
+    }
+    html += `<text x="${lx}" y="${(LY + 4).toFixed(1)}"
+      font-family="Inter,sans-serif" font-size="11" fill="#94a3b8">${item.label}</text>`;
+    lx += item.label.length * 6.4 + 28;
+  });
+
+  svg.innerHTML = html;
+  svg.setAttribute('viewBox', `0 0 ${VW} ${VH}`);
+}
+
+// ─────────────────────────────────────────────────────────────────
+// SCENARIO TOGGLE
+// ─────────────────────────────────────────────────────────────────
+document.querySelectorAll('.scenario-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    currentScenario = this.dataset.scenario;
+    renderBenefitChart(currentScenario);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────
+// ANIMATED COUNTERS ON SCROLL
+// ─────────────────────────────────────────────────────────────────
+function animateCounter(el, target, suffix, duration) {
+  const start = performance.now();
+  function tick(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    const val = ease * target;
+    el.textContent = val.toFixed(1).replace('.', ',') + suffix;
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// Observe hero number
+const heroNum = document.querySelector('.hero-number .count-up');
+let heroAnimated = false;
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !heroAnimated) {
+      heroAnimated = true;
+      animateCounter(e.target, 10.2, '', 1200);
+    }
+  });
+}, { threshold: 0.5 });
+if (heroNum) observer.observe(heroNum);
+
+// ─────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────
+renderBenefitChart('mid');
+renderCarCost();
+renderPayback();
+}
+</script>
 </body>
 </html>
