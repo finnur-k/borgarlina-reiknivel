@@ -837,7 +837,7 @@
     </div>
     -->
 
-    <button type="button" class="home-card" onclick="showTab('yfirdaginn')" aria-label="Opna Áhrif Borgarlínu">
+    <button type="button" class="home-card" onclick="openHomeCard('yfirdaginn')" aria-label="Opna Áhrif Borgarlínu">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
         <span style="font-size:20px;">&#128205;</span>
         <span style="font-size:13px;font-weight:700;color:#f8fafc;">Áhrif Borgarlínu</span>
@@ -849,7 +849,7 @@
       <div style="margin-top:10px;font-size:11px;color:#6366f1;font-weight:600;">Opna &#8594;</div>
     </button>
 
-    <button type="button" class="home-card" onclick="showTab('calc')" aria-label="Opna reiknivél">
+    <button type="button" class="home-card" onclick="openHomeCard('calc')" aria-label="Opna reiknivél">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
         <span style="font-size:20px;">&#128202;</span>
         <span style="font-size:13px;font-weight:700;color:#f8fafc;">Reiknivél &mdash; heill dagur</span>
@@ -860,7 +860,7 @@
       <div style="margin-top:10px;font-size:11px;color:#6366f1;font-weight:600;">Opna &#8594;</div>
     </button>
 
-    <button type="button" class="home-card" onclick="showTab('straeto')" aria-label="Opna Strætó grunnlínu">
+    <button type="button" class="home-card" onclick="openHomeCard('straeto')" aria-label="Opna Strætó grunnlínu">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
         <span style="font-size:20px;">&#128652;</span>
         <span style="font-size:13px;font-weight:700;color:#f8fafc;">Strætó grunnlína</span>
@@ -871,7 +871,7 @@
       <div style="margin-top:10px;font-size:11px;color:#6366f1;font-weight:600;">Opna &#8594;</div>
     </button>
 
-    <button type="button" class="home-card" onclick="showTab('munis')" aria-label="Opna Sveitarfélögin 7">
+    <button type="button" class="home-card" onclick="openHomeCard('munis')" aria-label="Opna Sveitarfélögin 7">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
         <span style="font-size:20px;">&#127968;</span>
         <span style="font-size:13px;font-weight:700;color:#f8fafc;">Sveitarfélögin 7</span>
@@ -2007,9 +2007,23 @@ var TAB_PATHS = {
 var ACTIVE_TABS = { home:true, yfirdaginn:true, calc:true, straeto:true, roads:true, munis:true };
 var PATH_TO_TAB = {};
 Object.keys(TAB_PATHS).forEach(function(k) { PATH_TO_TAB[TAB_PATHS[k]] = k; });
+var BL_ANALYTICS_READY = false;
+var BL_ANALYTICS_SLIDERS_TOUCHED = {};
+var BL_ANALYTICS_SCROLL_DEPTHS = {};
+
+function trackBL(name, data) {
+  if (!window.va) return;
+  window.va('event', { name: name, data: data || {} });
+}
+
+function openHomeCard(name) {
+  trackBL('home_card_click', { target: name, tab: getActiveTab() });
+  showTab(name);
+}
 
 // ── TAB SWITCHER ──
 function showTab(name) {
+  var previousTab = getActiveTab();
   if (!ACTIVE_TABS[name]) name = 'home';
   document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
   document.querySelectorAll('.tab').forEach(function(b)  { b.classList.remove('active'); });
@@ -2067,6 +2081,9 @@ function showTab(name) {
   else if (name === 'roads')   calcRoads();
   else if (name === 'munis')   renderMunis();
   updateHash();
+  if (BL_ANALYTICS_READY && previousTab !== name) {
+    trackBL('tab_open', { tab: name, from: previousTab || 'none' });
+  }
 }
 
 // ── Mobile drawer (Forsendur) ──
@@ -2162,12 +2179,50 @@ function getShareURL() {
 
 function shareLink() {
   var url = getShareURL();
+  trackBL('share_click', { tab: getActiveTab(), path: window.location.pathname || '/' });
   if (navigator.clipboard) {
     navigator.clipboard.writeText(url).then(function() {
       var btn = document.getElementById('shareBtn');
       if (btn) { btn.textContent = 'Afritað!'; setTimeout(function(){ btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="2" r="1.2"/><circle cx="9" cy="9" r="1.2"/><circle cx="2" cy="5.5" r="1.2"/><path d="M3.2 5.5h4M3.2 5.5L7.8 2.5M7.8 8.5L3.2 5.5"/></svg> Deila'; }, 2000); }
     });
   } else { prompt('Afrita slóð:', url); }
+}
+
+function installBehaviorAnalytics() {
+  document.addEventListener('input', function(e) {
+    var el = e.target;
+    if (!el || el.type !== 'range') return;
+    var slider = el.getAttribute('data-src') || el.id || el.name || 'range';
+    if (BL_ANALYTICS_SLIDERS_TOUCHED[slider]) return;
+    BL_ANALYTICS_SLIDERS_TOUCHED[slider] = true;
+    trackBL('slider_touch', { slider: slider, tab: getActiveTab() });
+  });
+
+  document.addEventListener('change', function(e) {
+    var el = e.target;
+    if (!el || el.type !== 'range') return;
+    var slider = el.getAttribute('data-src') || el.id || el.name || 'range';
+    trackBL('slider_change', { slider: slider, tab: getActiveTab() });
+  });
+
+  var ticking = false;
+  function checkScrollDepth() {
+    ticking = false;
+    var doc = document.documentElement;
+    var maxScroll = Math.max(1, doc.scrollHeight - window.innerHeight);
+    var pct = Math.round((window.scrollY / maxScroll) * 100);
+    [25, 50, 75, 90].forEach(function(depth) {
+      if (pct >= depth && !BL_ANALYTICS_SCROLL_DEPTHS[depth]) {
+        BL_ANALYTICS_SCROLL_DEPTHS[depth] = true;
+        trackBL('scroll_depth', { depth: String(depth), tab: getActiveTab() });
+      }
+    });
+  }
+  window.addEventListener('scroll', function() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(checkScrollDepth);
+  }, { passive: true });
 }
 
 function loadFromURL() {
@@ -2219,6 +2274,7 @@ function syncDrawerBadges() {
 
 // ── INIT ──
 window.addEventListener('DOMContentLoaded', function() {
+  installBehaviorAnalytics();
   if (!loadFromURL()) {
     // Hide FAB first — default tab is 'home' which has no sliders
     var fab = document.getElementById('fabForsendur');
@@ -2229,6 +2285,8 @@ window.addEventListener('DOMContentLoaded', function() {
     renderMunis();
     d3RefreshAll();
   }
+  BL_ANALYTICS_READY = true;
+  trackBL('landing', { tab: getActiveTab(), path: window.location.pathname || '/' });
 });
 
 // ═══════════════════════════════════════════════════════════════
