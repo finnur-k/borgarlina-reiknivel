@@ -800,7 +800,7 @@
       </div>
       <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:20px 22px;text-align:center;">
         <div style="font-size:24px;font-weight:900;color:#34d399;" id="home-cars-bl">−9.450</div>
-        <div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.4;">Bílar sem BL kemur í stað<br><span style="color:#475569;">við óbreyttar samgönguvenjur (5%)</span></div>
+        <div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.4;">Bílajafngildi sem BL tekur við<br><span style="color:#475569;">einfölduð sviðsmynd (5%)</span></div>
       </div>
       <div style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:8px;padding:20px 22px;text-align:center;">
         <div style="font-size:24px;font-weight:900;color:#818cf8;" id="home-peak-cars">2.000</div>
@@ -814,7 +814,7 @@
       <div style="font-size:11px;font-weight:700;color:#6366f1;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Lykilniðurstaða</div>
       <div style="font-size:15px;font-weight:700;color:#f8fafc;margin-bottom:10px;line-height:1.4;">Á morgunháannatíma er Ártúnsbrekka nálægt afkastagetu &mdash; litlar breytingar geta haft mikil áhrif.</div>
       <div style="font-size:13px;color:#cbd5e1;line-height:1.65;">
-        Útreikningurinn notar umferðargögn Vegagerðarinnar og metur að lykilálag á Ártúnsbrekku geti farið upp í V/C 0,91 á morgunháannatíma. Við þær aðstæður geta litlar breytingar á bílafjölda haft <strong>mikil áhrif á ferðatíma</strong>: líkanið metur að Borgarlínan geti fært álagið úr LOS D niður í LOS C á þessu sniði og þar með gert flæðið stöðugra &mdash; fyrir alla á veginum, ekki bara farþega Borgarlínu.
+        Útreikningurinn notar umferðargögn Vegagerðarinnar og einfaldar farþegafjölda yfir í bílajafngildi. Þetta er sviðsmynd um bílferðir á tilteknum tíma, ekki spá um fjölda bíla í eigu fólks. Við V/C 0,91 á morgunháannatíma geta litlar breytingar á bílferðum haft <strong>mikil áhrif á ferðatíma</strong>: þessi reiknivél metur að Borgarlínan geti fært álagið úr LOS D niður í LOS C á þessu sniði og þar með gert flæðið stöðugra &mdash; fyrir alla á veginum, ekki bara farþega Borgarlínu.
       </div>
   </div>
 
@@ -1052,13 +1052,13 @@
       <h4 style="font-size:13px;font-weight:700;color:#e2e8f0;margin:0 0 6px;">Útgangspunktur — bílar á klst. án Borgarlínu</h4>
       <p style="margin-bottom:14px;">Byggt á gögnum Vegagerðarinnar frá talningarstöð 49-01 (Vesturlandsvegur ofan Ártúnsbrekku). Áætlaður ÁDU fyrir 2025 er <strong>64.700 bílar</strong>. Klukkustundardreifing virkra daga (2024) er notuð til að reikna umferðarflæði á hverjum tíma (t.d. 08:00–09:00 er 7,3% af ÁDU). Tölunum er deilt með 2 til að fá flæði í eina átt.</p>
 
-      <h4 style="font-size:13px;font-weight:700;color:#e2e8f0;margin:0 0 6px;">Áhrif Borgarlínu — fækkun bíla á klst.</h4>
-      <p style="margin-bottom:6px;">Útreikningur á því hve mörgum bílum hver vagn kemur í staðinn fyrir:</p>
-      <p style="margin-bottom:6px;"><code style="background:#0f172a;padding:6px 12px;border-radius:4px;font-size:13px;display:inline-block;">bílar_fjarlægðir = 7 vagnar × 125 farþegar × nýting / 1,2 farþegar/bíl</code></p>
+      <h4 style="font-size:13px;font-weight:700;color:#e2e8f0;margin:0 0 6px;">Áhrif Borgarlínu — færri bílferðir á klst.</h4>
+      <p style="margin-bottom:6px;">Útreikningurinn breytir farþegafjölda í bílajafngildi. Það er sviðsmynd um bílferðir sem færast yfir, ekki bein mæling á fækkun bílaeignar:</p>
+      <p style="margin-bottom:6px;"><code style="background:#0f172a;padding:6px 12px;border-radius:4px;font-size:13px;display:inline-block;">bílajafngildi = 7 vagnar × 125 farþegar × nýting / 1,2 farþegar/bíl</code></p>
       <ul style="margin:6px 0 14px 20px;line-height:1.6;">
-        <li><strong>7 vagnar/klst:</strong> Tíðni á háannatíma (Phase 1, ~8 mín. fresti) skv. Frumdragaskýrslu 2021.</li>
+        <li><strong>7 vagnar/klst:</strong> Tíðni á háannatíma (~8 mín. fresti) skv. Borgarlínuáætlunum.</li>
         <li><strong>125 farþegar/vagn:</strong> Hámarksgeta vagns.</li>
-        <li><strong>1,2 farþegar/bíl:</strong> Meðalfjöldi í fólksbíl skv. ferðavenjukönnun Samgöngustofu.</li>
+        <li><strong>1,2 farþegar/bíl:</strong> Meðalfjöldi í fólksbíl skv. ferðavenjugögnum.</li>
         <li><strong>Nýting:</strong> Sveiflast yfir daginn (sjá graf neðst): topp ~95% á annatíma, ~50% á miðdegi, ~30% á jaðartíma. Notandi getur stillt topp-nýtingu með sleða.</li>
       </ul>
 
@@ -1080,6 +1080,7 @@
       <h4 style="font-size:13px;font-weight:700;color:#e2e8f0;margin:0 0 6px;">Forsendur og fyrirvarar</h4>
       <ul style="margin:6px 0 10px 20px;line-height:1.6;">
         <li>Líkan reiknar <em>aðeins eina átt</em> á Miklabraut — skoðar ekki gagnstæða átt eða aðrar leiðir.</li>
+        <li>Farþegafjöldi Borgarlínu er umreiknaður í bílajafngildi til að gera stærðargráðuna læsilegri.</li>
         <li>Vagnnýtingar-ferillinn er <em>mat byggt á alþjóðlegum BRT-rannsóknum</em> — ekki bein íslensk mæling. Notandi getur stillt topp-nýtingu til að skoða bjartsýnar/varfærnar sviðsmyndir.</li>
         <li>Klukkustundardreifing 2024 er notuð beint, óháð valdri spá á öðrum flipa. Líkanið gerir ekki ráð fyrir induced demand eða breytingum á dreifingu yfir tíma.</li>
         <li>BPR-formúlan einfaldar — tekur ekki tillit til umferðarljósa, gatnamóta, né dreifingar bíla milli leiða.</li>
@@ -1406,10 +1407,10 @@
 <div class="panel" id="panel-roads">
 
   <details class="info-box">
-    <summary><strong>Hver vagn leysir af hólmi 104 bíla</strong></summary>
+    <summary><strong>Hver fullnýttur vagn jafngildir um 104 bílferðum</strong></summary>
     <div class="info-body">
-      <p>Á meðan einkabílar standa í biðröð getur Borgarlínan runnið áfram á sérakrein. Á um 8 mínútna fresti flytur hver vagn 125 farþega — það jafngildir því að taka 104 bíla út úr umferðinni á Miklabraut. Með sjö ferðum á klukkustund rýmir kerfið fyrir yfir 700 bílum á Miklabraut, sem lækkar umferðarþyngd (V/C) og flýtir fyrir öllum.</p>
-      <p style="font-size:11px;color:#475569;"><strong>Forsendur:</strong> 7 vagnar/klst (á ~8 mín. fresti), 125 farþegar/vagn, 1,2 farþegar/bíl. Miklabraut: 3 akreinar til miðborgar, þolmörk 1.000 b/akrein/klst. Grunnumferð: 1.960–2.450 b/klst mat (V/C 0,73–0,91 — byggð á ÁDU 43.000, Vegagerðin 2017).</p>
+      <p>Á meðan einkabílar standa í biðröð getur Borgarlínan runnið áfram á sérakrein. Fullnýttur 125 farþega vagn jafngildir um 104 einkabílum miðað við 1,2 farþega í bíl. Þetta eru bílajafngildi á tilteknum klukkutíma, ekki bein spá um að jafnmargir bílar hverfi úr bílaeign á svæðinu.</p>
+      <p style="font-size:11px;color:#475569;"><strong>Forsendur:</strong> 7 vagnar/klst (á ~8 mín. fresti), 125 farþegar/vagn, 1,2 farþegar/bíl. Þetta er námunduð, einfölduð sviðsmynd til að meta stærðargráðu á álagstíma. Miklabraut: 3 akreinar til miðborgar, þolmörk 1.000 b/akrein/klst. Grunnumferð: 1.960–2.450 b/klst mat (V/C 0,73–0,91 — byggð á ÁDU 43.000, Vegagerðin 2017).</p>
   </details>
 
   <!-- 4-col hero -->
@@ -1433,13 +1434,13 @@
       <div style="font-size:11px;color:#64748b;margin-top:6px;" id="artVCLbl">Stöðugt flæði</div>
     </div>
     <div class="box" style="border-top:2px solid #34d399;padding:16px 18px;">
-      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;">Bílar af götunni á klst.</div>
+      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;">Bílajafngildi á klst.</div>
       <div style="font-size:34px;font-weight:800;color:#34d399;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;" id="artCarsHr">656</div>
       <div style="margin-top:10px;height:4px;border-radius:2px;background:rgba(255,255,255,.06);"></div>
       <div style="font-size:11px;color:#64748b;margin-top:6px;">á morgunháannatíma</div>
     </div>
     <div class="box" style="border-top:2px solid #818cf8;padding:16px 18px;">
-      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;">Bílar af götunni (90 mín)</div>
+      <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;">Bílajafngildi (90 mín)</div>
       <div style="font-size:34px;font-weight:800;color:#818cf8;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;" id="artTotalCars">1.125</div>
       <div style="margin-top:10px;height:4px;border-radius:2px;background:rgba(255,255,255,.06);"></div>
       <div style="font-size:11px;color:#64748b;margin-top:6px;" id="artTotalLbl">11 vagnar × 125 farþegar × 90%</div>
@@ -1477,7 +1478,7 @@
     </div>
     <div class="box" id="artAfterCard">
       <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;">Með Borgarlínu</div>
-      <div style="font-size:11px;color:#475569;margin-bottom:12px;" id="artAfterTag">90% hlutfall · 656 bílar/klst fjarlægt</div>
+      <div style="font-size:11px;color:#475569;margin-bottom:12px;" id="artAfterTag">90% nýting · 656 bílajafngildi/klst</div>
       <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px;">
         <div style="font-size:30px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;" id="artAfterVC">0.55</div>
         <div style="font-size:14px;font-weight:700;" id="artAfterLOS">LOS B</div>
@@ -1503,14 +1504,14 @@
   <!-- Slider -->
   <div class="box" style="margin-bottom:16px;">
     <div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;">Hvað ef fleiri velja vagninn?</div>
-    <div style="font-size:12px;color:#475569;margin-bottom:14px;">Stilltu fjölda farþega og sjáðu biðraðirnar hverfa.</div>
+    <div style="font-size:12px;color:#475569;margin-bottom:14px;">Stilltu nýtingu vagnanna og sjáðu hvernig bílajafngildi breyta álagi.</div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
       <div style="padding:10px;background:rgba(255,255,255,.025);border-radius:6px;border:1px solid rgba(255,255,255,.04);">
         <div style="font-size:9px;color:#475569;margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Farþegar í vögnum</div>
         <div style="font-size:18px;font-weight:700;color:#818cf8;font-variant-numeric:tabular-nums;" id="artSlPax">788</div>
       </div>
       <div style="padding:10px;background:rgba(255,255,255,.025);border-radius:6px;border:1px solid rgba(255,255,255,.04);">
-        <div style="font-size:9px;color:#475569;margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Bílar af götunni á klst.</div>
+        <div style="font-size:9px;color:#475569;margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Bílajafngildi á klst.</div>
         <div style="font-size:18px;font-weight:700;color:#34d399;font-variant-numeric:tabular-nums;" id="artSlCars">656</div>
       </div>
       <div style="padding:10px;background:rgba(255,255,255,.025);border-radius:6px;border:1px solid rgba(255,255,255,.04);">
@@ -1548,11 +1549,11 @@
   <!-- Phase 4 callout -->
   <div style="background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2);border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:12px;color:#94a3b8;line-height:1.7;">
     <strong style="color:#818cf8;">&#128101; Strætisvagnar í dag oft yfir fullir á háannatíma</strong><br>
-    Strætó bs. skráir reglulega yfirfulla vagna á leiðum inn til borgar á morgunháannatíma. Þegar Borgarlínan opnar og sannar virði sitt er ekki úr vegi að gera ráð fyrir sambærilegri eftirspurn — sem þýðir að 90% hlutfall í sleðanum hér að ofan gæti verið raunsæ spá frekar en bjartsýni.
+    Strætó bs. skráir reglulega yfirfulla vagna á leiðum inn til borgar á morgunháannatíma. Þegar Borgarlínan opnar og sannar virði sitt er hægt að prófa sambærilega eftirspurn í sleðanum hér að ofan. Það er næmnigreining á nýtingu, ekki bein spá.
   </div>
 
   <div class="note">
-    <strong>Um gögnin:</strong> Útreikningar byggja á Frumdragaskýrslu Borgarlínu (2021) og umferðartölum Vegagerðarinnar. Grunnálag (V/C 0,91) er dregið af lykilteljaranum á Vesturlandsvegi ofan Ártúnsbrekku (stöð 49-01, ÁDU 64.700 árið 2025) þar sem 7,3% af daglegri umferð kemur á milli 08:00–09:00 á virkum dögum. Miklabraut: 3 akreinar til miðborgar, þolmörk 1.000 b/akrein/klst. Miðað er við að hver vagn flytji 125 farþegar og fari sjö ferðir á klukkustund á álagstímum (07:30–09:00). Meðalfjöldi í hverjum einkabíl er ætlaður 1,2 farþegar skv. tölum Samgöngustofu.
+    <strong>Um gögnin:</strong> Útreikningar byggja á umferðartölum Vegagerðarinnar og Frumdragaskýrslu Borgarlínu (2021). Farþegafjöldi Borgarlínu er umreiknaður í bílajafngildi til að sýna stærðargráðu á álagstíma. Grunnálag (V/C 0,91) er dregið af lykilteljaranum á Vesturlandsvegi ofan Ártúnsbrekku (stöð 49-01, ÁDU 64.700 árið 2025) þar sem 7,3% af daglegri umferð kemur á milli 08:00–09:00 á virkum dögum. Miklabraut: 3 akreinar til miðborgar, þolmörk 1.000 b/akrein/klst. Miðað er við að hver vagn flytji 125 farþega og fari sjö ferðir á klukkustund á álagstímum (07:30–09:00). Meðalfjöldi í hverjum einkabíl er ætlaður 1,2 farþegar skv. ferðavenjugögnum.
   </div>
 
 </div>
@@ -1756,7 +1757,7 @@ function calcPeak() {
     'Án aðgerða &mdash; íbúafjölgun eins og spáð');
   s += scenCard('scenario-2031b', '&#128994; ' + yr + ' &mdash; Me&eth; Borgarlínu (' + modalPct + '% shift &aacute; BL-lei&eth;)', '#34d399',
     carsYrBL, peakVolBL, vcBL, delayBL, delaySchoolBL, losBL, vcSchoolBL,
-    'BL fjarlægir ~' + fmt(carsRemovedPeak) + ' bílar/klst af þessari leið á annatíma. BL afkastageta: ~' + fmt(blPaxPerHour) + ' farþegar/klst = ~' + fmt(blCarEquiv) + ' bílajafngildi.');
+    'BL tekur við ~' + fmt(carsRemovedPeak) + ' bílajafngildum/klst af þessari leið á annatíma. Þetta er sviðsmynd um færðar bílferðir, ekki bein spá um bílaeign. BL afkastageta: ~' + fmt(blPaxPerHour) + ' farþegar/klst = ~' + fmt(blCarEquiv) + ' bílajafngildi.');
   document.getElementById('scenarioCards').innerHTML = s;
 
   // ── COMPARISON TABLE ──
@@ -1770,7 +1771,7 @@ function calcPeak() {
   var rows = [
     ['Bílar á svæðinu (heild)', fmt(cars2025), fmt(carsYr), fmt(carsYrBL),
       '<span class="green">&minus;' + fmt(carsYr - carsYrBL) + '</span>'],
-    ['Bílar/klst á annatíma (lykilleiðir)', fmt(peakVol25), fmt(peakVolYr), fmt(peakVolBL),
+    ['Bílferðir/klst á annatíma (lykilleiðir)', fmt(peakVol25), fmt(peakVolYr), fmt(peakVolBL),
       '<span class="green">&minus;' + fmt(peakVolYr - peakVolBL) + '</span>'],
     ['V/C hlutfall (annatími)', vc25.toFixed(2), vcYr.toFixed(2), vcBL.toFixed(2),
       '<span class="green">&minus;' + (vcYr - vcBL).toFixed(2) + '</span>'],
@@ -1794,7 +1795,7 @@ function calcPeak() {
     + 'Þakmark: 1.000 bílar/akrein/klst (Highway Capacity Manual, 7th Ed.). '
     + 'Skólaáhrif: Íslenskar grunnskólur byrja 08:00&ndash;08:30 &mdash; þetta skapar þríhyrning í umferð 07:30&ndash;09:00 þar sem foreldrar aka börnum OG fara sjálfir í vinnu samtímis. '
     + 'Annatímahlutfall 7,3% (Vegagerðin, lykilteljarar á höfuðborgarsvæðinu, stöð 49-01, 2024). '
-    + '<strong>Takmörk líkansins:</strong> BPR er simplified &mdash; tekur ekki tillit til gatnamóta, umferðarljósa eða dreifingar bíla milli leiða. Notaðu tölurnar sem vísbendingu, ekki nákvæma spá.';
+    + '<strong>Takmörk líkansins:</strong> Þetta er einföld reiknivél sem umreiknar farþegafjölda í bílajafngildi. BPR er simplified &mdash; tekur ekki tillit til gatnamóta, umferðarljósa eða dreifingar bíla milli leiða. Notaðu tölurnar sem vísbendingu, ekki nákvæma spá.';
   d3RefreshAll();
 }
 
@@ -2508,18 +2509,18 @@ window.addEventListener('DOMContentLoaded', function() {
     const losChanged = losNo !== losWith;
     if (vcNo >= 1.0 && vcWith >= 1.0) {
       return { tag: 'Ofhleðsla', tagColor:'#f87171', tagBg:'#450a0a',
-        text: `<strong>${hour} — Án BL: LOS ${losNo} (V/C ${vcNo.toFixed(2)}). Með BL: LOS ${losWith} (V/C ${vcWith.toFixed(2)}).</strong> Líkanið metur að BL fjarlægi <strong>${removed.toLocaleString('is-IS')}</strong> bíla og flytji <strong>${pax.toLocaleString('is-IS')}</strong> farþega — kerfið er enn yfir afkastagetu (LOS F) í báðum tilfellum.` };
+        text: `<strong>${hour} — Án BL: LOS ${losNo} (V/C ${vcNo.toFixed(2)}). Með BL: LOS ${losWith} (V/C ${vcWith.toFixed(2)}).</strong> Líkanið metur að BL taki við <strong>${removed.toLocaleString('is-IS')}</strong> bílajafngildum og flytji <strong>${pax.toLocaleString('is-IS')}</strong> farþega — kerfið er enn yfir afkastagetu (LOS F) í báðum tilfellum.` };
     }
     if (vcNo >= 1.0 && vcWith < 1.0) {
       return { tag: 'Stór munur', tagColor:'#34d399', tagBg:'#064e3b',
-        text: `<strong>${hour} — Án BL: LOS ${losNo} (V/C ${vcNo.toFixed(2)}). Með BL: LOS ${losWith} (V/C ${vcWith.toFixed(2)}).</strong> Líkanið metur að BL færi álagið undir afkastagetu (LOS F) — flytur <strong>${pax.toLocaleString('is-IS')}</strong> farþega og fækkar bílum um <strong>${removed.toLocaleString('is-IS')}</strong>.` };
+        text: `<strong>${hour} — Án BL: LOS ${losNo} (V/C ${vcNo.toFixed(2)}). Með BL: LOS ${losWith} (V/C ${vcWith.toFixed(2)}).</strong> Líkanið metur að BL færi álagið undir afkastagetu (LOS F) — flytur <strong>${pax.toLocaleString('is-IS')}</strong> farþega og tekur við <strong>${removed.toLocaleString('is-IS')}</strong> bílajafngildum.` };
     }
     if (vcNo >= 0.77) {
       const improvement = losChanged ? `LOS ${losNo} → LOS ${losWith}` : `LOS ${losWith} í báðum tilfellum`;
       return { tag: vcNo >= 0.93 ? 'Þung umferð' : 'Meðalálag',
         tagColor: vcNo >= 0.93 ? '#fbbf24' : '#f97316',
         tagBg:    vcNo >= 0.93 ? '#451a03' : '#431407',
-        text: `<strong>${hour} — Án BL: LOS ${losNo} (V/C ${vcNo.toFixed(2)}). Með BL: ${improvement} (V/C ${vcWith.toFixed(2)}).</strong> Líkanið metur að BL flytji <strong>${pax.toLocaleString('is-IS')}</strong> farþega og fækki bílum um <strong>${removed.toLocaleString('is-IS')}</strong> á þessum tíma.` };
+        text: `<strong>${hour} — Án BL: LOS ${losNo} (V/C ${vcNo.toFixed(2)}). Með BL: ${improvement} (V/C ${vcWith.toFixed(2)}).</strong> Líkanið metur að BL flytji <strong>${pax.toLocaleString('is-IS')}</strong> farþega og taki við <strong>${removed.toLocaleString('is-IS')}</strong> bílajafngildum á þessum tíma.` };
     }
     return { tag: 'Létt umferð', tagColor:'#6366f1', tagBg:'#1e1b4b',
       text: `<strong>${hour} — LOS ${losNo} án BL, LOS ${losWith} með BL.</strong> Umferð er vel undir afkastagetu á þessum tíma — munurinn á sviðsmyndum er lítill. Áhrif BL á þennan tíma eru minni en á annatíma. Líkanið metur að BL flytji <strong>${pax.toLocaleString('is-IS')}</strong> farþega.` };
